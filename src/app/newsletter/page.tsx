@@ -6,6 +6,7 @@ import { CheckCircle } from "lucide-react";
 export const metadata: Metadata = {
   title: "Бюлетин",
   description: "Абонирай се за седмичния AI бюлетин на AiZaVseki и получавай най-важното от света на изкуствения интелект.",
+  alternates: { canonical: "https://aizavseki.eu/newsletter" },
 };
 
 const benefits = [

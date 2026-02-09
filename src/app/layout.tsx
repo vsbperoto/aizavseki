@@ -31,7 +31,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://aizavseki.eu"),
   title: {
-    default: "AiZaVseki — AI За Всеки | Изкуствен интелект за обикновени хора",
+    default: "AiZaVseki — AI За Всеки | AI на български",
     template: "%s | AiZaVseki",
   },
   description:
@@ -46,6 +46,9 @@ export const metadata: Metadata = {
     "AI съвети",
   ],
   authors: [{ name: "AiZaVseki" }],
+  alternates: {
+    canonical: "https://aizavseki.eu",
+  },
   openGraph: {
     type: "website",
     locale: "bg_BG",
@@ -53,15 +56,48 @@ export const metadata: Metadata = {
     siteName: "AiZaVseki",
     title: "AiZaVseki — AI За Всеки",
     description: "Изкуственият интелект, обяснен на човешки език",
-    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "AiZaVseki — AI За Всеки",
     description: "Изкуственият интелект, обяснен на човешки език",
-    images: ["/og-image.png"],
+    images: ["/opengraph-image"],
   },
   robots: { index: true, follow: true },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://aizavseki.eu/#organization",
+      name: "AiZaVseki",
+      alternateName: "АИ За Всеки",
+      url: "https://aizavseki.eu",
+      logo: "https://aizavseki.eu/opengraph-image",
+      sameAs: [
+        "https://www.instagram.com/aizavseki",
+        "https://www.facebook.com/aizavseki",
+      ],
+      contactPoint: {
+        "@type": "ContactPoint",
+        email: "contact@aizavseki.eu",
+        contactType: "customer service",
+        availableLanguage: "Bulgarian",
+      },
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://aizavseki.eu/#website",
+      url: "https://aizavseki.eu",
+      name: "AiZaVseki",
+      description: "Изкуственият интелект, обяснен на човешки език",
+      publisher: { "@id": "https://aizavseki.eu/#organization" },
+      inLanguage: "bg",
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -74,6 +110,10 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} ${sora.variable} ${dmSans.variable} ${jetbrainsMono.variable} antialiased`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <Navbar />
         <main className="min-h-screen">{children}</main>
         <Footer />

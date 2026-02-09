@@ -3,6 +3,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Политика за поверителност",
+  description: "Научете как AiZaVseki събира, обработва и защитава вашите лични данни. GDPR-съвместима политика за поверителност.",
+  alternates: { canonical: "https://aizavseki.eu/privacy-policy" },
 };
 
 export default function PrivacyPolicyPage() {

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { formatDate, truncate } from "@/lib/utils";
@@ -15,11 +16,12 @@ export function PostCard({ post }: PostCardProps) {
       <Card className="group h-full flex flex-col">
         {post.image_urls?.[0] && (
           <div className="relative mb-4 aspect-video overflow-hidden rounded-xl">
-            <img
+            <Image
               src={post.image_urls[0]}
               alt={post.title}
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              loading="lazy"
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
           </div>
         )}

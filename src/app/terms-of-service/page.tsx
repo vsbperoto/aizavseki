@@ -3,6 +3,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Условия за ползване",
+  description: "Условия за ползване на AiZaVseki.eu — правила за достъп и използване на нашата AI образователна платформа.",
+  alternates: { canonical: "https://aizavseki.eu/terms-of-service" },
 };
 
 export default function TermsOfServicePage() {

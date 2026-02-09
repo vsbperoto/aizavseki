@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/Card";
 export const metadata: Metadata = {
   title: "За нас",
   description: "AiZaVseki — мисията ни е да направим изкуствения интелект достъпен за всеки българин.",
+  alternates: { canonical: "https://aizavseki.eu/about" },
 };
 
 const values = [

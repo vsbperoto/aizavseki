@@ -13,6 +13,7 @@ import {
 export const metadata: Metadata = {
   title: "Ресурси",
   description: "Полезни AI инструменти и ресурси за всеки. Открий най-добрите AI приложения за работа и ежедневие.",
+  alternates: { canonical: "https://aizavseki.eu/resources" },
 };
 
 const tools = [

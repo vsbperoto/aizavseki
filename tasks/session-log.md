@@ -4,6 +4,54 @@
 
 ---
 
+## Session: 2026-02-09 (Supabase + Testing + Git Commit)
+
+### What Was Done
+- Supabase project created manually by user (ogdeziynjtxglhbuctgb)
+- Updated .env.local with real Supabase credentials (URL, anon key, service role key)
+- Database migration run successfully (5 tables, RLS policies, indexes)
+- Dev server tested — all 8 pages return HTTP 200
+- All 4 API endpoints tested end-to-end:
+  - Newsletter signup: working (upsert with re-subscribe)
+  - Contact form: working (inserts to contact_submissions)
+  - Data deletion: working (returns confirmation code)
+  - Webhook: working (rejects without Bearer token)
+- Initial git commit created: `2d9d8ad` on master (64 files, 4878 insertions)
+
+### Last Known Good State
+- **Build Status:** ✅ Passing (`npm run build` — 19 routes, 0 errors)
+- **Dev Server:** ✅ Tested and working (all pages + APIs)
+- **Last Successful Command:** `git commit` — 2d9d8ad
+- **Git State:** master, 2d9d8ad "feat: initial AiZaVseki website build"
+
+### What Changed (Files Modified)
+- `.env.local` — updated with real Supabase credentials
+- `supabase-migration.sql` — run in Supabase SQL Editor (5 tables created)
+- All 64 files committed to git
+
+### Active Decisions
+- Kept Tailwind v4 (default with Next.js 16) instead of downgrading to v3
+- Using explicit type assertions for Supabase queries (generic types don't resolve properly with manual Database interface)
+- Dark mode only — no next-themes
+- All Bulgarian text centralized in constants.ts
+
+### Known Issues
+- middleware.ts deprecation warning: "middleware" convention is deprecated in Next.js 16, should use "proxy" — non-blocking
+- No OG image (public/og-image.png) yet
+- META_APP_SECRET and WEBHOOK_SECRET still empty in .env.local
+
+### Next Steps (Priority Order)
+1. Deploy to Vercel
+2. Configure custom domain (aizavseki.eu)
+3. Create OG image (1200x630)
+4. Submit Meta app for review with legal page URLs
+
+### ⚠️ DO NOT Touch
+- src/app/api/data-deletion/route.ts — Meta signed_request verification logic is critical and tested
+- src/lib/supabase/types.ts — Manual types with explicit Json type workaround for Supabase generics
+
+---
+
 ## Session: 2026-02-09 (Initial Build)
 
 ### What Was Done

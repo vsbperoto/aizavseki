@@ -10,6 +10,7 @@ import type { Post } from "@/lib/supabase/types";
 export const metadata: Metadata = {
   title: "Блог",
   description: "AI новини, инструменти, съвети и забавления на български. Открий света на изкуствения интелект.",
+  alternates: { canonical: "https://aizavseki.eu/blog" },
 };
 
 interface BlogPageProps {

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import { PostContent } from "@/components/blog/PostContent";
 import { ShareButtons } from "@/components/blog/ShareButtons";
@@ -29,9 +30,12 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
   return {
     title: post.title,
     description: post.hook || undefined,
+    alternates: { canonical: `https://aizavseki.eu/blog/${slug}` },
     openGraph: {
       title: post.title,
       description: post.hook || undefined,
+      type: "article",
+      publishedTime: post.published_at,
       images: post.image_urls?.[0] ? [post.image_urls[0]] : undefined,
     },
   };
@@ -52,8 +56,35 @@ export default async function PostPage({ params }: PostPageProps) {
   const post = data as Post | null;
   if (!post) notFound();
 
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.hook || undefined,
+    image: post.image_urls?.[0] || undefined,
+    datePublished: post.published_at,
+    author: {
+      "@type": "Organization",
+      name: "AiZaVseki",
+      url: "https://aizavseki.eu",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "AiZaVseki",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://aizavseki.eu/opengraph-image",
+      },
+    },
+    mainEntityOfPage: `https://aizavseki.eu/blog/${slug}`,
+  };
+
   return (
     <div className="pt-24 pb-16 sm:pt-32">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <article className="mx-auto max-w-3xl px-4 sm:px-6">
         <Link
           href="/blog"
@@ -88,11 +119,14 @@ export default async function PostPage({ params }: PostPageProps) {
         </header>
 
         {post.image_urls?.[0] && (
-          <div className="mb-10 overflow-hidden rounded-2xl">
-            <img
+          <div className="relative mb-10 aspect-video overflow-hidden rounded-2xl">
+            <Image
               src={post.image_urls[0]}
               alt={post.title}
-              className="w-full object-cover"
+              fill
+              sizes="(max-width: 768px) 100vw, 768px"
+              className="object-cover"
+              priority
             />
           </div>
         )}

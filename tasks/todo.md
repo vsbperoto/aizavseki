@@ -13,16 +13,14 @@
 - [x] API routes (data-deletion, newsletter, contact, webhook/content)
 - [x] SEO (sitemap, robots, 404, loading)
 - [x] Production build passing (0 errors)
-
-## In Progress
-- [ ] Create Supabase project (waiting for user to free a slot)
+- [x] Create Supabase project + configure credentials
+- [x] Run database migration (5 tables + RLS)
+- [x] Update .env.local with real Supabase credentials
+- [x] Test dev server with live Supabase
+- [x] Initial git commit (2d9d8ad)
 
 ## Pending
-- [ ] Run database migration (5 tables + RLS)
-- [ ] Update .env.local with real Supabase credentials
-- [ ] Test dev server with live Supabase
 - [ ] Create OG image (1200x630)
-- [ ] Initial git commit
 - [ ] Deploy to Vercel
 - [ ] Configure custom domain (aizavseki.eu)
 - [ ] Submit Meta app for review with legal page URLs
