@@ -65,6 +65,9 @@ export const metadata: Metadata = {
     images: ["/opengraph-image"],
   },
   robots: { index: true, follow: true },
+  other: {
+    "facebook-domain-verification": "utb6bfaltojn4x2ktexvri8fuxd7l9",
+  },
 };
 
 const jsonLd = {
