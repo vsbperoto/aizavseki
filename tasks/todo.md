@@ -18,8 +18,13 @@
 - [x] Update .env.local with real Supabase credentials
 - [x] Test dev server with live Supabase
 - [x] Initial git commit (2d9d8ad)
+- [x] Facebook OAuth admin panel — SQL migration, types, OAuth helpers, session encryption, 5 API routes, admin dashboard
 
 ## Pending
+- [ ] Run `supabase-migration-facebook-tokens.sql` in Supabase SQL Editor
+- [ ] Fill env vars: META_APP_ID, META_APP_SECRET, ADMIN_SECRET, ADMIN_FACEBOOK_ID
+- [ ] Add OAuth redirect URIs in Facebook App settings
+- [ ] Test full OAuth flow end-to-end
 - [ ] Create OG image (1200x630)
 - [ ] Deploy to Vercel
 - [ ] Configure custom domain (aizavseki.eu)
