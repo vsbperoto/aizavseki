@@ -1,0 +1,198 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
+
+export interface Database {
+  public: {
+    Tables: {
+      newsletter_subscribers: {
+        Row: {
+          id: string;
+          email: string;
+          name: string | null;
+          subscribed_at: string;
+          unsubscribed_at: string | null;
+          source: string;
+          is_active: boolean;
+        };
+        Insert: {
+          id?: string;
+          email: string;
+          name?: string | null;
+          subscribed_at?: string;
+          unsubscribed_at?: string | null;
+          source?: string;
+          is_active?: boolean;
+        };
+        Update: {
+          id?: string;
+          email?: string;
+          name?: string | null;
+          subscribed_at?: string;
+          unsubscribed_at?: string | null;
+          source?: string;
+          is_active?: boolean;
+        };
+        Relationships: [];
+      };
+      posts: {
+        Row: {
+          id: string;
+          slug: string;
+          title: string;
+          hook: string | null;
+          pillar: string;
+          content: Json;
+          caption: string | null;
+          hashtags: string | null;
+          image_urls: string[] | null;
+          instagram_post_id: string | null;
+          facebook_post_id: string | null;
+          published_at: string;
+          is_featured: boolean;
+          views: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          slug: string;
+          title: string;
+          hook?: string | null;
+          pillar: string;
+          content: Json;
+          caption?: string | null;
+          hashtags?: string | null;
+          image_urls?: string[] | null;
+          instagram_post_id?: string | null;
+          facebook_post_id?: string | null;
+          published_at?: string;
+          is_featured?: boolean;
+          views?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          slug?: string;
+          title?: string;
+          hook?: string | null;
+          pillar?: string;
+          content?: PostContent;
+          caption?: string | null;
+          hashtags?: string | null;
+          image_urls?: string[] | null;
+          instagram_post_id?: string | null;
+          facebook_post_id?: string | null;
+          published_at?: string;
+          is_featured?: boolean;
+          views?: number;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      contact_submissions: {
+        Row: {
+          id: string;
+          name: string;
+          email: string;
+          message: string;
+          submitted_at: string;
+          is_read: boolean;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          email: string;
+          message: string;
+          submitted_at?: string;
+          is_read?: boolean;
+        };
+        Update: {
+          id?: string;
+          name?: string;
+          email?: string;
+          message?: string;
+          submitted_at?: string;
+          is_read?: boolean;
+        };
+        Relationships: [];
+      };
+      data_deletion_requests: {
+        Row: {
+          id: string;
+          confirmation_code: string;
+          facebook_user_id: string | null;
+          email: string | null;
+          reason: string | null;
+          status: string;
+          requested_at: string;
+          completed_at: string | null;
+          source: string;
+        };
+        Insert: {
+          id?: string;
+          confirmation_code: string;
+          facebook_user_id?: string | null;
+          email?: string | null;
+          reason?: string | null;
+          status?: string;
+          requested_at?: string;
+          completed_at?: string | null;
+          source?: string;
+        };
+        Update: {
+          id?: string;
+          confirmation_code?: string;
+          facebook_user_id?: string | null;
+          email?: string | null;
+          reason?: string | null;
+          status?: string;
+          requested_at?: string;
+          completed_at?: string | null;
+          source?: string;
+        };
+        Relationships: [];
+      };
+      page_views: {
+        Row: {
+          id: string;
+          path: string;
+          referrer: string | null;
+          user_agent: string | null;
+          country: string | null;
+          viewed_at: string;
+        };
+        Insert: {
+          id?: string;
+          path: string;
+          referrer?: string | null;
+          user_agent?: string | null;
+          country?: string | null;
+          viewed_at?: string;
+        };
+        Update: {
+          id?: string;
+          path?: string;
+          referrer?: string | null;
+          user_agent?: string | null;
+          country?: string | null;
+          viewed_at?: string;
+        };
+        Relationships: [];
+      };
+    };
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
+    Enums: Record<string, never>;
+    CompositeTypes: Record<string, never>;
+  };
+}
+
+export interface PostContent {
+  slide_titles?: string[];
+  slide_texts?: string[];
+  image_prompts?: string[];
+}
+
+export type Post = Database["public"]["Tables"]["posts"]["Row"];
+export type NewsletterSubscriber = Database["public"]["Tables"]["newsletter_subscribers"]["Row"];
+export type ContactSubmission = Database["public"]["Tables"]["contact_submissions"]["Row"];
+export type DataDeletionRequest = Database["public"]["Tables"]["data_deletion_requests"]["Row"];
