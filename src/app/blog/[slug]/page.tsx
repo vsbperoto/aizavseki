@@ -31,14 +31,20 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
   return {
     title: post.meta_title || post.title,
     description: post.meta_description || post.hook || undefined,
+    keywords: post.keywords || undefined,
     alternates: { canonical: `https://aizavseki.eu/blog/${slug}` },
     openGraph: {
       title: post.meta_title || post.title,
       description: post.meta_description || post.hook || undefined,
       type: "article",
       publishedTime: post.published_at,
-      images: post.image_urls?.[0] ? [post.image_urls[0]] : undefined,
+      images: post.image_urls?.[0]
+        ? [{ url: post.image_urls[0], width: 1200, height: 630 }]
+        : undefined,
     },
+    twitter: post.image_urls?.[0]
+      ? { card: "summary_large_image", images: [post.image_urls[0]] }
+      : undefined,
   };
 }
 

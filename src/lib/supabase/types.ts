@@ -60,6 +60,7 @@ export interface Database {
           word_count: number | null;
           target_keyword: string | null;
           internal_links_used: string[] | null;
+          keywords: string[] | null;
         };
         Insert: {
           id?: string;
@@ -86,6 +87,7 @@ export interface Database {
           word_count?: number | null;
           target_keyword?: string | null;
           internal_links_used?: string[] | null;
+          keywords?: string[] | null;
         };
         Update: {
           id?: string;
@@ -112,6 +114,7 @@ export interface Database {
           word_count?: number | null;
           target_keyword?: string | null;
           internal_links_used?: string[] | null;
+          keywords?: string[] | null;
         };
         Relationships: [];
       };

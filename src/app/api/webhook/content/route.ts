@@ -35,6 +35,7 @@ export async function POST(request: NextRequest) {
       word_count,
       target_keyword,
       internal_links_used,
+      keywords,
     } = body;
 
     if (!title || !pillar || !content) {
@@ -101,6 +102,7 @@ export async function POST(request: NextRequest) {
       word_count: word_count != null ? Number(word_count) : null,
       target_keyword: target_keyword || null,
       internal_links_used: internal_links_used || null,
+      keywords: Array.isArray(keywords) ? keywords : null,
     });
 
     if (error) {
