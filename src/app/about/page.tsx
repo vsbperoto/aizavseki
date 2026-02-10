@@ -34,8 +34,27 @@ const values = [
 ];
 
 export default function AboutPage() {
+  const aboutJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: "\u0417\u0430 AiZaVseki",
+    description: "AiZaVseki \u2014 \u043C\u0438\u0441\u0438\u044F\u0442\u0430 \u043D\u0438 \u0435 \u0434\u0430 \u043D\u0430\u043F\u0440\u0430\u0432\u0438\u043C \u0438\u0437\u043A\u0443\u0441\u0442\u0432\u0435\u043D\u0438\u044F \u0438\u043D\u0442\u0435\u043B\u0435\u043A\u0442 \u0434\u043E\u0441\u0442\u044A\u043F\u0435\u043D \u0437\u0430 \u0432\u0441\u0435\u043A\u0438 \u0431\u044A\u043B\u0433\u0430\u0440\u0438\u043D.",
+    url: "https://aizavseki.eu/about",
+    inLanguage: "bg",
+    mainEntity: {
+      "@type": "Organization",
+      name: "AiZaVseki",
+      url: "https://aizavseki.eu",
+      description: "\u0411\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0430 \u043F\u043B\u0430\u0442\u0444\u043E\u0440\u043C\u0430 \u0437\u0430 AI \u043E\u0431\u0440\u0430\u0437\u043E\u0432\u0430\u043D\u0438\u0435",
+    },
+  };
+
   return (
     <div className="pt-24 pb-16 sm:pt-32">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutJsonLd) }}
+      />
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <ScrollReveal>
           <h1 className="font-display text-4xl font-bold text-brand-white sm:text-5xl">

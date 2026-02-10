@@ -17,31 +17,23 @@ export function ResourceTypeFilter() {
   const activeType = searchParams.get("type");
   const activeCategory = searchParams.get("category");
 
-  function handleTypeFilter(type: string | null) {
+  function navigate(key: string, value: string | null) {
     const params = new URLSearchParams(searchParams.toString());
-    if (type) {
-      params.set("type", type);
+    if (value) {
+      params.set(key, value);
     } else {
-      params.delete("type");
+      params.delete(key);
     }
-    router.push(`/resources?${params.toString()}`);
-  }
-
-  function handleCategoryFilter(category: string | null) {
-    const params = new URLSearchParams(searchParams.toString());
-    if (category) {
-      params.set("category", category);
-    } else {
-      params.delete("category");
-    }
-    router.push(`/resources?${params.toString()}`);
+    params.delete("page");
+    const qs = params.toString();
+    router.push(`/resources${qs ? `?${qs}` : ""}`);
   }
 
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
         <button
-          onClick={() => handleTypeFilter(null)}
+          onClick={() => navigate("type", null)}
           className={cn(
             "rounded-full px-4 py-2 text-sm font-medium transition-all",
             !activeType
@@ -55,7 +47,7 @@ export function ResourceTypeFilter() {
           ([key, type]) => (
             <button
               key={key}
-              onClick={() => handleTypeFilter(key)}
+              onClick={() => navigate("type", key)}
               className={cn(
                 "rounded-full px-4 py-2 text-sm font-medium transition-all",
                 activeType === key
@@ -76,7 +68,7 @@ export function ResourceTypeFilter() {
 
       <div className="flex flex-wrap gap-2">
         <button
-          onClick={() => handleCategoryFilter(null)}
+          onClick={() => navigate("category", null)}
           className={cn(
             "rounded-full px-3 py-1.5 text-xs font-medium transition-all",
             !activeCategory
@@ -90,7 +82,7 @@ export function ResourceTypeFilter() {
           ([key, cat]) => (
             <button
               key={key}
-              onClick={() => handleCategoryFilter(key)}
+              onClick={() => navigate("category", key)}
               className={cn(
                 "rounded-full px-3 py-1.5 text-xs font-medium transition-all",
                 activeCategory === key
@@ -98,7 +90,7 @@ export function ResourceTypeFilter() {
                   : "bg-brand-navy text-brand-gray hover:text-brand-white hover:bg-brand-navy-light"
               )}
             >
-              {cat.name}
+              {cat.icon} {cat.name}
             </button>
           )
         )}

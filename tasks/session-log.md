@@ -4,6 +4,288 @@
 
 ---
 
+## Session: 2026-02-10 (Resources UX Overhaul + SEO Audit)
+
+### What Was Done
+- **Resources page UX overhaul**: Server-side pagination (24/page), search with debounce, sort (4 options), stats bar with clickable type counts
+- **Resource cards enhanced**: Colored left border per content type (cyan/green/amber), quality badge (★ Топ for ≥8.5), category emoji icons
+- **SEO fixes**: robots.txt blocks /admin, blog listing CollectionPage JSON-LD, about page AboutPage JSON-LD
+- **Resource detail SEO**: DefinedTerm schema for definitions, inLanguage: "bg" on all resources, isPartOf linking to CollectionPage
+- **Performance**: Listing page now selects only 10 columns instead of `select("*")`, no more loading all 333 resources at once
+- **Full audit report**: Created `tasks/audit-2026-02-10.md` with all findings
+
+### Last Known Good State
+- **Build Status:** ✅ Passing (0 errors)
+- **Dev Server:** Not tested (Supabase queries need live DB)
+- **Last Successful Command:** `npm run build`
+- **Git State:** master, uncommitted changes (ready to commit)
+
+### What Changed (Files Modified)
+- `src/app/resources/page.tsx` — Major rewrite: pagination, search, sort, stats, column selection
+- `src/components/resources/ResourceCard.tsx` — Colored border, quality badge, hover lift, category emoji
+- `src/components/resources/ResourceGrid.tsx` — Accept count info, result summary text
+- `src/components/resources/ResourceTypeFilter.tsx` — Reset page on filter change, category emoji icons
+- `src/lib/constants.ts` — Added emoji icon to each RESOURCE_CATEGORIES entry
+- `src/app/robots.ts` — Added `/admin` to disallow
+- `src/app/blog/page.tsx` — Added CollectionPage + ItemList JSON-LD
+- `src/app/about/page.tsx` — Added AboutPage JSON-LD
+- `src/app/resources/[slug]/page.tsx` — DefinedTerm for definitions, inLanguage, isPartOf
+
+### New Files Created
+- `src/components/resources/Pagination.tsx` — Page navigation with ellipsis
+- `src/components/resources/ResourceSearch.tsx` — Debounced search input (client)
+- `src/components/resources/ResourceSort.tsx` — Sort dropdown (client)
+- `src/components/resources/ResourceStats.tsx` — Clickable type count stats bar
+- `tasks/audit-2026-02-10.md` — Full SEO/LLMO audit report
+
+### Active Decisions
+- Using ilike search instead of Supabase FTS (simpler, works on title + key_takeaway)
+- Hardcoded type counts (111/111/111) when no filters — dynamic counts only when filtered
+- ResourceCard uses `hover={false}` on Card to avoid double hover effect (Card already has hover)
+- PER_PAGE = 24 (divisible by 2 and 3 for grid layout)
+
+### Known Issues
+- None — build passing
+
+### Next Steps (Priority Order)
+1. Commit + push to deploy on Vercel
+2. Verify live site: pagination, search, sort, filters, JSON-LD
+3. Submit updated sitemap to Google Search Console
+4. Fact-check Wave 1 articles (58 shorter articles)
+5. Configure n8n credentials and activate workflows
+
+### ⚠️ DO NOT Touch
+- `src/app/resources/[slug]/page.tsx` markdown styles — long but intentional explicit selectors
+- `src/lib/supabase/types.ts` — manual types, use explicit casts
+- n8n workflow nodes — need user credential config first
+
+---
+
+## Session: 2026-02-10 (333 Resource Seeding — COMPLETE)
+
+### What Was Done
+- **333/333 articles seeded successfully** via Codex CLI (gpt-5.3-codex + web_search: live)
+- Created 7 initial batch files from topic-map.json (batch-0 through batch-6)
+- Fixed Codex CLI flags: `codex exec --full-auto --json` (v0.98.0 syntax)
+- Launched 7 Codex agents → 6 retry agents → 3 final agents across 3 rate-limit cycles
+- Fixed 9 articles with word_count=1 (content was fine, just bad counting) — batch UPDATE
+- Quality verification passed:
+  - **Content types**: 111 definitions + 111 howtos + 111 comparisons = 333 total
+  - **Word counts**: min 464, avg 1,578, max 2,117 (20 articles <1000 words — all Wave 1 originals)
+  - **Quality scores**: 322 scored 9/10, 11 scored 8/10
+  - **FAQ items**: all 333 articles have 5 FAQ items
+  - **All content in Bulgarian**, answer-first format, bold quotable statements, 2026 web-researched data
+
+### Seeding Timeline
+| Wave | Articles | Method | Notes |
+|------|----------|--------|-------|
+| Wave 1 (pre-session) | 58 | Sonnet agents | Original definitions, shorter format |
+| Agent 0 | +2 | Codex exec | Gap fill (IDs 29, 30) |
+| Agents 1-6 | +46 | Codex exec | Agent 2 crashed exit 127, others hit rate limits |
+| Retry 1-6 | +200 | Codex exec | After rate limit reset #1 |
+| Final 1-3 | +27 | Codex exec | After rate limit reset #2, last 3 needed one more agent |
+
+### Last Known Good State
+- **Build Status:** ✅ Passing (no app code changes)
+- **Dev Server:** Not tested (no code changes)
+- **Last Successful Command:** `codex exec --full-auto --json "..."`
+- **Git State:** master, `8996065` — no new commits this session
+- **DB Count:** 333/333 resources — ALL COMPLETE
+
+### What Changed (Files Modified/Created)
+- `tasks/seed/batch-0.json` through `batch-6.json` — initial batch files
+- `tasks/seed/batch-retry-1.json` through `batch-retry-6.json` — retry wave batches
+- `tasks/seed/batch-final-1.json` through `batch-final-3.json` — final gap fill batches
+- `tasks/seed/create-batches.js` — batch creation script
+- `tasks/seed/check-progress.js` — progress checker + retry batch generator
+- `tasks/seed/find-missing.js` — missing slug finder
+- `tasks/seed/resume-seeding.md` — account switch protocol
+- `tasks/seed/logs/agent-*.log` — Codex agent logs (multiple waves)
+
+### Active Decisions
+- Using `codex exec` (non-interactive) instead of interactive mode (stdin TTY issue)
+- `--full-auto` + `--json` flags, web search via config `web_search = "live"`
+- Supabase MCP for direct SQL inserts with dollar-quoting `$body$...$body$`
+- UNIQUE slug constraint for idempotent inserts (safe to retry)
+
+### Known Issues
+- 20 articles below 1000 words (all from Wave 1 original batch — different format, not broken)
+- 2 comparisons at ~464-499 words are genuinely short but have valid content
+
+### Next Steps (Priority Order)
+1. Fact-check Wave 1 (original 58 articles) — update with 2026 web-researched data
+2. Verify live site renders all 333 resources correctly
+3. Configure n8n credentials and activate pipelines
+
+### ⚠️ DO NOT Touch
+- `~/.codex/config.toml` — Supabase MCP + web_search config
+- All 333 articles in DB — seeding complete
+
+---
+
+## Session: 2026-02-10 (Pipeline v5.1 Website Fixes)
+
+### What Was Done
+- Added `keywords TEXT[]` column to `posts` table via Supabase migration
+- Updated TypeScript types (Row, Insert, Update) with `keywords: string[] | null`
+- Webhook now accepts `keywords` from pipeline and stores with `Array.isArray()` guard
+- Blog article metadata upgraded: structured OG image `{url, width: 1200, height: 630}`, Twitter `summary_large_image` card, per-article `keywords` meta tag
+
+### Last Known Good State
+- **Build Status:** ✅ Passing
+- **Dev Server:** ✅ (not tested this session, build confirmed)
+- **Last Successful Command:** `npm run build`
+- **Git State:** master, `8996065` "feat: pipeline v5.1 — OG image dimensions, Twitter card, article keywords"
+- **Vercel:** Auto-deploying from push
+
+### What Changed (Files Modified)
+- `src/lib/supabase/types.ts` — added `keywords` field to posts Row, Insert, Update
+- `src/app/api/webhook/content/route.ts` — destructure `keywords` from body + insert with Array.isArray guard
+- `src/app/blog/[slug]/page.tsx` — replaced metadata return: structured OG image with dimensions, Twitter card, article keywords
+
+### Active Decisions
+- OG image dimensions hardcoded to 1200x630 (standard social preview size)
+- Twitter card type `summary_large_image` for Cloudinary URLs
+- Keywords fall back to undefined (inherits layout.tsx globals via Next.js metadata merging)
+
+### Known Issues
+- n8n workflows still need credential config before activation (unchanged from previous session)
+
+### Next Steps (Priority Order)
+1. Configure n8n credentials and activate pipelines
+2. Test end-to-end: pipeline sends keywords + image_urls → webhook stores → blog renders metadata
+3. Verify OG tags with Facebook Sharing Debugger / Twitter Card Validator after first v5.1 post
+
+### ⚠️ DO NOT Touch
+- `src/components/blog/FaqSection.tsx` — working, no changes needed
+- WEBHOOK_SECRET / auth logic — stable
+- Cloudinary config — managed in n8n, not Next.js
+
+---
+
+## Session: 2026-02-10 (Codex 5.3 Seeding Infrastructure — Web Research + Supabase MCP)
+
+### What Was Done
+- Added `supabase_aizavseki` MCP server to Codex config (`~/.codex/config.toml`) with user's PAT
+- Changed Codex `model_reasoning_effort` from `xhigh` to `high` (cost optimization)
+- Rewrote `tasks/seed/agent-prompt.md` — added mandatory web research step, switched from webhook POST to direct Supabase MCP SQL INSERTs with dollar-quoting
+- Rewrote `scripts/seed-orchestrator.sh` — default START=61 (skip Wave 1), removed WEBHOOK_SECRET dependency, added `--model-reasoning-effort high` flag, Supabase MCP instructions
+- Created `scripts/seed-update-existing.sh` — fact-check agent for Wave 1 articles (topics 1-60), reads existing articles then web searches and UPDATEs
+- Updated `scripts/seed-retry-failed.sh` — switched from webhook to Supabase MCP approach
+- Created `CODEX.md` in project root — Codex agent context file with table schema, SQL templates, content rules, web research requirements
+
+### Last Known Good State
+- **Build Status:** ✅ Passing (no app code changes — config/scripts only)
+- **Dev Server:** Not tested (no code changes)
+- **Last Successful Command:** file edits only
+- **Git State:** master, `522e8b0` — uncommitted changes to scripts + new files
+
+### What Changed (Files Modified)
+- `~/.codex/config.toml` — Added supabase_aizavseki MCP, reasoning_effort xhigh→high
+- `tasks/seed/agent-prompt.md` — Complete rewrite: webhook→Supabase MCP, added web research mandate
+- `scripts/seed-orchestrator.sh` — Rewritten for Supabase MCP, START=61, 6 agents default
+- `scripts/seed-retry-failed.sh` — Updated for Supabase MCP approach
+
+### New Files Created
+- `CODEX.md` — Project-level Codex agent instructions (table schema, SQL templates, rules)
+- `scripts/seed-update-existing.sh` — Fact-check and update Wave 1 articles
+
+### Active Decisions
+- Supabase MCP replaces webhook for resource seeding (direct SQL = no escaping issues, supports UPDATE)
+- Dollar-quoting `$body$...$body$` for content fields (avoids single-quote escaping hell)
+- Web search mandatory for every article (2026 fact-checked data)
+- Wave 1 (1-60) handled separately by seed-update-existing.sh after Wave 2 completes
+- Reasoning effort reduced to "high" (from "xhigh") for cost/speed balance
+
+### Known Issues
+- Wave 1 agents (topics 1-60) currently running via Claude Sonnet — those articles lack web research
+- seed-update-existing.sh will fix Wave 1 after completion
+
+### Next Steps (Priority Order)
+1. Wait for Wave 1 Sonnet agents to finish (topics 1-60)
+2. User runs from WSL: `./scripts/seed-orchestrator.sh 61 333 6`
+3. Monitor: `./scripts/seed-status.sh`
+4. After Wave 2 done: `./scripts/seed-update-existing.sh` (fact-checks Wave 1)
+5. Retry failures: `./scripts/seed-retry-failed.sh`
+6. Verify: `SELECT count(*), content_type FROM resources GROUP BY content_type;` = 111 each
+
+### ⚠️ DO NOT Touch
+- Codex MCP configs for other projects (globalnik, sladkishcho, vintage)
+- n8n credential IDs
+- WEBHOOK_SECRET in Vercel (still needed for n8n content pipeline)
+- Wave 1 Sonnet agents currently running — let them finish
+
+---
+
+## Session: 2026-02-10 (333 Resources Infrastructure + Seeding System)
+
+### What Was Done
+- Created `resources` table in Supabase via MCP migration (UUID, slug, content_type, category, content, FAQ, keywords, etc.)
+- Added Resource type to `src/lib/supabase/types.ts` (Row/Insert/Update + type export)
+- Added `RESOURCE_CATEGORIES` (8 categories) and `CONTENT_TYPES` (3 types) to `src/lib/constants.ts`
+- Created `/api/webhook/resources` endpoint — same auth pattern as content webhook, validates content_type/category, auto-calculates word count, handles slug dedup
+- Created 3 resource components: `ResourceCard`, `ResourceGrid`, `ResourceTypeFilter`
+- Replaced static `/resources` page with DB-driven listing (ISR, filters by type+category, CollectionPage JSON-LD)
+- Created `/resources/[slug]` detail page (type-specific JSON-LD, BreadcrumbList, FAQPage, speakable, markdown rendering, related resources, key takeaway box)
+- Updated sitemap with resource entries
+- Updated `llms.txt` with resources section
+- Generated 333-topic map: 111 definitions + 111 how-to + 111 comparisons, balanced across 8 categories
+- Created Codex agent prompt (`tasks/seed/agent-prompt.md`) with content structure, LLMO/GEO rules, JSON schema
+- Created 3 orchestration scripts: `seed-orchestrator.sh`, `seed-status.sh`, `seed-retry-failed.sh`
+
+### Last Known Good State
+- **Build Status:** ✅ Passing (0 errors, 32 routes)
+- **Dev Server:** Not tested
+- **Last Successful Command:** `npm run build`
+- **Git State:** master, `522e8b0` — pushed to origin, Vercel auto-deploying
+
+### What Changed (Files Modified)
+- `src/lib/supabase/types.ts` — Added resources table + Resource type
+- `src/lib/constants.ts` — Added RESOURCE_CATEGORIES, CONTENT_TYPES, ResourceCategoryKey, ContentTypeKey
+- `src/app/resources/page.tsx` — REPLACED static tools page with DB-driven listing
+- `src/app/sitemap.ts` — Added resource entries from Supabase
+- `public/llms.txt` — Added resources section
+
+### New Files Created
+- `tasks/migrations/create_resources_table.sql` — DB migration
+- `src/app/api/webhook/resources/route.ts` — Resource ingestion webhook
+- `src/app/resources/[slug]/page.tsx` — Resource detail page
+- `src/components/resources/ResourceCard.tsx` — Card component
+- `src/components/resources/ResourceGrid.tsx` — Grid layout
+- `src/components/resources/ResourceTypeFilter.tsx` — Filter tabs
+- `tasks/seed/topic-map.json` — 333 topics master list
+- `tasks/seed/agent-prompt.md` — Codex agent instructions
+- `scripts/seed-orchestrator.sh` — Parallel agent launcher
+- `scripts/seed-status.sh` — Progress monitor
+- `scripts/seed-retry-failed.sh` — Retry failed topics
+
+### Active Decisions
+- Resources use plain markdown (via react-markdown), not slides format like blog posts
+- 8 resource categories are independent from 5 blog pillars (more granular)
+- Resource webhook uses same WEBHOOK_SECRET as content webhook
+- Slug dedup: append `-{timestamp.toString(36)}` for collisions
+- FaqSection component reused from blog (no new component needed)
+
+### Known Issues
+- None blocking — all infrastructure is deployed
+
+### Next Steps (Priority Order)
+1. Wait for Vercel deploy to complete
+2. Test webhook with curl: `curl -X POST https://aizavseki.eu/api/webhook/resources -H "Authorization: Bearer $WEBHOOK_SECRET" -H "Content-Type: application/json" -d '{"title":"Тест","content_type":"definition","category":"AI_BASICS","content":"Тестово съдържание."}'`
+3. Verify test resource at `/resources/{slug}`, then delete from Supabase
+4. Run seeding from WSL: `./scripts/seed-orchestrator.sh 1 333 4`
+5. Monitor with `./scripts/seed-status.sh`
+6. Retry failures with `./scripts/seed-retry-failed.sh`
+7. Verify count: `SELECT count(*), content_type FROM resources GROUP BY content_type;`
+
+### ⚠️ DO NOT Touch
+- n8n credential IDs: `BZp9maC2RuSSomid` (Gemini), `jb8lJzGL9ZRWU2Vy` (Anthropic)
+- WEBHOOK_SECRET in Vercel — already configured
+- `/resources/rechnik/` glossary page — still works as sub-route
+- Blog components — not modified, resources have their own components
+
+---
+
 ## Session: 2026-02-10 (Pipeline v3 Critical Fixes — Scout-First + JSON Robustness)
 
 ### What Was Done

@@ -48,6 +48,54 @@
 - [x] IF node `looseTypeValidation: true` for boolean check
 - [x] Workflow validated: 0 errors, 14 warnings (all false positives)
 
+## Resources UX Overhaul + SEO Audit (2026-02-10)
+- [x] Add emoji icons to RESOURCE_CATEGORIES constants
+- [x] Rewrite resources/page.tsx: pagination, search, sort, stats, column selection
+- [x] Create Pagination.tsx component
+- [x] Create ResourceSearch.tsx component (debounced, client)
+- [x] Create ResourceSort.tsx component (4 sort options, client)
+- [x] Create ResourceStats.tsx component (clickable type counts)
+- [x] Update ResourceCard.tsx: colored borders, quality badge, category emoji
+- [x] Update ResourceGrid.tsx: accept count info, result summary
+- [x] Update ResourceTypeFilter.tsx: reset page on filter change, category emoji
+- [x] Block /admin in robots.ts
+- [x] Add CollectionPage JSON-LD to blog listing
+- [x] Add AboutPage JSON-LD to about page
+- [x] Add DefinedTerm schema for definitions, inLanguage, isPartOf to resource detail
+- [x] Write full audit report (tasks/audit-2026-02-10.md)
+- [x] Build verified: 0 errors
+- [ ] Commit + push to Vercel
+- [ ] Verify live site: pagination, search, sort, filters, JSON-LD
+- [ ] Submit updated sitemap to Google Search Console
+
+## 333 Resources Seeding
+- [x] Create resources table in Supabase (RLS, indexes, FTS)
+- [x] Add Resource type + table to types.ts
+- [x] Add RESOURCE_CATEGORIES + CONTENT_TYPES constants
+- [x] Create /api/webhook/resources endpoint
+- [x] Create ResourceCard, ResourceGrid, ResourceTypeFilter components
+- [x] Replace /resources page with DB-driven listing
+- [x] Create /resources/[slug] detail page
+- [x] Update sitemap + llms.txt
+- [x] Generate 333-topic map (111 def + 111 howto + 111 comparison)
+- [x] Create agent prompt + orchestration scripts
+- [x] Build verified: 0 errors
+- [x] Git commit + push (`522e8b0`)
+- [x] Test webhook with curl after Vercel deploys
+- [x] Add Supabase MCP to Codex config for direct DB access
+- [x] Update agent-prompt.md with web research + Supabase MCP
+- [x] Update seed-orchestrator.sh for Supabase MCP approach
+- [x] Create seed-update-existing.sh for Wave 1 fact-checking
+- [x] Create CODEX.md project instructions for Codex agents
+- [x] Update seed-retry-failed.sh for Supabase MCP approach
+- [ ] Wave 1 (topics 1-60): Sonnet agents finish seeding
+- [ ] Wave 2 (topics 61-333): Run `./scripts/seed-orchestrator.sh 61 333 6` from WSL
+- [ ] Monitor: `./scripts/seed-status.sh`
+- [ ] Fact-check Wave 1: `./scripts/seed-update-existing.sh`
+- [ ] Retry failures: `./scripts/seed-retry-failed.sh`
+- [ ] Verify: `SELECT count(*), content_type FROM resources GROUP BY content_type;` = 111 each
+- [ ] Submit updated sitemap to Google Search Console
+
 ## Pending — User Configuration Required
 - [ ] Configure xAI API key in n8n (for Grok Scout workflow — Header Auth credential)
 - [ ] Configure Supabase service role key in n8n Code nodes (Get Scout Topic + Upload & Publish)

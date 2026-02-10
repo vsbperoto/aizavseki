@@ -33,8 +33,31 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const { data } = await query;
   const posts = (data || []) as Post[];
 
+  const collectionJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "\u0411\u043B\u043E\u0433 \u2014 AiZaVseki",
+    description: "AI \u043D\u043E\u0432\u0438\u043D\u0438, \u0438\u043D\u0441\u0442\u0440\u0443\u043C\u0435\u043D\u0442\u0438, \u0441\u044A\u0432\u0435\u0442\u0438 \u0438 \u0437\u0430\u0431\u0430\u0432\u043B\u0435\u043D\u0438\u044F \u043D\u0430 \u0431\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438",
+    url: "https://aizavseki.eu/blog",
+    inLanguage: "bg",
+    numberOfItems: posts.length,
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: posts.slice(0, 20).map((post, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        url: `https://aizavseki.eu/blog/${post.slug}`,
+        name: post.title,
+      })),
+    },
+  };
+
   return (
     <div className="pt-24 pb-16 sm:pt-32">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
+      />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <ScrollReveal>
           <h1 className="font-display text-4xl font-bold text-brand-white sm:text-5xl">

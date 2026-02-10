@@ -73,15 +73,29 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
   }
 
   // Article JSON-LD (type-specific)
-  const articleType = resource.content_type === "howto" ? "HowTo" : "Article";
+  const isDefinition = resource.content_type === "definition";
+  const articleType = isDefinition ? "DefinedTerm" : resource.content_type === "howto" ? "HowTo" : "Article";
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": articleType,
-    headline: resource.title,
-    description: resource.meta_description || resource.key_takeaway || undefined,
+    ...(isDefinition
+      ? {
+          name: resource.title,
+          description: resource.meta_description || resource.key_takeaway || undefined,
+          inDefinedTermSet: {
+            "@type": "DefinedTermSet",
+            name: "AI \u0420\u0435\u0441\u0443\u0440\u0441\u0438 \u2014 \u0414\u0435\u0444\u0438\u043D\u0438\u0446\u0438\u0438",
+            url: "https://aizavseki.eu/resources?type=definition",
+          },
+        }
+      : {
+          headline: resource.title,
+          description: resource.meta_description || resource.key_takeaway || undefined,
+        }),
     image: resource.image_url || undefined,
     datePublished: resource.published_at,
     dateModified: resource.updated_at,
+    inLanguage: "bg",
     author: {
       "@type": "Organization",
       name: "AiZaVseki",
@@ -96,6 +110,11 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
       },
     },
     mainEntityOfPage: `https://aizavseki.eu/resources/${slug}`,
+    isPartOf: {
+      "@type": "CollectionPage",
+      name: "AI \u0420\u0435\u0441\u0443\u0440\u0441\u0438",
+      url: "https://aizavseki.eu/resources",
+    },
     ...(resource.content_type === "comparison" && { articleSection: "\u0421\u0440\u0430\u0432\u043D\u0435\u043D\u0438\u044F" }),
     speakable: {
       "@type": "SpeakableSpecification",
