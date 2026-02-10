@@ -65,4 +65,4 @@
 - [ ] Deploy to Vercel
 - [ ] Configure custom domain (aizavseki.eu)
 - [ ] Submit Meta app for review with legal page URLs
-- [ ] Git commit and push v3 changes
+- [x] Git commit and push v3 changes — `fc7cc43`, pushed to origin/master

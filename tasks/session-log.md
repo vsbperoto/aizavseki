@@ -40,13 +40,12 @@
 - Neither workflow activated yet — needs manual testing first
 
 ### Next Steps (Priority Order)
-1. Git commit and push all v3 changes (local code)
-2. Configure Supabase service role key in n8n Code nodes
-3. Configure xAI API key credential in n8n
+1. ~~Git commit and push all v3 changes~~ — DONE: `fc7cc43`, pushed to origin/master, Vercel auto-deploying
+2. Configure Supabase service role key in n8n Code nodes (Get Best Topic + Upload & Publish)
+3. Configure xAI API key credential in n8n (Grok Scout)
 4. Manual test Scout workflow → verify topics in Supabase
 5. Manual test main pipeline v3 → verify article publishes
 6. Activate both workflows
-7. Deploy to Vercel
 
 ### ⚠️ DO NOT Touch
 - n8n credential IDs: `BZp9maC2RuSSomid` (Gemini), `jb8lJzGL9ZRWU2Vy` (Anthropic) — DO NOT change
