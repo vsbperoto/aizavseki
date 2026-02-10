@@ -19,8 +19,17 @@
 - [x] Test dev server with live Supabase
 - [x] Initial git commit (2d9d8ad)
 - [x] Facebook OAuth admin panel — SQL migration, types, OAuth helpers, session encryption, 5 API routes, admin dashboard
+- [x] LLMO/GEO Content Pipeline — types, webhook upgrade, PostContent markdown, FaqSection, key_takeaway box, triple JSON-LD, react-markdown
+- [x] n8n workflow created (AiZaVseki LLMO Content Pipeline v2 — ID: Rs3zNLx8hSSTgw47)
 
 ## Pending
+- [x] Run `tasks/migrations/add_llmo_columns.sql` in Supabase (4 new post columns) — done via MCP
+- [x] Fix n8n workflow: replace `fetch()` with `this.helpers.httpRequest()` + Cloudinary upload
+- [x] Fix n8n workflow: add `continueOnFail` on Generate Image node
+- [ ] ~~Create "images" storage bucket in Supabase~~ — No longer needed (using Cloudinary instead)
+- [ ] Configure n8n credentials: Google Gemini API key + Anthropic API key
+- [ ] Manual test of n8n LLMO workflow (Rs3zNLx8hSSTgw47)
+- [ ] Activate n8n workflow for daily 8AM schedule
 - [ ] Run `supabase-migration-facebook-tokens.sql` in Supabase SQL Editor
 - [ ] Fill env vars: META_APP_ID, META_APP_SECRET, ADMIN_SECRET, ADMIN_FACEBOOK_ID
 - [ ] Add OAuth redirect URIs in Facebook App settings

@@ -3,13 +3,14 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import { PostContent } from "@/components/blog/PostContent";
+import { FaqSection } from "@/components/blog/FaqSection";
 import { ShareButtons } from "@/components/blog/ShareButtons";
 import { Badge } from "@/components/ui/Badge";
 import { formatDate } from "@/lib/utils";
 import { ArrowLeft, Eye } from "lucide-react";
 import Link from "next/link";
 import type { PillarKey } from "@/lib/constants";
-import type { Post, PostContent as PostContentType } from "@/lib/supabase/types";
+import type { Post, PostContent as PostContentType, FaqItem } from "@/lib/supabase/types";
 
 interface PostPageProps {
   params: Promise<{ slug: string }>;
@@ -28,12 +29,12 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
   if (!post) return { title: "Публикация не е намерена" };
 
   return {
-    title: post.title,
-    description: post.hook || undefined,
+    title: post.meta_title || post.title,
+    description: post.meta_description || post.hook || undefined,
     alternates: { canonical: `https://aizavseki.eu/blog/${slug}` },
     openGraph: {
-      title: post.title,
-      description: post.hook || undefined,
+      title: post.meta_title || post.title,
+      description: post.meta_description || post.hook || undefined,
       type: "article",
       publishedTime: post.published_at,
       images: post.image_urls?.[0] ? [post.image_urls[0]] : undefined,
@@ -56,11 +57,14 @@ export default async function PostPage({ params }: PostPageProps) {
   const post = data as Post | null;
   if (!post) notFound();
 
+  const faqItems = (post.faq_items || []) as FaqItem[];
+
+  // Article JSON-LD
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post.title,
-    description: post.hook || undefined,
+    description: post.meta_description || post.hook || undefined,
     image: post.image_urls?.[0] || undefined,
     datePublished: post.published_at,
     author: {
@@ -79,12 +83,47 @@ export default async function PostPage({ params }: PostPageProps) {
     mainEntityOfPage: `https://aizavseki.eu/blog/${slug}`,
   };
 
+  // BreadcrumbList JSON-LD
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Начало", item: "https://aizavseki.eu" },
+      { "@type": "ListItem", position: 2, name: "Блог", item: "https://aizavseki.eu/blog" },
+      { "@type": "ListItem", position: 3, name: post.title },
+    ],
+  };
+
+  // FAQPage JSON-LD (only when FAQ items exist)
+  const faqJsonLd = faqItems.length > 0 ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  } : null;
+
   return (
     <div className="pt-24 pb-16 sm:pt-32">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
       <article className="mx-auto max-w-3xl px-4 sm:px-6">
         <Link
           href="/blog"
@@ -131,10 +170,23 @@ export default async function PostPage({ params }: PostPageProps) {
           </div>
         )}
 
+        {post.key_takeaway && (
+          <div className="mb-10 rounded-xl border border-brand-cyan/20 bg-brand-cyan/5 p-6">
+            <p className="text-sm font-semibold uppercase tracking-wider text-brand-cyan mb-2">
+              Ключов извод
+            </p>
+            <p className="text-lg text-brand-white leading-relaxed">
+              {post.key_takeaway}
+            </p>
+          </div>
+        )}
+
         <PostContent
           content={post.content as unknown as PostContentType}
           imageUrls={post.image_urls}
         />
+
+        {faqItems.length > 0 && <FaqSection items={faqItems} />}
 
         {post.caption && (
           <div className="mt-10 rounded-xl bg-brand-navy/50 p-6 border border-brand-cyan/10">

@@ -51,6 +51,10 @@ export interface Database {
           is_featured: boolean;
           views: number;
           created_at: string;
+          meta_title: string | null;
+          meta_description: string | null;
+          key_takeaway: string | null;
+          faq_items: FaqItem[] | null;
         };
         Insert: {
           id?: string;
@@ -68,6 +72,10 @@ export interface Database {
           is_featured?: boolean;
           views?: number;
           created_at?: string;
+          meta_title?: string | null;
+          meta_description?: string | null;
+          key_takeaway?: string | null;
+          faq_items?: Json | null;
         };
         Update: {
           id?: string;
@@ -85,6 +93,10 @@ export interface Database {
           is_featured?: boolean;
           views?: number;
           created_at?: string;
+          meta_title?: string | null;
+          meta_description?: string | null;
+          key_takeaway?: string | null;
+          faq_items?: Json | null;
         };
         Relationships: [];
       };
@@ -232,6 +244,11 @@ export interface Database {
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
   };
+}
+
+export interface FaqItem {
+  question: string;
+  answer: string;
 }
 
 export interface PostContent {

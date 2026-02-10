@@ -26,6 +26,10 @@ export async function POST(request: NextRequest) {
       hook,
       instagram_post_id,
       facebook_post_id,
+      meta_title,
+      meta_description,
+      key_takeaway,
+      faq_items,
     } = body;
 
     if (!title || !pillar || !content) {
@@ -37,6 +41,29 @@ export async function POST(request: NextRequest) {
 
     const slug = slugify(title);
     const supabase = await createServiceClient();
+
+    // Handle base64 image upload to Supabase Storage
+    let finalImageUrls = image_urls || null;
+    if (body.image_base64) {
+      const buffer = Buffer.from(body.image_base64, "base64");
+      const filename = `posts/${slug}-${Date.now()}.png`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("images")
+        .upload(filename, buffer, {
+          contentType: body.image_content_type || "image/png",
+          upsert: false,
+        });
+
+      if (!uploadError) {
+        const { data: urlData } = supabase.storage
+          .from("images")
+          .getPublicUrl(filename);
+        finalImageUrls = [urlData.publicUrl, ...(image_urls || [])];
+      } else {
+        console.error("Image upload error:", uploadError);
+      }
+    }
 
     // Check for duplicate slug
     const { data: existing } = await supabase
@@ -56,10 +83,14 @@ export async function POST(request: NextRequest) {
       content,
       caption: caption || null,
       hashtags: hashtags || null,
-      image_urls: image_urls || null,
+      image_urls: finalImageUrls,
       hook: hook || null,
       instagram_post_id: instagram_post_id || null,
       facebook_post_id: facebook_post_id || null,
+      meta_title: meta_title || null,
+      meta_description: meta_description || null,
+      key_takeaway: key_takeaway || null,
+      faq_items: faq_items || null,
     });
 
     if (error) {

@@ -16,3 +16,41 @@
 - **Info:** Next.js 16 deprecates `middleware.ts` in favor of `proxy.ts`
 - **Impact:** Non-blocking warning during build, middleware still works
 - **Action:** Will need to migrate when Supabase SSR updates their docs
+
+## n8n Workflow Creation via MCP
+- **Node types:** Use `@n8n/n8n-nodes-langchain.googleGemini` (standalone) for Gemini, `@n8n/n8n-nodes-langchain.chainLlm` + `@n8n/n8n-nodes-langchain.lmChatAnthropic` (sub-node) for Claude
+- **Connections:** Chat model sub-nodes connect via `ai_languageModel` type, not `main`
+- **Partial update:** Node names with special characters (& etc.) fail in `updateNode` — use `nodeId` instead, but ensure full ID (not truncated)
+- **Credential IDs:** Left empty during creation — user must configure in n8n UI
+- **Rule:** Always validate workflow after creation with `n8n_validate_workflow`
+
+## Supabase MCP Permissions
+- **Problem:** Supabase MCP tool may not have access to all projects (different org or access token scope)
+- **Workaround:** Provide SQL migration file for manual execution in Supabase SQL Editor
+- **Rule:** Always have a fallback SQL migration file when using Supabase MCP for DDL operations
+
+## n8n Code Nodes — No `fetch()` Available
+- **Problem:** n8n Code nodes run in a sandboxed environment where `fetch()` is NOT defined
+- **Solution:** Use `this.helpers.httpRequest()` for all HTTP calls — this is n8n's built-in HTTP utility
+- **Syntax:** `await this.helpers.httpRequest({ method, url, headers, body, json: true })`
+- **Rule:** NEVER use `fetch()` in n8n Code nodes. Always use `this.helpers.httpRequest()`
+
+## n8n Partial Update API
+- **Problem:** `updateNode` operation requires `updates` (plural), not `update`
+- **Rule:** Always use `updates` key in `updateNode` operations for `n8n_update_partial_workflow`
+
+## n8n Nodes Created via API — Always Set `operation` Explicitly
+- **Problem:** n8n nodes created via MCP/API may not correctly infer default `operation` values. The UI always writes operation explicitly, but the API doesn't auto-fill defaults.
+- **Impact:** Node silently fails because parameters gated by `displayOptions.show.operation` aren't recognized as active
+- **Rule:** ALWAYS set both `resource` AND `operation` explicitly when creating/updating n8n nodes via API
+- **Example:** For image generation: `resource: "image"` + `operation: "generate"` (not just `resource: "image"`)
+
+## Tailwind v4 — `prose` Requires Typography Plugin
+- **Problem:** `prose` and `prose-invert` classes do nothing without `@tailwindcss/typography` installed
+- **Impact:** Markdown rendered by react-markdown gets no base typography styles (bold, lists, links, etc.)
+- **Workaround:** Use explicit descendant selectors like `[&_strong]:font-bold [&_strong]:text-brand-white`
+- **Rule:** Either install the typography plugin OR use explicit styles — don't rely on `prose` without the plugin
+
+## n8n Validation False Positives
+- **Info:** n8n workflow validator warns about "Invalid $ usage" and "Use $helpers not helpers" for valid Code node patterns like `$('Node Name')` and `this.helpers.httpRequest()`
+- **Rule:** These warnings are false positives — ignore them if the patterns match known n8n Code node APIs

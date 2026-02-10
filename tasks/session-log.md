@@ -4,6 +4,163 @@
 
 ---
 
+## Session: 2026-02-10 (Fix Image Generation Node + Bold Text)
+
+### What Was Done
+- Fixed n8n "Generate Image" node: added explicit `operation: "generate"` parameter (was missing, causing node to silently fail)
+- Fixed bold text rendering in PostContent: added `[&_strong]:font-bold` to ensure `font-weight: 700` on `<strong>` elements
+- User fixed webhook 401 by adding `WEBHOOK_SECRET` to Vercel env vars
+
+### Last Known Good State
+- **Build Status:** ✅ Passing (`npm run build` — 25 routes, 0 errors, 1594ms)
+- **Dev Server:** Not tested (build-only)
+- **Last Successful Command:** `npm run build`
+- **Git State:** master, uncommitted change in PostContent.tsx
+
+### What Changed (Files Modified)
+- `src/components/blog/PostContent.tsx` — added `[&_strong]:font-bold` to markdown container div
+- **n8n workflow `Rs3zNLx8hSSTgw47`:** "Generate Image" node updated with explicit `operation: "generate"`
+
+### Active Decisions
+- Using explicit `operation` parameter on all n8n nodes (API-created nodes don't reliably use defaults)
+- Not installing `@tailwindcss/typography` — using manual CSS selectors for markdown instead
+
+### Known Issues
+- Image generation not yet tested end-to-end (user needs to trigger workflow)
+- `prose prose-invert` classes on PostContent outer div are no-ops (no typography plugin) — harmless but could be cleaned up later
+
+### Next Steps (Priority Order)
+1. User triggers n8n workflow manually to test image generation end-to-end
+2. Verify bold text renders correctly on live site after deploy
+3. Deploy updated PostContent.tsx to Vercel (`git push`)
+
+### ⚠️ DO NOT Touch
+- `src/app/api/data-deletion/route.ts` — Meta signed_request verification
+- `src/lib/auth/session.ts` — AES-256-GCM session encryption
+- Webhook secret in `.env.local` / Vercel — must match n8n workflow value
+- `src/app/api/webhook/content/route.ts` — working correctly now
+
+---
+
+## Session: 2026-02-10 (n8n Workflow Fix — Cloudinary + fetch Error)
+
+### What Was Done
+- Ran Supabase migration: added `meta_title`, `meta_description`, `key_takeaway`, `faq_items` columns to `posts` table
+- Fixed n8n workflow `Rs3zNLx8hSSTgw47` — "Generate Image" node: added `onError: continueRegularOutput` so pipeline continues if image generation fails
+- Fixed n8n workflow `Rs3zNLx8hSSTgw47` — "Upload & Publish" node: replaced broken `fetch()` calls with `this.helpers.httpRequest()` (the n8n-native way)
+- Upload & Publish now uploads images to Cloudinary (`dgpayiccs`, preset `aizavseki_unsigned`) instead of Supabase Storage
+- Webhook payload now sends `image_urls` (Cloudinary URLs) instead of `image_base64` — webhook route already supports this path
+- Graceful handling: if Gemini generates 0 images, pipeline continues and publishes without an image
+
+### Last Known Good State
+- **Build Status:** ✅ Passing (no code changes made)
+- **Dev Server:** Not tested (no code changes)
+- **Last Successful Command:** n8n workflow validation — 0 errors, 9 warnings (all generic/false-positive)
+- **Git State:** master, no new changes (n8n-only session)
+
+### What Changed (Files Modified)
+- No local files changed — all changes were to n8n workflow via MCP
+- **n8n workflow `Rs3zNLx8hSSTgw47`:** 2 node updates (Generate Image + Upload & Publish)
+- **Supabase `posts` table:** 4 new columns added via SQL migration
+
+### Active Decisions
+- Using Cloudinary (`dgpayiccs`) with unsigned upload preset `aizavseki_unsigned` for image hosting (matches old workflow pattern)
+- `this.helpers.httpRequest()` is the correct way to make HTTP calls in n8n Code nodes (not `fetch()`)
+- Cloudinary URLs go directly into `image_urls` field — no base64 intermediary needed
+- Generate Image uses `continueRegularOutput` (not `continueErrorOutput`) so it passes through to Upload & Publish even on failure
+
+### Known Issues
+- n8n validation warnings about "$helpers" and "Invalid $ usage" are false positives — `$('node')` and `this.helpers` are valid Code node patterns
+- n8n credentials still need user configuration (Google Gemini + Anthropic API keys)
+- Workflow not yet activated — needs manual test first
+
+### Next Steps (Priority Order)
+1. Configure n8n credentials: Google Gemini API key + Anthropic API key
+2. Manual test of n8n workflow (trigger single execution)
+3. Activate workflow for daily 8AM schedule
+4. Verify end-to-end: article appears on aizavseki.eu/blog with Cloudinary image
+
+### ⚠️ DO NOT Touch
+- `src/app/api/data-deletion/route.ts` — Meta signed_request verification (tested, critical)
+- `src/lib/auth/session.ts` — AES-256-GCM session encryption
+- Webhook secret in `.env.local` — must match n8n workflow's hardcoded value
+- `src/app/api/webhook/content/route.ts` — supports both `image_urls` and `image_base64` paths, both are needed
+
+---
+
+## Session: 2026-02-10 (LLMO/GEO Content Pipeline)
+
+### What Was Done
+- Implemented full LLMO/GEO content pipeline for AI-optimized article generation
+- Added 4 new database columns to posts: `meta_title`, `meta_description`, `key_takeaway`, `faq_items` (JSONB)
+- Added `FaqItem` interface to types.ts, updated Post Row/Insert/Update types with new fields
+- Upgraded PostContent component: markdown rendering via `react-markdown` + `remark-gfm`, replaced `<img>` with `next/image`
+- Created FaqSection component: expandable accordion for FAQ items (client component with ChevronDown animation)
+- Updated webhook endpoint: accepts new LLMO fields + base64 image upload to Supabase Storage
+- Updated blog post page (`[slug]/page.tsx`):
+  - Key takeaway highlighted box before content
+  - FaqSection after content
+  - `generateMetadata` uses `meta_title`/`meta_description` with fallbacks
+  - Triple JSON-LD: Article + BreadcrumbList + FAQPage (conditional)
+- Generated WEBHOOK_SECRET and set in `.env.local`
+- Installed `react-markdown` and `remark-gfm` dependencies
+- Created SQL migration file at `tasks/migrations/add_llmo_columns.sql`
+- Created n8n workflow "AiZaVseki LLMO Content Pipeline v2" (ID: Rs3zNLx8hSSTgw47) with 10 nodes:
+  1. Schedule Trigger (daily 8AM Europe/Sofia)
+  2. Code (pillar rotation: AI_NEWS → AI_TOOLS → AI_TIPS → AI_BUSINESS → AI_FUN)
+  3. Google Gemini (research with Google Search grounding)
+  4. Basic LLM Chain + Claude Haiku 4.5 (LLMO content brief)
+  5. Basic LLM Chain + Claude Sonnet 4.5 (full article writer in Bulgarian)
+  6. Code (JSON validation)
+  7. Google Gemini (image generation)
+  8. Code (upload image + POST to webhook)
+
+### Last Known Good State
+- **Build Status:** ✅ Passing (`npm run build` — 25 routes, 0 errors, compiled in 1556ms)
+- **Dev Server:** Not tested this session (build-only verification)
+- **Last Successful Command:** `npm run build`
+- **Git State:** master, no new commit (awaiting user review)
+
+### What Changed (Files Modified)
+- `src/lib/supabase/types.ts` — Added `FaqItem` interface, 4 new fields to posts Row/Insert/Update
+- `src/app/api/webhook/content/route.ts` — Added LLMO fields + base64 image upload to Supabase Storage
+- `src/components/blog/PostContent.tsx` — Markdown rendering via react-markdown, next/image for slide images
+- `src/components/blog/FaqSection.tsx` — NEW: Expandable FAQ accordion component
+- `src/app/blog/[slug]/page.tsx` — Key takeaway box, FaqSection, triple JSON-LD, updated generateMetadata
+- `.env.local` — Set WEBHOOK_SECRET
+- `package.json` / `package-lock.json` — Added react-markdown, remark-gfm (97 packages)
+- `tasks/migrations/add_llmo_columns.sql` — NEW: Database migration for 4 new columns
+
+### Active Decisions
+- Using standalone Google Gemini node (not chat model sub-node) for research with built-in Google Search grounding
+- Using Basic LLM Chain + Anthropic Chat Model sub-nodes for Claude (Haiku brief + Sonnet writing)
+- Image upload via base64 in webhook payload → Supabase Storage (avoids external service)
+- FaqSection uses simple state toggle (no animation library needed, just CSS transition)
+- Pillar rotation uses `dayOfYear % 5` for deterministic daily cycling
+
+### Known Issues
+- SQL migration (`tasks/migrations/add_llmo_columns.sql`) needs to be run manually in Supabase SQL Editor
+- n8n credential IDs are empty — user must configure Google Gemini and Anthropic API credentials in n8n
+- Supabase Storage bucket "images" must be created and set to public
+- n8n workflow not yet activated (needs credentials + manual test first)
+- middleware.ts deprecation warning still present (non-blocking)
+
+### Next Steps (Priority Order)
+1. Run `tasks/migrations/add_llmo_columns.sql` in Supabase SQL Editor
+2. Create "images" storage bucket in Supabase (set public)
+3. Configure n8n credentials (Google Gemini API key + Anthropic API key)
+4. Manual test of n8n workflow
+5. Activate n8n workflow for daily 8AM schedule
+6. Test full pipeline end-to-end
+7. Deploy updated app to Vercel
+
+### ⚠️ DO NOT Touch
+- `src/app/api/data-deletion/route.ts` — Meta signed_request verification (tested, critical)
+- `src/lib/auth/session.ts` — AES-256-GCM session encryption
+- Webhook secret in `.env.local` — must match n8n workflow's hardcoded value
+
+---
+
 ## Session: 2026-02-09 (Facebook OAuth Admin Panel)
 
 ### What Was Done

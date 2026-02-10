@@ -1,3 +1,6 @@
+import Image from "next/image";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import type { PostContent as PostContentType } from "@/lib/supabase/types";
 
 interface PostContentProps {
@@ -17,17 +20,21 @@ export function PostContent({ content, imageUrls }: PostContentProps) {
           </h2>
 
           {slide_texts[index] && (
-            <p className="text-brand-gray-light leading-relaxed text-lg">
-              {slide_texts[index]}
-            </p>
+            <div className="text-brand-gray-light leading-relaxed text-lg [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_a]:text-brand-cyan [&_a]:underline [&_strong]:font-bold [&_strong]:text-brand-white [&_p]:mb-4">
+              <Markdown remarkPlugins={[remarkGfm]}>
+                {slide_texts[index]}
+              </Markdown>
+            </div>
           )}
 
           {imageUrls?.[index] && (
-            <div className="mt-4 overflow-hidden rounded-xl">
-              <img
+            <div className="mt-4 relative aspect-video overflow-hidden rounded-xl">
+              <Image
                 src={imageUrls[index]}
                 alt={title}
-                className="w-full object-cover"
+                fill
+                sizes="(max-width: 768px) 100vw, 768px"
+                className="object-cover"
                 loading="lazy"
               />
             </div>
@@ -35,7 +42,6 @@ export function PostContent({ content, imageUrls }: PostContentProps) {
         </div>
       ))}
 
-      {/* If there's a caption without slides, render as paragraph */}
       {slide_titles.length === 0 && slide_texts.length === 0 && (
         <p className="text-brand-gray-light leading-relaxed text-lg">
           Съдържанието скоро ще бъде добавено.
