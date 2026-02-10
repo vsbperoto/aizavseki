@@ -7,7 +7,7 @@ import { FaqSection } from "@/components/blog/FaqSection";
 import { ShareButtons } from "@/components/blog/ShareButtons";
 import { Badge } from "@/components/ui/Badge";
 import { formatDate } from "@/lib/utils";
-import { ArrowLeft, Eye } from "lucide-react";
+import { ArrowLeft, Eye, Clock } from "lucide-react";
 import Link from "next/link";
 import type { PillarKey } from "@/lib/constants";
 import type { Post, PostContent as PostContentType, FaqItem } from "@/lib/supabase/types";
@@ -59,6 +59,9 @@ export default async function PostPage({ params }: PostPageProps) {
 
   const faqItems = (post.faq_items || []) as FaqItem[];
 
+  const content = post.content as unknown as PostContentType;
+  const readingTime = Math.max(1, Math.ceil((post.word_count || 0) / 200));
+
   // Article JSON-LD
   const articleJsonLd = {
     "@context": "https://schema.org",
@@ -67,6 +70,7 @@ export default async function PostPage({ params }: PostPageProps) {
     description: post.meta_description || post.hook || undefined,
     image: post.image_urls?.[0] || undefined,
     datePublished: post.published_at,
+    dateModified: post.published_at,
     author: {
       "@type": "Organization",
       name: "AiZaVseki",
@@ -81,7 +85,24 @@ export default async function PostPage({ params }: PostPageProps) {
       },
     },
     mainEntityOfPage: `https://aizavseki.eu/blog/${slug}`,
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: ["article h1", "article h2", ".key-takeaway"],
+    },
   };
+
+  // HowTo JSON-LD (only for AI_TIPS pillar)
+  const howToJsonLd = post.pillar === "AI_TIPS" && content.slide_titles?.length ? {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: post.title,
+    description: post.meta_description || post.hook || undefined,
+    step: content.slide_titles.map((title, i) => ({
+      "@type": "HowToStep",
+      name: title,
+      text: content.slide_texts?.[i] || "",
+    })),
+  } : null;
 
   // BreadcrumbList JSON-LD
   const breadcrumbJsonLd = {
@@ -124,6 +145,12 @@ export default async function PostPage({ params }: PostPageProps) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
         />
       )}
+      {howToJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
+        />
+      )}
       <article className="mx-auto max-w-3xl px-4 sm:px-6">
         <Link
           href="/blog"
@@ -154,6 +181,12 @@ export default async function PostPage({ params }: PostPageProps) {
               <Eye className="h-3.5 w-3.5" />
               {post.views} прегледа
             </span>
+            {post.word_count ? (
+              <span className="flex items-center gap-1">
+                <Clock className="h-3.5 w-3.5" />
+                {readingTime} мин четене
+              </span>
+            ) : null}
           </div>
         </header>
 
@@ -161,7 +194,7 @@ export default async function PostPage({ params }: PostPageProps) {
           <div className="relative mb-10 aspect-video overflow-hidden rounded-2xl">
             <Image
               src={post.image_urls[0]}
-              alt={post.title}
+              alt={post.image_alt_text || post.title}
               fill
               sizes="(max-width: 768px) 100vw, 768px"
               className="object-cover"
@@ -182,8 +215,9 @@ export default async function PostPage({ params }: PostPageProps) {
         )}
 
         <PostContent
-          content={post.content as unknown as PostContentType}
+          content={content}
           imageUrls={post.image_urls}
+          imageAltText={post.image_alt_text}
         />
 
         {faqItems.length > 0 && <FaqSection items={faqItems} />}

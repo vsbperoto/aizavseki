@@ -71,6 +71,18 @@ export const PILLARS: Record<PillarKey, { label: string; icon: string; color: st
   },
 } as const;
 
+export const PILLAR_SLUGS: Record<PillarKey, string> = {
+  AI_NEWS: "ai-novini",
+  AI_TOOLS: "ai-instrumenti",
+  AI_TIPS: "ai-saveti",
+  AI_BUSINESS: "ai-za-biznes",
+  AI_FUN: "ai-zabavlenia",
+} as const;
+
+export const SLUG_TO_PILLAR: Record<string, PillarKey> = Object.fromEntries(
+  Object.entries(PILLAR_SLUGS).map(([key, slug]) => [slug, key as PillarKey])
+) as Record<string, PillarKey>;
+
 export const STATS = [
   { value: 50, suffix: "+", label: "публикации" },
   { value: 5, suffix: "", label: "теми" },

@@ -1,7 +1,16 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+const AI_BOTS = ["GPTBot", "ClaudeBot", "PerplexityBot", "Google-Extended", "Bingbot", "ChatGPT-User"];
+
 export async function middleware(request: NextRequest) {
+  // Log AI bot visits
+  const ua = request.headers.get("user-agent") || "";
+  const matchedBot = AI_BOTS.find((bot) => ua.includes(bot));
+  if (matchedBot) {
+    console.log(`[AI Bot] ${matchedBot} visited ${request.nextUrl.pathname}`);
+  }
+
   let supabaseResponse = NextResponse.next({ request });
 
   createServerClient(

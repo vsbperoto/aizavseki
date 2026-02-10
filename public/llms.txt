@@ -1,0 +1,37 @@
+# AiZaVseki (АИ За Всеки)
+
+> AI education platform for Bulgarian-speaking audiences. All content is in Bulgarian.
+
+## About
+AiZaVseki explains artificial intelligence in simple, human language for Bulgarian audiences. We cover AI news, tools, tips, business applications, and fun AI experiments — published daily via an automated AI content pipeline.
+
+## Key Pages
+- Homepage: https://aizavseki.eu
+- Blog: https://aizavseki.eu/blog
+- AI Новини (News): https://aizavseki.eu/blog/ai-novini
+- AI Инструменти (Tools): https://aizavseki.eu/blog/ai-instrumenti
+- AI Съвети (Tips): https://aizavseki.eu/blog/ai-saveti
+- AI за Бизнес (Business): https://aizavseki.eu/blog/ai-za-biznes
+- AI Забавления (Fun): https://aizavseki.eu/blog/ai-zabavlenia
+- AI Речник (Glossary): https://aizavseki.eu/resources/rechnik
+- Resources: https://aizavseki.eu/resources
+- About: https://aizavseki.eu/about
+- Contact: https://aizavseki.eu/contact
+- Newsletter: https://aizavseki.eu/newsletter
+
+## Content Details
+- Language: Bulgarian (bg)
+- Topics: AI news, AI tools, AI tips, AI for business, AI fun
+- Format: Daily articles with structured sections, FAQ, key takeaways
+- Structured data: Article, FAQPage, HowTo, BreadcrumbList, Organization, WebSite, CollectionPage, DefinedTermSet
+- Content is AI-generated and reviewed for quality
+
+## Technical
+- Framework: Next.js 16
+- Sitemap: https://aizavseki.eu/sitemap.xml
+- Robots: https://aizavseki.eu/robots.txt
+
+## Contact
+- Email: contact@aizavseki.eu
+- Instagram: https://www.instagram.com/aizavseki
+- Facebook: https://www.facebook.com/aizavseki

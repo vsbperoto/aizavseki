@@ -55,6 +55,11 @@ export interface Database {
           meta_description: string | null;
           key_takeaway: string | null;
           faq_items: FaqItem[] | null;
+          image_alt_text: string | null;
+          quality_score: number | null;
+          word_count: number | null;
+          target_keyword: string | null;
+          internal_links_used: string[] | null;
         };
         Insert: {
           id?: string;
@@ -76,6 +81,11 @@ export interface Database {
           meta_description?: string | null;
           key_takeaway?: string | null;
           faq_items?: Json | null;
+          image_alt_text?: string | null;
+          quality_score?: number | null;
+          word_count?: number | null;
+          target_keyword?: string | null;
+          internal_links_used?: string[] | null;
         };
         Update: {
           id?: string;
@@ -97,6 +107,11 @@ export interface Database {
           meta_description?: string | null;
           key_takeaway?: string | null;
           faq_items?: Json | null;
+          image_alt_text?: string | null;
+          quality_score?: number | null;
+          word_count?: number | null;
+          target_keyword?: string | null;
+          internal_links_used?: string[] | null;
         };
         Relationships: [];
       };
@@ -238,6 +253,63 @@ export interface Database {
         };
         Relationships: [];
       };
+      trending_topics: {
+        Row: {
+          id: string;
+          topic: string;
+          topic_en: string | null;
+          pillar: string;
+          source: string;
+          source_url: string | null;
+          source_author: string | null;
+          deep_context: Json;
+          target_keyword: string | null;
+          secondary_keywords: string[] | null;
+          search_intent: string | null;
+          engagement_score: number;
+          relevance_score: number | null;
+          scan_batch: string | null;
+          scouted_at: string;
+          used_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          topic: string;
+          topic_en?: string | null;
+          pillar: string;
+          source?: string;
+          source_url?: string | null;
+          source_author?: string | null;
+          deep_context?: Json;
+          target_keyword?: string | null;
+          secondary_keywords?: string[] | null;
+          search_intent?: string | null;
+          engagement_score?: number;
+          relevance_score?: number | null;
+          scan_batch?: string | null;
+          scouted_at?: string;
+          used_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          topic?: string;
+          topic_en?: string | null;
+          pillar?: string;
+          source?: string;
+          source_url?: string | null;
+          source_author?: string | null;
+          deep_context?: Json;
+          target_keyword?: string | null;
+          secondary_keywords?: string[] | null;
+          search_intent?: string | null;
+          engagement_score?: number;
+          relevance_score?: number | null;
+          scan_batch?: string | null;
+          scouted_at?: string;
+          used_at?: string | null;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
@@ -262,3 +334,4 @@ export type NewsletterSubscriber = Database["public"]["Tables"]["newsletter_subs
 export type ContactSubmission = Database["public"]["Tables"]["contact_submissions"]["Row"];
 export type DataDeletionRequest = Database["public"]["Tables"]["data_deletion_requests"]["Row"];
 export type FacebookToken = Database["public"]["Tables"]["facebook_tokens"]["Row"];
+export type TrendingTopic = Database["public"]["Tables"]["trending_topics"]["Row"];

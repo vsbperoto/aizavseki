@@ -8,6 +8,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/about",
     "/blog",
     "/resources",
+    "/resources/rechnik",
     "/newsletter",
     "/contact",
     "/privacy-policy",
@@ -15,11 +16,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/data-deletion",
   ];
 
+  const pillarPages = [
+    "/blog/ai-novini",
+    "/blog/ai-instrumenti",
+    "/blog/ai-saveti",
+    "/blog/ai-za-biznes",
+    "/blog/ai-zabavlenia",
+  ];
+
   const staticEntries: MetadataRoute.Sitemap = staticPages.map((path) => ({
     url: `${BASE_URL}${path}`,
     lastModified: new Date(),
     changeFrequency: path === "/blog" ? "daily" : "weekly",
     priority: path === "" ? 1 : 0.8,
+  }));
+
+  const pillarEntries: MetadataRoute.Sitemap = pillarPages.map((path) => ({
+    url: `${BASE_URL}${path}`,
+    lastModified: new Date(),
+    changeFrequency: "daily" as const,
+    priority: 0.8,
   }));
 
   let blogEntries: MetadataRoute.Sitemap = [];
@@ -43,5 +59,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Supabase not configured
   }
 
-  return [...staticEntries, ...blogEntries];
+  return [...staticEntries, ...pillarEntries, ...blogEntries];
 }

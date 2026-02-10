@@ -21,15 +21,42 @@
 - [x] Facebook OAuth admin panel — SQL migration, types, OAuth helpers, session encryption, 5 API routes, admin dashboard
 - [x] LLMO/GEO Content Pipeline — types, webhook upgrade, PostContent markdown, FaqSection, key_takeaway box, triple JSON-LD, react-markdown
 - [x] n8n workflow created (AiZaVseki LLMO Content Pipeline v2 — ID: Rs3zNLx8hSSTgw47)
-
-## Pending
 - [x] Run `tasks/migrations/add_llmo_columns.sql` in Supabase (4 new post columns) — done via MCP
 - [x] Fix n8n workflow: replace `fetch()` with `this.helpers.httpRequest()` + Cloudinary upload
 - [x] Fix n8n workflow: add `continueOnFail` on Generate Image node
+- [x] Content Pipeline v3 — Full LLMO/GEO Overhaul (Phases 1-6):
+  - [x] Phase 1: DB migration (trending_topics table + 5 new posts columns) — via Supabase MCP
+  - [x] Phase 1: Webhook route updated with new fields (image_alt_text, quality_score, word_count, target_keyword, internal_links_used)
+  - [x] Phase 1: Supabase types updated (TrendingTopic type + new Post fields)
+  - [x] Phase 2: Grok Scout workflow created (AiZaVseki Topic Scout — ID: J0KAdiRqGkGcp41i)
+  - [x] Phase 3: Main pipeline rebuilt to v3 (12 nodes: scout topic + IF + SERP brief + quality review)
+  - [x] Phase 4: llms.txt created
+  - [x] Phase 4: Sitemap updated with pillar pages + glossary
+  - [x] Phase 4: Article JSON-LD enhanced (speakable, dateModified, HowTo for AI_TIPS)
+  - [x] Phase 4: Reading time display added
+  - [x] Phase 4: image_alt_text wired to blog post + PostContent
+  - [x] Phase 4: Organization JSON-LD enhanced (knowsAbout, foundingDate, areaServed)
+  - [x] Phase 5: 5 pillar landing pages created (ai-novini, ai-instrumenti, ai-saveti, ai-za-biznes, ai-zabavlenia)
+  - [x] Phase 5: Bulgarian AI glossary page (24 terms with DefinedTermSet JSON-LD)
+  - [x] Phase 5: AI bot detection middleware (GPTBot, ClaudeBot, PerplexityBot, etc.)
+  - [x] Phase 5: Pillar slug mapping added to constants.ts
+  - [x] Phase 6: Content type cycling (article/definition/comparison) in Pick Daily Pillar
+  - [x] Phase 6: Sonnet Writer prompt updated for content type awareness
+  - [x] Build verified: 0 errors, all new routes rendering
+- [x] Critical Fix: Scout-first architecture — Get Best Topic queries ANY pillar by relevance/engagement, Pick Daily Pillar moved to FALSE branch only
+- [x] Critical Fix: JSON parsing robustness — robust sanitizer (curly quotes, control chars, BOM, regex extraction) + stricter LLM prompts
+- [x] IF node `looseTypeValidation: true` for boolean check
+- [x] Workflow validated: 0 errors, 14 warnings (all false positives)
+
+## Pending — User Configuration Required
+- [ ] Configure xAI API key in n8n (for Grok Scout workflow — Header Auth credential)
+- [ ] Configure Supabase service role key in n8n Code nodes (Get Scout Topic + Upload & Publish)
+- [ ] Configure n8n environment variable: SUPABASE_SERVICE_ROLE_KEY (for Scout workflow Insert to Supabase node)
+- [ ] Manual test of Grok Scout workflow (J0KAdiRqGkGcp41i)
+- [ ] Manual test of main pipeline v3 (Rs3zNLx8hSSTgw47)
+- [ ] Activate both n8n workflows (Scout: every 6h, Pipeline: daily 8AM)
 - [ ] ~~Create "images" storage bucket in Supabase~~ — No longer needed (using Cloudinary instead)
 - [ ] Configure n8n credentials: Google Gemini API key + Anthropic API key
-- [ ] Manual test of n8n LLMO workflow (Rs3zNLx8hSSTgw47)
-- [ ] Activate n8n workflow for daily 8AM schedule
 - [ ] Run `supabase-migration-facebook-tokens.sql` in Supabase SQL Editor
 - [ ] Fill env vars: META_APP_ID, META_APP_SECRET, ADMIN_SECRET, ADMIN_FACEBOOK_ID
 - [ ] Add OAuth redirect URIs in Facebook App settings
@@ -38,3 +65,4 @@
 - [ ] Deploy to Vercel
 - [ ] Configure custom domain (aizavseki.eu)
 - [ ] Submit Meta app for review with legal page URLs
+- [ ] Git commit and push v3 changes

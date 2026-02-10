@@ -4,6 +4,156 @@
 
 ---
 
+## Session: 2026-02-10 (Pipeline v3 Critical Fixes — Scout-First + JSON Robustness)
+
+### What Was Done
+- **Fix 1: Scout-first architecture** — Rewired entire pipeline so scout topic DRIVES pillar choice
+  - Renamed "Get Scout Topic" → "Get Best Topic" with cross-pillar query (`order=relevance_score.desc,engagement_score.desc`)
+  - Moved "Pick Daily Pillar" to FALSE branch of IF (only runs when no scout topics exist)
+  - Rewired: `Daily 8AM → Get Best Topic → Has Topic? → TRUE: SERP Brief / FALSE: Pick Daily Pillar → Gemini Fallback → SERP Brief`
+  - Updated all downstream expressions with conditional `has_scout_topic ? scout : pillar` pattern
+- **Fix 2: JSON parsing robustness** — Two-layer defense
+  - Replaced Validate JSON sanitizer with robust version (Bulgarian curly quotes, control chars, BOM, regex extraction)
+  - Used `String.fromCharCode()` approach to avoid JSON encoding hell in n8n Code nodes
+  - Updated Sonnet Writer + Gemini Quality Review prompts with strict JSON output rules
+- IF node `Has Topic?` now uses `looseTypeValidation: true` for reliable boolean check
+- Workflow validated: **0 errors**, 14 warnings (all known false positives)
+- Connection graph verified: 12 nodes, 11 connections, scout-first architecture confirmed
+
+### Last Known Good State
+- **Build Status:** ✅ Passing (no local code changes — n8n-only session)
+- **n8n Workflow:** ✅ Valid (0 errors, Rs3zNLx8hSSTgw47)
+- **Git State:** master, uncommitted local changes from v3 implementation
+
+### What Changed (Files Modified)
+- No local files changed — all changes to n8n workflow `Rs3zNLx8hSSTgw47` via MCP
+- **n8n nodes updated:** Get Best Topic (renamed + new code), Pick Daily Pillar (moved to false branch), Gemini SERP Brief (updated expressions), Sonnet Writer (stricter JSON rules + conditional pillar refs), Gemini Quality Review (stricter JSON rules), Validate JSON (robust sanitizer), Upload & Publish (updated refs)
+
+### Active Decisions
+- Scout-first: best unused topic (any pillar) drives the article's pillar — no more pillar rotation when topics exist
+- Pillar rotation (dayOfYear % 5) only fires as fallback when trending_topics table is empty
+- `String.fromCharCode()` used in Validate JSON Code node to avoid backslash/quote escaping issues in n8n API
+
+### Known Issues
+- Supabase service role key still placeholder `'REPLACE_WITH_SERVICE_ROLE_KEY'` in Get Best Topic + Upload & Publish
+- xAI API key not yet configured for Grok Scout workflow
+- Neither workflow activated yet — needs manual testing first
+
+### Next Steps (Priority Order)
+1. Git commit and push all v3 changes (local code)
+2. Configure Supabase service role key in n8n Code nodes
+3. Configure xAI API key credential in n8n
+4. Manual test Scout workflow → verify topics in Supabase
+5. Manual test main pipeline v3 → verify article publishes
+6. Activate both workflows
+7. Deploy to Vercel
+
+### ⚠️ DO NOT Touch
+- n8n credential IDs: `BZp9maC2RuSSomid` (Gemini), `jb8lJzGL9ZRWU2Vy` (Anthropic) — DO NOT change
+- WEBHOOK_SECRET in Vercel — already configured
+- Cloudinary config: `dgpayiccs` / `aizavseki_unsigned` / `aizavseki/posts`
+- IF node `looseTypeValidation: true` — needed for boolean check to work correctly
+
+---
+
+## Session: 2026-02-10 (Content Pipeline v3 Implementation)
+
+### What Was Done
+- Implemented full Content Pipeline v3 overhaul (all 6 phases)
+- **Phase 1**: Supabase migration (trending_topics table + 5 new post columns), webhook + types update
+- **Phase 2**: Created Grok Scout workflow (J0KAdiRqGkGcp41i) — 5 nodes, xAI Responses API with x_search + web_search
+- **Phase 3**: Rebuilt main pipeline to v3 (Rs3zNLx8hSSTgw47) — 12 nodes with scout integration, IF branching, SERP brief, quality review
+- **Phase 4**: LLMO optimizations — llms.txt, speakable schema, HowTo schema, dateModified, reading time, image_alt_text, enhanced Organization JSON-LD, sitemap update
+- **Phase 5**: 5 pillar landing pages, Bulgarian AI glossary (24 terms), AI bot detection middleware, pillar slug mapping
+- **Phase 6**: Content type cycling (article/definition/comparison) in pillar rotation + Sonnet Writer prompt
+
+### Last Known Good State
+- **Build Status:** ✅ Passing (0 errors)
+- **Dev Server:** Not tested this session
+- **Last Successful Command:** `npm run build`
+- **Git State:** master, uncommitted changes (ready to commit)
+
+### What Changed (Files Modified)
+- `src/lib/supabase/types.ts` — Added TrendingTopic type, 5 new Post fields
+- `src/app/api/webhook/content/route.ts` — Accept image_alt_text, quality_score, word_count, target_keyword, internal_links_used
+- `src/app/blog/[slug]/page.tsx` — Speakable, HowTo, dateModified, reading time, image_alt_text
+- `src/app/layout.tsx` — Enhanced Organization JSON-LD (knowsAbout, foundingDate, areaServed)
+- `src/app/sitemap.ts` — Added pillar pages + glossary
+- `src/components/blog/PostContent.tsx` — Added imageAltText prop
+- `src/lib/constants.ts` — Added PILLAR_SLUGS + SLUG_TO_PILLAR mappings
+- `src/middleware.ts` — AI bot detection (GPTBot, ClaudeBot, PerplexityBot, etc.)
+
+### New Files Created
+- `public/llms.txt` — AI crawler discovery file
+- `tasks/migrations/v3_pipeline.sql` — DB migration
+- `src/components/blog/PillarPage.tsx` — Shared pillar page component
+- `src/app/blog/(pillars)/ai-novini/page.tsx` — AI News pillar page
+- `src/app/blog/(pillars)/ai-instrumenti/page.tsx` — AI Tools pillar page
+- `src/app/blog/(pillars)/ai-saveti/page.tsx` — AI Tips pillar page
+- `src/app/blog/(pillars)/ai-za-biznes/page.tsx` — AI Business pillar page
+- `src/app/blog/(pillars)/ai-zabavlenia/page.tsx` — AI Fun pillar page
+- `src/app/resources/rechnik/page.tsx` — Bulgarian AI glossary (24 terms)
+
+### Active Decisions
+- Grok Scout uses HTTP Request to xAI Responses API (not built-in node) for x_search/web_search tools
+- trending_topics uses `used_at TIMESTAMPTZ` (NULL = available) instead of boolean
+- Supabase service role key stored as placeholder in Code nodes — user must replace
+- Content types cycle independently from pillars (dayOfYear % 3 for types, % 5 for pillars)
+- Quality Review uses Gemini (free via Google credits) instead of Claude
+
+### Known Issues
+- Supabase service role key is placeholder `'REPLACE_WITH_SERVICE_ROLE_KEY'` in n8n Code nodes (Get Scout Topic, Upload & Publish)
+- Grok Scout HTTP Request needs Header Auth credential configured for xAI API key
+- Scout workflow Insert to Supabase uses `$env.SUPABASE_SERVICE_ROLE_KEY` — user must set this n8n env var
+- IF node "Has Topic?" warning about error output connections — this is the false branch, not an error
+
+### Next Steps (Priority Order)
+1. Git commit and push all v3 changes
+2. Configure xAI API key credential in n8n for Grok Scout
+3. Replace Supabase key placeholders in n8n Code nodes
+4. Manual test Scout workflow → verify topics in Supabase
+5. Manual test main pipeline v3 → verify article publishes with all new fields
+6. Activate both workflows
+7. Deploy to Vercel
+
+### ⚠️ DO NOT Touch
+- `src/components/blog/FaqSection.tsx` — Working as-is
+- n8n credential IDs: `BZp9maC2RuSSomid` (Gemini), `jb8lJzGL9ZRWU2Vy` (Anthropic) — DO NOT change
+- WEBHOOK_SECRET in Vercel — already configured, do not modify
+- Cloudinary config: `dgpayiccs` / `aizavseki_unsigned` / `aizavseki/posts`
+
+---
+
+## Session: 2026-02-10 (Fix JSON Escaping Loop in n8n)
+
+### What Was Done
+- Updated "Sonnet Writer" prompt: added CRITICAL JSON OUTPUT RULES to prevent Bulgarian curly quotes in JSON output
+- Simplified "Validate JSON" node: removed all quote-fixing regex (caused escaping loops), kept only safe fixes (trailing commas, comments), added better error reporting with position context
+
+### Last Known Good State
+- **Build Status:** ✅ Passing (no code changes)
+- **n8n Workflow:** ✅ Valid (0 errors)
+- **Git State:** master, 3ee475c
+
+### What Changed (Files Modified)
+- **n8n workflow `Rs3zNLx8hSSTgw47`:** 2 node updates (Sonnet Writer prompt + Validate JSON code)
+
+### Active Decisions
+- Prevent JSON issues at the source (LLM prompt) instead of patching in post-processing
+- Validate JSON node no longer attempts to fix quotes — just parse and report errors clearly
+
+### Known Issues
+- Needs manual test to confirm Sonnet 4.5 respects the JSON output rules consistently
+
+### Next Steps (Priority Order)
+1. User triggers n8n workflow manually to test JSON output
+2. If still failing, error message now shows exact position for debugging
+
+### ⚠️ DO NOT Touch
+- Same as previous session
+
+---
+
 ## Session: 2026-02-10 (Fix Image Generation Node + Bold Text)
 
 ### What Was Done

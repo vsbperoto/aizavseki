@@ -6,9 +6,10 @@ import type { PostContent as PostContentType } from "@/lib/supabase/types";
 interface PostContentProps {
   content: PostContentType;
   imageUrls?: string[] | null;
+  imageAltText?: string | null;
 }
 
-export function PostContent({ content, imageUrls }: PostContentProps) {
+export function PostContent({ content, imageUrls, imageAltText }: PostContentProps) {
   const { slide_titles = [], slide_texts = [] } = content;
 
   return (
@@ -31,7 +32,7 @@ export function PostContent({ content, imageUrls }: PostContentProps) {
             <div className="mt-4 relative aspect-video overflow-hidden rounded-xl">
               <Image
                 src={imageUrls[index]}
-                alt={title}
+                alt={imageAltText || title}
                 fill
                 sizes="(max-width: 768px) 100vw, 768px"
                 className="object-cover"

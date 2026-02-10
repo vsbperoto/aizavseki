@@ -30,6 +30,11 @@ export async function POST(request: NextRequest) {
       meta_description,
       key_takeaway,
       faq_items,
+      image_alt_text,
+      quality_score,
+      word_count,
+      target_keyword,
+      internal_links_used,
     } = body;
 
     if (!title || !pillar || !content) {
@@ -91,6 +96,11 @@ export async function POST(request: NextRequest) {
       meta_description: meta_description || null,
       key_takeaway: key_takeaway || null,
       faq_items: faq_items || null,
+      image_alt_text: image_alt_text || null,
+      quality_score: quality_score != null ? Number(quality_score) : null,
+      word_count: word_count != null ? Number(word_count) : null,
+      target_keyword: target_keyword || null,
+      internal_links_used: internal_links_used || null,
     });
 
     if (error) {

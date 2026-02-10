@@ -39,6 +39,12 @@
 - **Problem:** `updateNode` operation requires `updates` (plural), not `update`
 - **Rule:** Always use `updates` key in `updateNode` operations for `n8n_update_partial_workflow`
 
+## LLM JSON Output + Bulgarian Text — Escaping Loop Prevention
+- **Problem:** Bulgarian text uses curly quotes (`„"`, `""`, `''`) which break JSON parsing. Trying to fix quotes in post-processing creates an escaping loop (each fix adds more broken escaping).
+- **Solution:** Prevent at the source — add strict JSON output rules to the LLM prompt: "Use ONLY straight quotes, escape inner quotes as \", never use curly quotes"
+- **Rule:** NEVER try to regex-replace curly quotes in a JSON validator node. Fix the prompt instead.
+- **Validator should:** Only do safe fixes (trailing commas, comments), parse as-is, and give clear error positions on failure.
+
 ## n8n Nodes Created via API — Always Set `operation` Explicitly
 - **Problem:** n8n nodes created via MCP/API may not correctly infer default `operation` values. The UI always writes operation explicitly, but the API doesn't auto-fill defaults.
 - **Impact:** Node silently fails because parameters gated by `displayOptions.show.operation` aren't recognized as active
@@ -54,3 +60,18 @@
 ## n8n Validation False Positives
 - **Info:** n8n workflow validator warns about "Invalid $ usage" and "Use $helpers not helpers" for valid Code node patterns like `$('Node Name')` and `this.helpers.httpRequest()`
 - **Rule:** These warnings are false positives — ignore them if the patterns match known n8n Code node APIs
+
+## n8n Code Nodes Cannot Access $env
+- **Problem:** `$env.VARIABLE_NAME` works in expression fields (HTTP Request, Set, etc.) but NOT in Code node JavaScript
+- **Workaround:** Use HTTP Request nodes for env-dependent operations, or hardcode values in Code nodes with clear `// USER: Replace` comments
+- **Rule:** For Supabase/API key access in Code nodes, use placeholder constants that the user replaces manually
+
+## Bulgarian Curly Quotes in JSX Break Turbopack Parser
+- **Problem:** Bulgarian quotation marks `„"` inside JSX string literals cause Turbopack parsing errors in Next.js 16
+- **Solution:** Use Unicode escape sequences: `\u201E` for `„` and `\u201C` for `"`
+- **Rule:** Always escape Bulgarian curly quotes in JSX/TSX files using Unicode escapes
+
+## n8n IF Node False Branch Is Output Index 1
+- **Info:** In n8n IF node v2, true branch = `main[0]`, false branch = `main[1]`
+- **Warning:** Validator warns about "error output connections in main[1]" — this is a false positive for IF nodes, not an actual error
+- **Rule:** Ignore the "missing onError: continueErrorOutput" warning for IF node false branches
