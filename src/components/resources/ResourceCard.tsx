@@ -36,8 +36,8 @@ export function ResourceCard({ resource }: ResourceCardProps) {
             {typeConfig?.label || resource.content_type}
           </span>
           {categoryConfig && (
-            <span className="text-xs text-brand-gray/60">
-              {categoryConfig.name}
+            <span className="text-xs text-brand-gray font-medium">
+              &middot; {categoryConfig.name}
             </span>
           )}
         </div>
@@ -48,7 +48,7 @@ export function ResourceCard({ resource }: ResourceCardProps) {
 
         {resource.key_takeaway && (
           <p className="mt-2 text-sm text-brand-gray line-clamp-3 flex-1">
-            {truncate(resource.key_takeaway, 150)}
+            {truncate(resource.key_takeaway.replace(/\*\*/g, ''), 150)}
           </p>
         )}
 
