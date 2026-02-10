@@ -39,7 +39,7 @@
   --font-display: var(--font-outfit);
   --font-heading: var(--font-sora);
   --font-body: var(--font-dm-sans);
-  --font-mono: var(--font-jetbrains-mono);
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
 }
 
 /* ===== Base Styles ===== */

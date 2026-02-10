@@ -61,7 +61,7 @@ export function Navbar() {
               ))}
               <Link
                 href="/newsletter"
-                className="ml-3 rounded-full bg-gradient-to-r from-brand-cyan to-accent-purple px-5 py-2 text-sm font-semibold text-white transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(0,212,255,0.3)]"
+                className="ml-3 rounded-full bg-gradient-to-r from-brand-cyan to-accent-purple px-5 py-2 text-sm font-bold text-brand-dark transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(0,212,255,0.3)]"
               >
                 Абонирай се
               </Link>
@@ -117,7 +117,7 @@ export function Navbar() {
               >
                 <Link
                   href="/newsletter"
-                  className="mt-4 rounded-full bg-gradient-to-r from-brand-cyan to-accent-purple px-8 py-3 text-lg font-semibold text-white"
+                  className="mt-4 rounded-full bg-gradient-to-r from-brand-cyan to-accent-purple px-8 py-3 text-lg font-bold text-brand-dark"
                 >
                   Абонирай се
                 </Link>

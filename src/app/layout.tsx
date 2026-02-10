@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Outfit, Sora, DM_Sans, JetBrains_Mono } from "next/font/google";
+import { Outfit, Sora, DM_Sans } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -18,12 +18,6 @@ const sora = Sora({
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
-  subsets: ["latin", "latin-ext"],
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
   subsets: ["latin", "latin-ext"],
   display: "swap",
 });
@@ -124,7 +118,7 @@ export default function RootLayout({
   return (
     <html lang="bg">
       <body
-        className={`${outfit.variable} ${sora.variable} ${dmSans.variable} ${jetbrainsMono.variable} antialiased`}
+        className={`${outfit.variable} ${sora.variable} ${dmSans.variable} antialiased`}
       >
         <script
           type="application/ld+json"

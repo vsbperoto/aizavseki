@@ -18,7 +18,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           "focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/50 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-dark",
           "disabled:opacity-50 disabled:cursor-not-allowed",
           variant === "primary" && [
-            "bg-gradient-to-r from-brand-cyan to-accent-purple text-white",
+            "bg-gradient-to-r from-brand-cyan to-accent-purple text-brand-dark font-bold",
             "hover:scale-105 hover:shadow-[0_0_30px_rgba(0,212,255,0.3)]",
             "active:scale-95",
           ],
