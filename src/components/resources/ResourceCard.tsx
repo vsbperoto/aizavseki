@@ -53,8 +53,8 @@ export function ResourceCard({ resource }: ResourceCardProps) {
         )}
 
         <div className="mt-4 flex items-center justify-between text-xs text-brand-gray/60">
-          <span>{readingTime} \u043C\u0438\u043D \u0447\u0435\u0442\u0435\u043D\u0435</span>
-          <span>{resource.views} \u043F\u0440\u0435\u0433\u043B\u0435\u0434\u0430</span>
+          <span>{readingTime} мин четене</span>
+          <span>{resource.views} прегледа</span>
         </div>
       </Card>
     </Link>

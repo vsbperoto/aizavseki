@@ -10,7 +10,7 @@ export function ResourceGrid({ resources }: ResourceGridProps) {
     return (
       <div className="py-16 text-center">
         <p className="text-brand-gray text-lg">
-          \u041D\u044F\u043C\u0430 \u043D\u0430\u043C\u0435\u0440\u0435\u043D\u0438 \u0440\u0435\u0441\u0443\u0440\u0441\u0438.
+          Няма намерени ресурси.
         </p>
       </div>
     );

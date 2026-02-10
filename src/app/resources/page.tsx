@@ -72,7 +72,7 @@ export default async function ResourcesPage({ searchParams }: ResourcesPageProps
             className="inline-flex items-center gap-2 rounded-xl border border-brand-cyan/20 bg-brand-cyan/5 px-4 py-2.5 text-sm text-brand-cyan hover:bg-brand-cyan/10 transition-colors"
           >
             <BookOpen className="h-4 w-4" />
-            AI {"\u0420\u0435\u0447\u043D\u0438\u043A"} \u2014 {"\u0422\u0435\u0440\u043C\u0438\u043D\u0438 \u043D\u0430 \u0431\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438"}
+            {"AI Речник \u2014 Термини на български"}
           </Link>
         </div>
 
