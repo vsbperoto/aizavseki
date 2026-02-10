@@ -4,6 +4,110 @@
 
 ---
 
+## Session: 2026-02-10 (Blog Section Visual Redesign)
+
+### What Was Done
+- Complete blog section visual redesign matching the `/resources` page quality
+- Created 3 new components: BlogHero, BlogSearch, BlogSort
+- Upgraded 5 existing components: PostCard (gradient border, glow, quality indicator), PostGrid (ScrollReveal, animated empty state), PillarFilter (icons, glow active states), FaqSection (AnimatePresence expand/collapse, ARIA accordion), ShareButtons (glass container, animated copy icon)
+- Rebuilt blog listing page: hero, sticky toolbar, search/sort/pagination, background gradients
+- Enhanced blog article page: ScrollReveal, glass pill metadata, key takeaway glow, back button hover effect
+- Enhanced PillarPage: ambience blob, post count stat, pagination (was rendering all posts)
+- Refactored Pagination to accept `basePath` prop (reusable for blog + resources)
+- Updated all 5 pillar route pages to support pagination via searchParams
+- Ran Gemini design review: fixed 3/4 major findings (F4: focus contrast, F12: ARIA accordion, F17: pagination). F11 (dynamic inline styles) intentionally kept — same pattern as Badge/ResourceTypeFilter.
+- Also fixed minor findings: F2 (redundant color logic in BlogHero)
+
+### Last Known Good State
+- **Build Status:** ✅ Passing (0 errors, 32 pages)
+- **Dev Server:** Not tested (Supabase queries need live DB)
+- **Last Successful Command:** `npm run build`
+- **Git State:** master, uncommitted changes (ready to commit)
+
+### What Changed (Files Modified)
+- `src/components/resources/Pagination.tsx` — Added `basePath` prop
+- `src/components/blog/BlogHero.tsx` — NEW: animated hero with stats
+- `src/components/blog/BlogSearch.tsx` — NEW: glow search with debounce
+- `src/components/blog/BlogSort.tsx` — NEW: custom sort dropdown with keyboard nav
+- `src/components/blog/PostCard.tsx` — Gradient border, hover glow, quality badge, reading time
+- `src/components/blog/PostGrid.tsx` — Client component, ScrollReveal stagger, animated empty state
+- `src/components/blog/PillarFilter.tsx` — Lucide icons, glow active, horizontal scroll
+- `src/components/blog/FaqSection.tsx` — AnimatePresence, aria-controls, aria-expanded
+- `src/components/blog/ShareButtons.tsx` — Glass container, hover scale, animated copy
+- `src/components/blog/PillarPage.tsx` — Ambience blob, pagination, post count stat
+- `src/app/blog/page.tsx` — Full redesign: hero, toolbar, search/sort, pagination
+- `src/app/blog/[slug]/page.tsx` — Background gradient, ScrollReveal, glass metadata
+- `src/app/blog/(pillars)/ai-novini/page.tsx` — Added searchParams for pagination
+- `src/app/blog/(pillars)/ai-instrumenti/page.tsx` — Added searchParams for pagination
+- `src/app/blog/(pillars)/ai-saveti/page.tsx` — Added searchParams for pagination
+- `src/app/blog/(pillars)/ai-za-biznes/page.tsx` — Added searchParams for pagination
+- `src/app/blog/(pillars)/ai-zabavlenia/page.tsx` — Added searchParams for pagination
+
+### Active Decisions
+- PostCard now uses explicit post type instead of `Post` from types.ts (matches ResourceCard pattern — only listing columns)
+- Blog uses 12 posts per page (vs 24 for resources) since blog cards have images
+- PillarFilter inline dynamic styles kept intentional — same pattern as Badge component
+- PillarPage now paginates (12 per page) instead of loading all posts
+
+### Known Issues
+- None
+
+### Next Steps (Priority Order)
+1. Fact-check Wave 1 (original 58 shorter articles)
+2. n8n credential config + workflow activation
+3. Consider adding ParticleBackground to blog hero (like homepage)
+
+### ⚠️ DO NOT Touch
+- JSON-LD on all blog pages (Article, HowTo, BreadcrumbList, FAQPage, CollectionPage) — SEO critical
+- `PostContent.tsx` — just fixed in previous commit, rendering logic is stable
+- Supabase query logic patterns — pagination, range, count are proven working
+
+---
+
+## Session: 2026-02-10 (Resources Page Redesign)
+
+### What Was Done
+- Gemini 3 Pro Preview designed a complete visual redesign of `/resources` page
+- Implemented the design: hero section, animated stats, glow search, custom sort dropdown, category cards, interactive resource cards, glass pagination
+- Fixed 3 minor findings from Gemini re-review (filter wrapping, focus styles, keyboard nav)
+- All previous functionality preserved (pagination, search, sort, type/category filters)
+
+### Last Known Good State
+- **Build Status:** ✅ Passing
+- **Dev Server:** ✅ Running
+- **Last Successful Command:** `npm run build`
+- **Git State:** master, `a55a4b5` "feat: resources page visual redesign by Gemini 3 Pro Preview"
+
+### What Changed (Files Modified)
+- `src/app/resources/page.tsx` — New layout with hero, sticky toolbar, background gradients
+- `src/components/resources/ResourceHero.tsx` — NEW: animated hero with glow orbs, gradient text, pulsing badge
+- `src/components/resources/ResourceStats.tsx` — Glass cards with CountUp animations + spring transitions
+- `src/components/resources/ResourceSearch.tsx` — Glow focus effect, animated clear button
+- `src/components/resources/ResourceSort.tsx` — Custom dropdown with keyboard navigation (replaces native select)
+- `src/components/resources/ResourceTypeFilter.tsx` — Category cards with icons, layout glow animation
+- `src/components/resources/ResourceCard.tsx` — Gradient top border, hover glow, enabled Card hover effects
+- `src/components/resources/ResourceGrid.tsx` — ScrollReveal stagger, animated empty state with Frown icon
+- `src/components/resources/Pagination.tsx` — Glass bar, active page glow, chevron arrows
+
+### Active Decisions
+- Type filtering moved to ResourceStats (clickable CountUp cards), category filtering in ResourceTypeFilter
+- ResourceGrid is now a client component (needed for ScrollReveal + motion)
+- Sort dropdown has full keyboard navigation (ArrowUp/Down, Enter, Escape)
+
+### Known Issues
+- None
+
+### Next Steps (Priority Order)
+1. Fact-check Wave 1 (original 58 shorter articles)
+2. n8n credential config + workflow activation
+3. Consider adding ParticleBackground to resources hero (like homepage)
+
+### ⚠️ DO NOT Touch
+- JSON-LD on resources page, blog listing, about page (SEO critical)
+- Supabase query logic in page.tsx (pagination, type counts)
+
+---
+
 ## Session: 2026-02-10 (Resources UX Overhaul + SEO Audit)
 
 ### What Was Done

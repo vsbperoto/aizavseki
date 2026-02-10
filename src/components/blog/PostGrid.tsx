@@ -1,26 +1,79 @@
+"use client";
+
 import { PostCard } from "./PostCard";
-import type { Post } from "@/lib/supabase/types";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { motion } from "framer-motion";
+import { Frown } from "lucide-react";
 
 interface PostGridProps {
-  posts: Post[];
+  posts: {
+    id: string;
+    slug: string;
+    title: string;
+    hook: string | null;
+    pillar: string;
+    image_urls: string[] | null;
+    published_at: string;
+    views: number;
+    quality_score: number | null;
+    word_count: number | null;
+  }[];
+  totalCount: number;
+  currentPage: number;
+  perPage: number;
+  searchQuery?: string;
 }
 
-export function PostGrid({ posts }: PostGridProps) {
+export function PostGrid({
+  posts,
+  totalCount,
+  currentPage,
+  perPage,
+  searchQuery,
+}: PostGridProps) {
   if (posts.length === 0) {
     return (
-      <div className="py-16 text-center">
-        <p className="text-brand-gray text-lg">
-          Няма намерени публикации.
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col items-center justify-center py-20 text-center"
+      >
+        <div className="w-20 h-20 bg-brand-navy-light rounded-full flex items-center justify-center mb-6 ring-4 ring-brand-navy/50">
+          <Frown className="w-10 h-10 text-brand-gray" />
+        </div>
+        <h3 className="text-2xl font-bold text-brand-white mb-2">
+          {searchQuery
+            ? `${"\u041D\u044F\u043C\u0430 \u0440\u0435\u0437\u0443\u043B\u0442\u0430\u0442\u0438 \u0437\u0430"} \u201E${searchQuery}\u201C`
+            : "\u041D\u044F\u043C\u0430 \u043D\u0430\u043C\u0435\u0440\u0435\u043D\u0438 \u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u0438"}
+        </h3>
+        <p className="text-brand-gray max-w-md mx-auto">
+          {"\u041E\u043F\u0438\u0442\u0430\u0439\u0442\u0435 \u0441 \u0434\u0440\u0443\u0433\u0438 \u043A\u043B\u044E\u0447\u043E\u0432\u0438 \u0434\u0443\u043C\u0438 \u0438\u043B\u0438 \u0438\u0437\u0447\u0438\u0441\u0442\u0435\u0442\u0435 \u0444\u0438\u043B\u0442\u0440\u0438\u0442\u0435."}
         </p>
-      </div>
+      </motion.div>
     );
   }
 
+  const start = (currentPage - 1) * perPage + 1;
+  const end = Math.min(currentPage * perPage, totalCount);
+
   return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {posts.map((post) => (
-        <PostCard key={post.id} post={post} />
-      ))}
+    <div>
+      <p className="text-sm text-brand-gray/60 mb-6">
+        {searchQuery
+          ? `${totalCount} ${"\u0440\u0435\u0437\u0443\u043B\u0442\u0430\u0442\u0430 \u0437\u0430"} \u201E${searchQuery}\u201C`
+          : `${"\u041F\u043E\u043A\u0430\u0437\u0430\u043D\u0438"} ${start}\u2013${end} ${"\u043E\u0442"} ${totalCount} ${"\u043F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u0438"}`}
+      </p>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
+        {posts.map((post, index) => (
+          <ScrollReveal
+            key={post.id}
+            delay={Math.min(index * 0.05, 0.6)}
+            className="h-full"
+          >
+            <PostCard post={post} />
+          </ScrollReveal>
+        ))}
+      </div>
     </div>
   );
 }

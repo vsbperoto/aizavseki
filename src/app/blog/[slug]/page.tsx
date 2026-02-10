@@ -6,6 +6,7 @@ import { PostContent } from "@/components/blog/PostContent";
 import { FaqSection } from "@/components/blog/FaqSection";
 import { ShareButtons } from "@/components/blog/ShareButtons";
 import { Badge } from "@/components/ui/Badge";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { formatDate } from "@/lib/utils";
 import { ArrowLeft, Eye, Clock } from "lucide-react";
 import Link from "next/link";
@@ -26,7 +27,7 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
     .single();
 
   const post = data as Post | null;
-  if (!post) return { title: "Публикация не е намерена" };
+  if (!post) return { title: "\u041F\u0443\u0431\u043B\u0438\u043A\u0430\u0446\u0438\u044F \u043D\u0435 \u0435 \u043D\u0430\u043C\u0435\u0440\u0435\u043D\u0430" };
 
   return {
     title: post.meta_title || post.title,
@@ -115,8 +116,8 @@ export default async function PostPage({ params }: PostPageProps) {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Начало", item: "https://aizavseki.eu" },
-      { "@type": "ListItem", position: 2, name: "Блог", item: "https://aizavseki.eu/blog" },
+      { "@type": "ListItem", position: 1, name: "\u041D\u0430\u0447\u0430\u043B\u043E", item: "https://aizavseki.eu" },
+      { "@type": "ListItem", position: 2, name: "\u0411\u043B\u043E\u0433", item: "https://aizavseki.eu/blog" },
       { "@type": "ListItem", position: 3, name: post.title },
     ],
   };
@@ -136,7 +137,7 @@ export default async function PostPage({ params }: PostPageProps) {
   } : null;
 
   return (
-    <div className="pt-24 pb-16 sm:pt-32">
+    <div className="min-h-screen">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
@@ -157,44 +158,52 @@ export default async function PostPage({ params }: PostPageProps) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
         />
       )}
-      <article className="mx-auto max-w-3xl px-4 sm:px-6">
+
+      {/* Background Gradient */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute top-0 left-0 w-full h-[400px] bg-gradient-to-b from-brand-navy-light/20 to-transparent" />
+      </div>
+
+      <article className="relative z-10 mx-auto max-w-3xl px-4 sm:px-6 pt-24 pb-16 sm:pt-32">
         <Link
           href="/blog"
-          className="mb-8 inline-flex items-center gap-1.5 text-sm text-brand-gray hover:text-brand-cyan transition-colors"
+          className="mb-8 inline-flex items-center gap-1.5 text-sm text-brand-gray hover:text-brand-cyan hover:gap-2 transition-all"
         >
           <ArrowLeft className="h-4 w-4" />
-          Обратно към блога
+          {"\u041E\u0431\u0440\u0430\u0442\u043D\u043E \u043A\u044A\u043C \u0431\u043B\u043E\u0433\u0430"}
         </Link>
 
-        <header className="mb-10">
-          <Badge pillar={post.pillar as PillarKey} className="mb-4" />
+        <ScrollReveal>
+          <header className="mb-10">
+            <Badge pillar={post.pillar as PillarKey} className="mb-4" />
 
-          <h1 className="font-display text-3xl font-bold text-brand-white sm:text-4xl lg:text-5xl leading-tight">
-            {post.title}
-          </h1>
+            <h1 className="font-display text-3xl font-bold text-brand-white sm:text-4xl lg:text-5xl leading-tight">
+              {post.title}
+            </h1>
 
-          {post.hook && (
-            <p className="mt-4 text-lg text-brand-gray-light">
-              {post.hook}
-            </p>
-          )}
+            {post.hook && (
+              <p className="mt-4 text-lg text-brand-gray-light">
+                {post.hook}
+              </p>
+            )}
 
-          <div className="mt-6 flex items-center gap-4 text-sm text-brand-gray/60">
-            <time dateTime={post.published_at}>
-              {formatDate(post.published_at)}
-            </time>
-            <span className="flex items-center gap-1">
-              <Eye className="h-3.5 w-3.5" />
-              {post.views} прегледа
-            </span>
-            {post.word_count ? (
+            <div className="mt-6 inline-flex items-center gap-4 text-sm text-brand-gray/60 bg-brand-navy/30 backdrop-blur-sm rounded-xl px-4 py-3 border border-brand-white/5">
+              <time dateTime={post.published_at}>
+                {formatDate(post.published_at)}
+              </time>
               <span className="flex items-center gap-1">
-                <Clock className="h-3.5 w-3.5" />
-                {readingTime} мин четене
+                <Eye className="h-3.5 w-3.5" />
+                {post.views} {"\u043F\u0440\u0435\u0433\u043B\u0435\u0434\u0430"}
               </span>
-            ) : null}
-          </div>
-        </header>
+              {post.word_count ? (
+                <span className="flex items-center gap-1">
+                  <Clock className="h-3.5 w-3.5" />
+                  {readingTime} {"\u043C\u0438\u043D \u0447\u0435\u0442\u0435\u043D\u0435"}
+                </span>
+              ) : null}
+            </div>
+          </header>
+        </ScrollReveal>
 
         {post.image_urls?.[0] && (
           <div className="relative mb-10 aspect-video overflow-hidden rounded-2xl">
@@ -210,14 +219,17 @@ export default async function PostPage({ params }: PostPageProps) {
         )}
 
         {post.key_takeaway && (
-          <div className="mb-10 rounded-xl border border-brand-cyan/20 bg-brand-cyan/5 p-6">
-            <p className="text-sm font-semibold uppercase tracking-wider text-brand-cyan mb-2">
-              Ключов извод
-            </p>
-            <p className="text-lg text-brand-white leading-relaxed">
-              {post.key_takeaway}
-            </p>
-          </div>
+          <ScrollReveal>
+            <div className="relative mb-10 rounded-xl border border-brand-cyan/20 bg-brand-cyan/5 p-6 overflow-hidden">
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-brand-cyan/10 rounded-full blur-[60px] pointer-events-none" />
+              <p className="relative text-sm font-semibold uppercase tracking-wider text-brand-cyan mb-2">
+                {"\u041A\u043B\u044E\u0447\u043E\u0432 \u0438\u0437\u0432\u043E\u0434"}
+              </p>
+              <p className="relative text-lg text-brand-white leading-relaxed">
+                {post.key_takeaway}
+              </p>
+            </div>
+          </ScrollReveal>
         )}
 
         <PostContent
@@ -226,7 +238,11 @@ export default async function PostPage({ params }: PostPageProps) {
           imageAltText={post.image_alt_text}
         />
 
-        {faqItems.length > 0 && <FaqSection items={faqItems} />}
+        {faqItems.length > 0 && (
+          <ScrollReveal>
+            <FaqSection items={faqItems} />
+          </ScrollReveal>
+        )}
 
         {post.caption && (
           <div className="mt-10 rounded-xl bg-brand-navy/50 p-6 border border-brand-cyan/10">
@@ -244,9 +260,11 @@ export default async function PostPage({ params }: PostPageProps) {
           </div>
         )}
 
-        <div className="mt-10 border-t border-brand-cyan/10 pt-6">
-          <ShareButtons title={post.title} slug={post.slug} />
-        </div>
+        <ScrollReveal>
+          <div className="mt-10 border-t border-brand-cyan/10 pt-6">
+            <ShareButtons title={post.title} slug={post.slug} />
+          </div>
+        </ScrollReveal>
       </article>
     </div>
   );

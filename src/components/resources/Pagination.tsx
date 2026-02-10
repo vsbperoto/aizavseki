@@ -6,12 +6,14 @@ interface PaginationProps {
   currentPage: number;
   totalPages: number;
   baseParams: URLSearchParams;
+  basePath?: string;
 }
 
 export function Pagination({
   currentPage,
   totalPages,
   baseParams,
+  basePath = "/resources",
 }: PaginationProps) {
   if (totalPages <= 1) return null;
 
@@ -23,7 +25,7 @@ export function Pagination({
       params.set("page", String(page));
     }
     const qs = params.toString();
-    return `/resources${qs ? `?${qs}` : ""}`;
+    return `${basePath}${qs ? `?${qs}` : ""}`;
   }
 
   // Build visible page range
