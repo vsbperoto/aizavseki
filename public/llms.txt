@@ -31,6 +31,21 @@ AiZaVseki explains artificial intelligence in simple, human language for Bulgari
 - Sitemap: https://aizavseki.eu/sitemap.xml
 - Robots: https://aizavseki.eu/robots.txt
 
+## AI Resources (333 Reference Articles)
+AiZaVseki maintains a comprehensive library of 333 LLMO/GEO-optimized reference articles in Bulgarian, organized into three content types:
+- **Definitions (111)**: "What is...?" articles explaining AI concepts clearly for Bulgarian audiences
+- **How-to Guides (111)**: Step-by-step practical guides for using AI tools and techniques
+- **Comparisons (111)**: Side-by-side analyses of AI tools, models, and approaches
+
+Categories: AI Basics, AI Tools, AI Tips, AI for Business, AI Creative, AI Development, AI Ethics, AI Trends
+
+- Resources Hub: https://aizavseki.eu/resources
+- Example Definition: https://aizavseki.eu/resources/kakvo-e-izkustven-intelekt
+- Example How-to: https://aizavseki.eu/resources/kak-da-izpolzvame-chatgpt
+- Example Comparison: https://aizavseki.eu/resources/chatgpt-vs-claude
+
+Each article includes: key takeaway, structured content with headers, FAQ section, target keywords, and related resources.
+
 ## Contact
 - Email: contact@aizavseki.eu
 - Instagram: https://www.instagram.com/aizavseki

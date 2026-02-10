@@ -1,0 +1,4669 @@
+[
+  {
+    "id": 1,
+    "title": "Какво е изкуствен интелект (AI)?",
+    "slug": "kakvo-e-izkustven-intelekt-ai",
+    "content_type": "definition",
+    "category": "AI_BASICS",
+    "target_keyword": "изкуствен интелект",
+    "secondary_keywords": [
+      "AI",
+      "ИИ",
+      "artificial intelligence"
+    ],
+    "brief": "Define AI for Bulgarian beginners. Cover history, types, daily examples, future.",
+    "status": "pending"
+  },
+  {
+    "id": 2,
+    "title": "Какво е машинно обучение?",
+    "slug": "kakvo-e-mashinno-obuchenie",
+    "content_type": "definition",
+    "category": "AI_BASICS",
+    "target_keyword": "машинно обучение",
+    "secondary_keywords": [
+      "machine learning",
+      "ML"
+    ],
+    "brief": "Explain machine learning fundamentals and how computers learn from data.",
+    "status": "pending"
+  },
+  {
+    "id": 3,
+    "title": "Какво е невронна мрежа?",
+    "slug": "kakvo-e-nevronna-mrezha",
+    "content_type": "definition",
+    "category": "AI_BASICS",
+    "target_keyword": "невронна мрежа",
+    "secondary_keywords": [
+      "neural network",
+      "deep learning"
+    ],
+    "brief": "Describe neural networks, inspired by human brain, used in modern AI.",
+    "status": "pending"
+  },
+  {
+    "id": 4,
+    "title": "Какво е дълбоко обучение?",
+    "slug": "kakvo-e-dalboko-obuchenie",
+    "content_type": "definition",
+    "category": "AI_BASICS",
+    "target_keyword": "дълбоко обучение",
+    "secondary_keywords": [
+      "deep learning",
+      "DL"
+    ],
+    "brief": "Explain deep learning as advanced ML with multiple neural network layers.",
+    "status": "pending"
+  },
+  {
+    "id": 5,
+    "title": "Какво е естествен език (NLP)?",
+    "slug": "kakvo-e-estestven-ezik-nlp",
+    "content_type": "definition",
+    "category": "AI_BASICS",
+    "target_keyword": "обработка на естествен език",
+    "secondary_keywords": [
+      "NLP",
+      "natural language processing"
+    ],
+    "brief": "Define NLP and how AI understands human language.",
+    "status": "pending"
+  },
+  {
+    "id": 6,
+    "title": "Какво е компютърно зрение?",
+    "slug": "kakvo-e-kompyutarno-zrenie",
+    "content_type": "definition",
+    "category": "AI_BASICS",
+    "target_keyword": "компютърно зрение",
+    "secondary_keywords": [
+      "computer vision",
+      "CV",
+      "image recognition"
+    ],
+    "brief": "Explain how AI sees and interprets visual information.",
+    "status": "pending"
+  },
+  {
+    "id": 7,
+    "title": "Какво е генеративен AI?",
+    "slug": "kakvo-e-generativen-ai",
+    "content_type": "definition",
+    "category": "AI_BASICS",
+    "target_keyword": "генеративен AI",
+    "secondary_keywords": [
+      "generative AI",
+      "GenAI"
+    ],
+    "brief": "Define generative AI that creates new content: text, images, video, audio.",
+    "status": "pending"
+  },
+  {
+    "id": 8,
+    "title": "Какво е ChatGPT?",
+    "slug": "kakvo-e-chatgpt",
+    "content_type": "definition",
+    "category": "AI_BASICS",
+    "target_keyword": "ChatGPT",
+    "secondary_keywords": [
+      "GPT",
+      "OpenAI"
+    ],
+    "brief": "Introduce ChatGPT as popular conversational AI tool.",
+    "status": "pending"
+  },
+  {
+    "id": 9,
+    "title": "Какво е Claude AI?",
+    "slug": "kakvo-e-claude-ai",
+    "content_type": "definition",
+    "category": "AI_BASICS",
+    "target_keyword": "Claude",
+    "secondary_keywords": [
+      "Anthropic",
+      "AI асистент"
+    ],
+    "brief": "Explain Claude as advanced AI assistant by Anthropic.",
+    "status": "pending"
+  },
+  {
+    "id": 10,
+    "title": "Какво е Gemini?",
+    "slug": "kakvo-e-gemini",
+    "content_type": "definition",
+    "category": "AI_BASICS",
+    "target_keyword": "Gemini",
+    "secondary_keywords": [
+      "Google AI",
+      "Bard"
+    ],
+    "brief": "Describe Google Gemini multimodal AI model.",
+    "status": "pending"
+  },
+  {
+    "id": 11,
+    "title": "Какво е GPT модел?",
+    "slug": "kakvo-e-gpt-model",
+    "content_type": "definition",
+    "category": "AI_BASICS",
+    "target_keyword": "GPT",
+    "secondary_keywords": [
+      "Generative Pre-trained Transformer",
+      "LLM"
+    ],
+    "brief": "Explain GPT architecture powering modern language models.",
+    "status": "pending"
+  },
+  {
+    "id": 12,
+    "title": "Какво е LLM (голям езиков модел)?",
+    "slug": "kakvo-e-llm-golyam-ezikov-model",
+    "content_type": "definition",
+    "category": "AI_BASICS",
+    "target_keyword": "LLM",
+    "secondary_keywords": [
+      "large language model",
+      "езиков модел"
+    ],
+    "brief": "Define large language models and their capabilities.",
+    "status": "pending"
+  },
+  {
+    "id": 13,
+    "title": "Какво е AI агент?",
+    "slug": "kakvo-e-ai-agent",
+    "content_type": "definition",
+    "category": "AI_BASICS",
+    "target_keyword": "AI агент",
+    "secondary_keywords": [
+      "autonomous agent",
+      "AI assistant"
+    ],
+    "brief": "Explain AI agents that can perform tasks autonomously.",
+    "status": "pending"
+  },
+  {
+    "id": 14,
+    "title": "Какво е Transformer архитектура?",
+    "slug": "kakvo-e-transformer-arhitektura",
+    "content_type": "definition",
+    "category": "AI_BASICS",
+    "target_keyword": "Transformer",
+    "secondary_keywords": [
+      "attention mechanism",
+      "BERT"
+    ],
+    "brief": "Describe transformer architecture revolutionizing NLP.",
+    "status": "pending"
+  },
+  {
+    "id": 15,
+    "title": "Какво е Midjourney?",
+    "slug": "kakvo-e-midjourney",
+    "content_type": "definition",
+    "category": "AI_TOOLS",
+    "target_keyword": "Midjourney",
+    "secondary_keywords": [
+      "AI art",
+      "image generation"
+    ],
+    "brief": "Introduce Midjourney AI art generator.",
+    "status": "pending"
+  },
+  {
+    "id": 16,
+    "title": "Какво е DALL-E?",
+    "slug": "kakvo-e-dall-e",
+    "content_type": "definition",
+    "category": "AI_TOOLS",
+    "target_keyword": "DALL-E",
+    "secondary_keywords": [
+      "OpenAI",
+      "image AI"
+    ],
+    "brief": "Explain DALL-E text-to-image AI by OpenAI.",
+    "status": "pending"
+  },
+  {
+    "id": 17,
+    "title": "Какво е Stable Diffusion?",
+    "slug": "kakvo-e-stable-diffusion",
+    "content_type": "definition",
+    "category": "AI_TOOLS",
+    "target_keyword": "Stable Diffusion",
+    "secondary_keywords": [
+      "open source AI",
+      "image generation"
+    ],
+    "brief": "Describe open-source Stable Diffusion image model.",
+    "status": "pending"
+  },
+  {
+    "id": 18,
+    "title": "Какво е GitHub Copilot?",
+    "slug": "kakvo-e-github-copilot",
+    "content_type": "definition",
+    "category": "AI_TOOLS",
+    "target_keyword": "GitHub Copilot",
+    "secondary_keywords": [
+      "code assistant",
+      "programming AI"
+    ],
+    "brief": "Explain Copilot AI pair programmer for developers.",
+    "status": "pending"
+  },
+  {
+    "id": 19,
+    "title": "Какво е Cursor AI?",
+    "slug": "kakvo-e-cursor-ai",
+    "content_type": "definition",
+    "category": "AI_TOOLS",
+    "target_keyword": "Cursor",
+    "secondary_keywords": [
+      "AI code editor",
+      "development"
+    ],
+    "brief": "Introduce Cursor AI-powered code editor.",
+    "status": "pending"
+  },
+  {
+    "id": 20,
+    "title": "Какво е Notion AI?",
+    "slug": "kakvo-e-notion-ai",
+    "content_type": "definition",
+    "category": "AI_TOOLS",
+    "target_keyword": "Notion AI",
+    "secondary_keywords": [
+      "productivity",
+      "knowledge management"
+    ],
+    "brief": "Describe AI features in Notion productivity tool.",
+    "status": "pending"
+  },
+  {
+    "id": 21,
+    "title": "Какво е Jasper AI?",
+    "slug": "kakvo-e-jasper-ai",
+    "content_type": "definition",
+    "category": "AI_TOOLS",
+    "target_keyword": "Jasper",
+    "secondary_keywords": [
+      "copywriting",
+      "content creation"
+    ],
+    "brief": "Explain Jasper AI copywriting assistant.",
+    "status": "pending"
+  },
+  {
+    "id": 22,
+    "title": "Какво е Copy.ai?",
+    "slug": "kakvo-e-copy-ai",
+    "content_type": "definition",
+    "category": "AI_TOOLS",
+    "target_keyword": "Copy.ai",
+    "secondary_keywords": [
+      "marketing",
+      "content AI"
+    ],
+    "brief": "Introduce Copy.ai for marketing content generation.",
+    "status": "pending"
+  },
+  {
+    "id": 23,
+    "title": "Какво е Grammarly?",
+    "slug": "kakvo-e-grammarly",
+    "content_type": "definition",
+    "category": "AI_TOOLS",
+    "target_keyword": "Grammarly",
+    "secondary_keywords": [
+      "writing assistant",
+      "grammar check"
+    ],
+    "brief": "Describe Grammarly AI writing enhancement tool.",
+    "status": "pending"
+  },
+  {
+    "id": 24,
+    "title": "Какво е Runway ML?",
+    "slug": "kakvo-e-runway-ml",
+    "content_type": "definition",
+    "category": "AI_TOOLS",
+    "target_keyword": "Runway",
+    "secondary_keywords": [
+      "video AI",
+      "creative tools"
+    ],
+    "brief": "Explain Runway AI video and creative generation platform.",
+    "status": "pending"
+  },
+  {
+    "id": 25,
+    "title": "Какво е ElevenLabs?",
+    "slug": "kakvo-e-elevenlabs",
+    "content_type": "definition",
+    "category": "AI_TOOLS",
+    "target_keyword": "ElevenLabs",
+    "secondary_keywords": [
+      "voice AI",
+      "text-to-speech"
+    ],
+    "brief": "Introduce ElevenLabs realistic AI voice synthesis.",
+    "status": "pending"
+  },
+  {
+    "id": 26,
+    "title": "Какво е Whisper AI?",
+    "slug": "kakvo-e-whisper-ai",
+    "content_type": "definition",
+    "category": "AI_TOOLS",
+    "target_keyword": "Whisper",
+    "secondary_keywords": [
+      "speech recognition",
+      "transcription"
+    ],
+    "brief": "Describe OpenAI Whisper speech-to-text model.",
+    "status": "pending"
+  },
+  {
+    "id": 27,
+    "title": "Какво е Hugging Face?",
+    "slug": "kakvo-e-hugging-face",
+    "content_type": "definition",
+    "category": "AI_TOOLS",
+    "target_keyword": "Hugging Face",
+    "secondary_keywords": [
+      "ML platform",
+      "open source"
+    ],
+    "brief": "Explain Hugging Face ML model repository and tools.",
+    "status": "pending"
+  },
+  {
+    "id": 28,
+    "title": "Какво е LangChain?",
+    "slug": "kakvo-e-langchain",
+    "content_type": "definition",
+    "category": "AI_TOOLS",
+    "target_keyword": "LangChain",
+    "secondary_keywords": [
+      "LLM framework",
+      "development"
+    ],
+    "brief": "Introduce LangChain framework for building LLM apps.",
+    "status": "pending"
+  },
+  {
+    "id": 29,
+    "title": "Какво е prompt engineering?",
+    "slug": "kakvo-e-prompt-engineering",
+    "content_type": "definition",
+    "category": "AI_TIPS",
+    "target_keyword": "prompt engineering",
+    "secondary_keywords": [
+      "промпт инженерство",
+      "AI communication"
+    ],
+    "brief": "Define prompt engineering as skill for effective AI communication.",
+    "status": "pending"
+  },
+  {
+    "id": 30,
+    "title": "Какво е temperature в AI модели?",
+    "slug": "kakvo-e-temperature-v-ai-modeli",
+    "content_type": "definition",
+    "category": "AI_TIPS",
+    "target_keyword": "temperature",
+    "secondary_keywords": [
+      "creativity",
+      "randomness"
+    ],
+    "brief": "Explain temperature parameter controlling AI output randomness.",
+    "status": "pending"
+  },
+  {
+    "id": 31,
+    "title": "Какво е token в LLM?",
+    "slug": "kakvo-e-token-v-llm",
+    "content_type": "definition",
+    "category": "AI_TIPS",
+    "target_keyword": "token",
+    "secondary_keywords": [
+      "tokenization",
+      "context window"
+    ],
+    "brief": "Define tokens as basic units LLMs process.",
+    "status": "pending"
+  },
+  {
+    "id": 32,
+    "title": "Какво е context window?",
+    "slug": "kakvo-e-context-window",
+    "content_type": "definition",
+    "category": "AI_TIPS",
+    "target_keyword": "context window",
+    "secondary_keywords": [
+      "memory",
+      "input limit"
+    ],
+    "brief": "Explain context window limiting how much AI can remember.",
+    "status": "pending"
+  },
+  {
+    "id": 33,
+    "title": "Какво е few-shot learning?",
+    "slug": "kakvo-e-few-shot-learning",
+    "content_type": "definition",
+    "category": "AI_TIPS",
+    "target_keyword": "few-shot learning",
+    "secondary_keywords": [
+      "examples",
+      "prompting"
+    ],
+    "brief": "Describe few-shot learning with examples in prompts.",
+    "status": "pending"
+  },
+  {
+    "id": 34,
+    "title": "Какво е zero-shot prompting?",
+    "slug": "kakvo-e-zero-shot-prompting",
+    "content_type": "definition",
+    "category": "AI_TIPS",
+    "target_keyword": "zero-shot",
+    "secondary_keywords": [
+      "no examples",
+      "direct prompting"
+    ],
+    "brief": "Explain zero-shot as prompting without examples.",
+    "status": "pending"
+  },
+  {
+    "id": 35,
+    "title": "Какво е chain-of-thought prompting?",
+    "slug": "kakvo-e-chain-of-thought-prompting",
+    "content_type": "definition",
+    "category": "AI_TIPS",
+    "target_keyword": "chain-of-thought",
+    "secondary_keywords": [
+      "CoT",
+      "reasoning"
+    ],
+    "brief": "Introduce CoT prompting for step-by-step reasoning.",
+    "status": "pending"
+  },
+  {
+    "id": 36,
+    "title": "Какво е hallucination в AI?",
+    "slug": "kakvo-e-hallucination-v-ai",
+    "content_type": "definition",
+    "category": "AI_TIPS",
+    "target_keyword": "халюцинация",
+    "secondary_keywords": [
+      "AI errors",
+      "fake information"
+    ],
+    "brief": "Define AI hallucinations as confident but false outputs.",
+    "status": "pending"
+  },
+  {
+    "id": 37,
+    "title": "Какво е system prompt?",
+    "slug": "kakvo-e-system-prompt",
+    "content_type": "definition",
+    "category": "AI_TIPS",
+    "target_keyword": "system prompt",
+    "secondary_keywords": [
+      "instructions",
+      "behavior"
+    ],
+    "brief": "Explain system prompts setting AI behavior and role.",
+    "status": "pending"
+  },
+  {
+    "id": 38,
+    "title": "Какво е RAG (Retrieval Augmented Generation)?",
+    "slug": "kakvo-e-rag-retrieval-augmented-generation",
+    "content_type": "definition",
+    "category": "AI_TIPS",
+    "target_keyword": "RAG",
+    "secondary_keywords": [
+      "retrieval",
+      "knowledge base"
+    ],
+    "brief": "Describe RAG combining AI with external knowledge sources.",
+    "status": "pending"
+  },
+  {
+    "id": 39,
+    "title": "Какво е fine-tuning?",
+    "slug": "kakvo-e-fine-tuning",
+    "content_type": "definition",
+    "category": "AI_TIPS",
+    "target_keyword": "fine-tuning",
+    "secondary_keywords": [
+      "model training",
+      "customization"
+    ],
+    "brief": "Explain fine-tuning as customizing AI models for specific tasks.",
+    "status": "pending"
+  },
+  {
+    "id": 40,
+    "title": "Какво е embedding?",
+    "slug": "kakvo-e-embedding",
+    "content_type": "definition",
+    "category": "AI_TIPS",
+    "target_keyword": "embedding",
+    "secondary_keywords": [
+      "vector",
+      "semantic search"
+    ],
+    "brief": "Define embeddings as numerical representations of data.",
+    "status": "pending"
+  },
+  {
+    "id": 41,
+    "title": "Какво е vector database?",
+    "slug": "kakvo-e-vector-database",
+    "content_type": "definition",
+    "category": "AI_TIPS",
+    "target_keyword": "vector database",
+    "secondary_keywords": [
+      "векторна база",
+      "semantic search"
+    ],
+    "brief": "Explain vector databases storing embeddings for AI apps.",
+    "status": "pending"
+  },
+  {
+    "id": 42,
+    "title": "Какво е AI alignment?",
+    "slug": "kakvo-e-ai-alignment",
+    "content_type": "definition",
+    "category": "AI_TIPS",
+    "target_keyword": "alignment",
+    "secondary_keywords": [
+      "safety",
+      "human values"
+    ],
+    "brief": "Describe AI alignment ensuring AI follows human intentions.",
+    "status": "pending"
+  },
+  {
+    "id": 43,
+    "title": "Какво е AI автоматизация?",
+    "slug": "kakvo-e-ai-avtomatizatsiya",
+    "content_type": "definition",
+    "category": "AI_BUSINESS",
+    "target_keyword": "автоматизация",
+    "secondary_keywords": [
+      "automation",
+      "workflow"
+    ],
+    "brief": "Explain AI automation streamlining business processes.",
+    "status": "pending"
+  },
+  {
+    "id": 44,
+    "title": "Какво е AI асистент за бизнес?",
+    "slug": "kakvo-e-ai-asistent-za-biznes",
+    "content_type": "definition",
+    "category": "AI_BUSINESS",
+    "target_keyword": "бизнес асистент",
+    "secondary_keywords": [
+      "productivity",
+      "enterprise AI"
+    ],
+    "brief": "Describe AI assistants boosting business productivity.",
+    "status": "pending"
+  },
+  {
+    "id": 45,
+    "title": "Какво е AI chatbot?",
+    "slug": "kakvo-e-ai-chatbot",
+    "content_type": "definition",
+    "category": "AI_BUSINESS",
+    "target_keyword": "чатбот",
+    "secondary_keywords": [
+      "customer service",
+      "conversational AI"
+    ],
+    "brief": "Explain AI chatbots for customer support and engagement.",
+    "status": "pending"
+  },
+  {
+    "id": 46,
+    "title": "Какво е predictive analytics?",
+    "slug": "kakvo-e-predictive-analytics",
+    "content_type": "definition",
+    "category": "AI_BUSINESS",
+    "target_keyword": "предиктивна аналитика",
+    "secondary_keywords": [
+      "forecasting",
+      "data analysis"
+    ],
+    "brief": "Define predictive analytics using AI for business forecasting.",
+    "status": "pending"
+  },
+  {
+    "id": 47,
+    "title": "Какво е AI CRM?",
+    "slug": "kakvo-e-ai-crm",
+    "content_type": "definition",
+    "category": "AI_BUSINESS",
+    "target_keyword": "AI CRM",
+    "secondary_keywords": [
+      "customer relationship",
+      "sales"
+    ],
+    "brief": "Describe AI-powered customer relationship management.",
+    "status": "pending"
+  },
+  {
+    "id": 48,
+    "title": "Какво е AI за маркетинг?",
+    "slug": "kakvo-e-ai-za-marketing",
+    "content_type": "definition",
+    "category": "AI_BUSINESS",
+    "target_keyword": "AI маркетинг",
+    "secondary_keywords": [
+      "marketing automation",
+      "personalization"
+    ],
+    "brief": "Explain AI transforming marketing with automation and insights.",
+    "status": "pending"
+  },
+  {
+    "id": 49,
+    "title": "Какво е AI SEO?",
+    "slug": "kakvo-e-ai-seo",
+    "content_type": "definition",
+    "category": "AI_BUSINESS",
+    "target_keyword": "AI SEO",
+    "secondary_keywords": [
+      "search optimization",
+      "content"
+    ],
+    "brief": "Introduce AI tools optimizing search engine performance.",
+    "status": "pending"
+  },
+  {
+    "id": 50,
+    "title": "Какво е sentiment analysis?",
+    "slug": "kakvo-e-sentiment-analysis",
+    "content_type": "definition",
+    "category": "AI_BUSINESS",
+    "target_keyword": "анализ на настроения",
+    "secondary_keywords": [
+      "emotion detection",
+      "social listening"
+    ],
+    "brief": "Define sentiment analysis detecting emotions in text.",
+    "status": "pending"
+  },
+  {
+    "id": 51,
+    "title": "Какво е AI за HR?",
+    "slug": "kakvo-e-ai-za-hr",
+    "content_type": "definition",
+    "category": "AI_BUSINESS",
+    "target_keyword": "AI HR",
+    "secondary_keywords": [
+      "recruitment",
+      "human resources"
+    ],
+    "brief": "Explain AI in human resources and recruitment.",
+    "status": "pending"
+  },
+  {
+    "id": 52,
+    "title": "Какво е AI за финанси?",
+    "slug": "kakvo-e-ai-za-finansi",
+    "content_type": "definition",
+    "category": "AI_BUSINESS",
+    "target_keyword": "AI финанси",
+    "secondary_keywords": [
+      "fintech",
+      "fraud detection"
+    ],
+    "brief": "Describe AI applications in finance and banking.",
+    "status": "pending"
+  },
+  {
+    "id": 53,
+    "title": "Какво е AI за ecommerce?",
+    "slug": "kakvo-e-ai-za-ecommerce",
+    "content_type": "definition",
+    "category": "AI_BUSINESS",
+    "target_keyword": "AI ecommerce",
+    "secondary_keywords": [
+      "онлайн търговия",
+      "recommendations"
+    ],
+    "brief": "Explain AI powering online shopping experiences.",
+    "status": "pending"
+  },
+  {
+    "id": 54,
+    "title": "Какво е AI за реклами?",
+    "slug": "kakvo-e-ai-za-reklami",
+    "content_type": "definition",
+    "category": "AI_BUSINESS",
+    "target_keyword": "AI реклами",
+    "secondary_keywords": [
+      "advertising",
+      "targeting"
+    ],
+    "brief": "Introduce AI optimizing ad targeting and creation.",
+    "status": "pending"
+  },
+  {
+    "id": 55,
+    "title": "Какво е AI analytics?",
+    "slug": "kakvo-e-ai-analytics",
+    "content_type": "definition",
+    "category": "AI_BUSINESS",
+    "target_keyword": "AI аналитика",
+    "secondary_keywords": [
+      "business intelligence",
+      "insights"
+    ],
+    "brief": "Describe AI-powered business analytics and insights.",
+    "status": "pending"
+  },
+  {
+    "id": 56,
+    "title": "Какво е AI за продажби?",
+    "slug": "kakvo-e-ai-za-prodazhbi",
+    "content_type": "definition",
+    "category": "AI_BUSINESS",
+    "target_keyword": "AI продажби",
+    "secondary_keywords": [
+      "sales automation",
+      "forecasting"
+    ],
+    "brief": "Explain AI tools boosting sales performance.",
+    "status": "pending"
+  },
+  {
+    "id": 57,
+    "title": "Какво е AI art?",
+    "slug": "kakvo-e-ai-art",
+    "content_type": "definition",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI изкуство",
+    "secondary_keywords": [
+      "digital art",
+      "generative art"
+    ],
+    "brief": "Define AI-generated art and its creative possibilities.",
+    "status": "pending"
+  },
+  {
+    "id": 58,
+    "title": "Какво е text-to-image AI?",
+    "slug": "kakvo-e-text-to-image-ai",
+    "content_type": "definition",
+    "category": "AI_CREATIVE",
+    "target_keyword": "текст към изображение",
+    "secondary_keywords": [
+      "image generation",
+      "DALL-E"
+    ],
+    "brief": "Explain AI creating images from text descriptions.",
+    "status": "pending"
+  },
+  {
+    "id": 59,
+    "title": "Какво е AI музика?",
+    "slug": "kakvo-e-ai-muzika",
+    "content_type": "definition",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI музика",
+    "secondary_keywords": [
+      "music generation",
+      "composition"
+    ],
+    "brief": "Describe AI composing and generating music.",
+    "status": "pending"
+  },
+  {
+    "id": 60,
+    "title": "Какво е AI видео генератор?",
+    "slug": "kakvo-e-ai-video-generator",
+    "content_type": "definition",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI видео",
+    "secondary_keywords": [
+      "video generation",
+      "Sora"
+    ],
+    "brief": "Introduce AI tools creating videos from text.",
+    "status": "pending"
+  },
+  {
+    "id": 61,
+    "title": "Какво е AI дизайн?",
+    "slug": "kakvo-e-ai-dizayn",
+    "content_type": "definition",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI дизайн",
+    "secondary_keywords": [
+      "graphic design",
+      "creative automation"
+    ],
+    "brief": "Explain AI assisting in graphic and product design.",
+    "status": "pending"
+  },
+  {
+    "id": 62,
+    "title": "Какво е AI писател?",
+    "slug": "kakvo-e-ai-pisatel",
+    "content_type": "definition",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI писател",
+    "secondary_keywords": [
+      "content creation",
+      "writing"
+    ],
+    "brief": "Describe AI tools for creative and content writing.",
+    "status": "pending"
+  },
+  {
+    "id": 63,
+    "title": "Какво е AI за фотография?",
+    "slug": "kakvo-e-ai-za-fotografiya",
+    "content_type": "definition",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI фотография",
+    "secondary_keywords": [
+      "photo editing",
+      "enhancement"
+    ],
+    "brief": "Explain AI enhancing and editing photos.",
+    "status": "pending"
+  },
+  {
+    "id": 64,
+    "title": "Какво е style transfer?",
+    "slug": "kakvo-e-style-transfer",
+    "content_type": "definition",
+    "category": "AI_CREATIVE",
+    "target_keyword": "transfer на стил",
+    "secondary_keywords": [
+      "artistic style",
+      "image processing"
+    ],
+    "brief": "Define style transfer applying artistic styles to images.",
+    "status": "pending"
+  },
+  {
+    "id": 65,
+    "title": "Какво е AI анимация?",
+    "slug": "kakvo-e-ai-animatsiya",
+    "content_type": "definition",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI анимация",
+    "secondary_keywords": [
+      "animation",
+      "motion"
+    ],
+    "brief": "Introduce AI creating and assisting animation.",
+    "status": "pending"
+  },
+  {
+    "id": 66,
+    "title": "Какво е AI voice cloning?",
+    "slug": "kakvo-e-ai-voice-cloning",
+    "content_type": "definition",
+    "category": "AI_CREATIVE",
+    "target_keyword": "клониране на глас",
+    "secondary_keywords": [
+      "voice synthesis",
+      "TTS"
+    ],
+    "brief": "Explain AI replicating human voices.",
+    "status": "pending"
+  },
+  {
+    "id": 67,
+    "title": "Какво е AI за 3D моделиране?",
+    "slug": "kakvo-e-ai-za-3d-modelirane",
+    "content_type": "definition",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI 3D",
+    "secondary_keywords": [
+      "3D generation",
+      "modeling"
+    ],
+    "brief": "Describe AI generating 3D models and assets.",
+    "status": "pending"
+  },
+  {
+    "id": 68,
+    "title": "Какво е AI storytelling?",
+    "slug": "kakvo-e-ai-storytelling",
+    "content_type": "definition",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI разказване",
+    "secondary_keywords": [
+      "narrative",
+      "creative writing"
+    ],
+    "brief": "Explain AI assisting in story and narrative creation.",
+    "status": "pending"
+  },
+  {
+    "id": 69,
+    "title": "Какво е AI за игри?",
+    "slug": "kakvo-e-ai-za-igri",
+    "content_type": "definition",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI игри",
+    "secondary_keywords": [
+      "game development",
+      "NPCs"
+    ],
+    "brief": "Introduce AI in game design and development.",
+    "status": "pending"
+  },
+  {
+    "id": 70,
+    "title": "Какво е deepfake?",
+    "slug": "kakvo-e-deepfake",
+    "content_type": "definition",
+    "category": "AI_CREATIVE",
+    "target_keyword": "deepfake",
+    "secondary_keywords": [
+      "дийпфейк",
+      "face swap"
+    ],
+    "brief": "Define deepfake technology and its implications.",
+    "status": "pending"
+  },
+  {
+    "id": 71,
+    "title": "Какво е AI SDK?",
+    "slug": "kakvo-e-ai-sdk",
+    "content_type": "definition",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "AI SDK",
+    "secondary_keywords": [
+      "software development kit",
+      "APIs"
+    ],
+    "brief": "Explain SDKs for integrating AI into applications.",
+    "status": "pending"
+  },
+  {
+    "id": 72,
+    "title": "Какво е OpenAI API?",
+    "slug": "kakvo-e-openai-api",
+    "content_type": "definition",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "OpenAI API",
+    "secondary_keywords": [
+      "GPT API",
+      "integration"
+    ],
+    "brief": "Describe OpenAI API for building AI apps.",
+    "status": "pending"
+  },
+  {
+    "id": 73,
+    "title": "Какво е model training?",
+    "slug": "kakvo-e-model-training",
+    "content_type": "definition",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "обучение на модел",
+    "secondary_keywords": [
+      "training",
+      "ML pipeline"
+    ],
+    "brief": "Explain process of training machine learning models.",
+    "status": "pending"
+  },
+  {
+    "id": 74,
+    "title": "Какво е TensorFlow?",
+    "slug": "kakvo-e-tensorflow",
+    "content_type": "definition",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "TensorFlow",
+    "secondary_keywords": [
+      "ML framework",
+      "Google"
+    ],
+    "brief": "Introduce TensorFlow machine learning framework.",
+    "status": "pending"
+  },
+  {
+    "id": 75,
+    "title": "Какво е PyTorch?",
+    "slug": "kakvo-e-pytorch",
+    "content_type": "definition",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "PyTorch",
+    "secondary_keywords": [
+      "deep learning",
+      "Facebook"
+    ],
+    "brief": "Describe PyTorch deep learning framework.",
+    "status": "pending"
+  },
+  {
+    "id": 76,
+    "title": "Какво е API за AI?",
+    "slug": "kakvo-e-api-za-ai",
+    "content_type": "definition",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "AI API",
+    "secondary_keywords": [
+      "integration",
+      "endpoints"
+    ],
+    "brief": "Explain APIs connecting applications to AI services.",
+    "status": "pending"
+  },
+  {
+    "id": 77,
+    "title": "Какво е MLOps?",
+    "slug": "kakvo-e-mlops",
+    "content_type": "definition",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "MLOps",
+    "secondary_keywords": [
+      "ML operations",
+      "deployment"
+    ],
+    "brief": "Define MLOps as practices for deploying ML models.",
+    "status": "pending"
+  },
+  {
+    "id": 78,
+    "title": "Какво е model deployment?",
+    "slug": "kakvo-e-model-deployment",
+    "content_type": "definition",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "deployment",
+    "secondary_keywords": [
+      "production",
+      "serving"
+    ],
+    "brief": "Explain deploying trained models to production.",
+    "status": "pending"
+  },
+  {
+    "id": 79,
+    "title": "Какво е inference?",
+    "slug": "kakvo-e-inference",
+    "content_type": "definition",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "inference",
+    "secondary_keywords": [
+      "prediction",
+      "model serving"
+    ],
+    "brief": "Define inference as using trained models for predictions.",
+    "status": "pending"
+  },
+  {
+    "id": 80,
+    "title": "Какво е transfer learning?",
+    "slug": "kakvo-e-transfer-learning",
+    "content_type": "definition",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "transfer learning",
+    "secondary_keywords": [
+      "pre-training",
+      "adaptation"
+    ],
+    "brief": "Explain reusing pre-trained models for new tasks.",
+    "status": "pending"
+  },
+  {
+    "id": 81,
+    "title": "Какво е data preprocessing?",
+    "slug": "kakvo-e-data-preprocessing",
+    "content_type": "definition",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "предобработка на данни",
+    "secondary_keywords": [
+      "cleaning",
+      "preparation"
+    ],
+    "brief": "Describe preparing data for machine learning.",
+    "status": "pending"
+  },
+  {
+    "id": 82,
+    "title": "Какво е model evaluation?",
+    "slug": "kakvo-e-model-evaluation",
+    "content_type": "definition",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "оценка на модел",
+    "secondary_keywords": [
+      "metrics",
+      "validation"
+    ],
+    "brief": "Explain measuring AI model performance.",
+    "status": "pending"
+  },
+  {
+    "id": 83,
+    "title": "Какво е overfitting?",
+    "slug": "kakvo-e-overfitting",
+    "content_type": "definition",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "overfitting",
+    "secondary_keywords": [
+      "memorization",
+      "generalization"
+    ],
+    "brief": "Define overfitting when models memorize instead of learn.",
+    "status": "pending"
+  },
+  {
+    "id": 84,
+    "title": "Какво е hyperparameter tuning?",
+    "slug": "kakvo-e-hyperparameter-tuning",
+    "content_type": "definition",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "hyperparameter",
+    "secondary_keywords": [
+      "optimization",
+      "configuration"
+    ],
+    "brief": "Explain optimizing model configuration parameters.",
+    "status": "pending"
+  },
+  {
+    "id": 85,
+    "title": "Какво е AI етика?",
+    "slug": "kakvo-e-ai-etika",
+    "content_type": "definition",
+    "category": "AI_ETHICS",
+    "target_keyword": "AI етика",
+    "secondary_keywords": [
+      "ethics",
+      "responsible AI"
+    ],
+    "brief": "Define ethical considerations in AI development and use.",
+    "status": "pending"
+  },
+  {
+    "id": 86,
+    "title": "Какво е AI bias?",
+    "slug": "kakvo-e-ai-bias",
+    "content_type": "definition",
+    "category": "AI_ETHICS",
+    "target_keyword": "AI предубеждение",
+    "secondary_keywords": [
+      "bias",
+      "fairness"
+    ],
+    "brief": "Explain bias in AI systems and its impact.",
+    "status": "pending"
+  },
+  {
+    "id": 87,
+    "title": "Какво е AI transparency?",
+    "slug": "kakvo-e-ai-transparency",
+    "content_type": "definition",
+    "category": "AI_ETHICS",
+    "target_keyword": "прозрачност",
+    "secondary_keywords": [
+      "explainability",
+      "interpretability"
+    ],
+    "brief": "Describe importance of transparent AI decision-making.",
+    "status": "pending"
+  },
+  {
+    "id": 88,
+    "title": "Какво е explainable AI (XAI)?",
+    "slug": "kakvo-e-explainable-ai-xai",
+    "content_type": "definition",
+    "category": "AI_ETHICS",
+    "target_keyword": "обясним AI",
+    "secondary_keywords": [
+      "XAI",
+      "interpretability"
+    ],
+    "brief": "Introduce explainable AI making decisions understandable.",
+    "status": "pending"
+  },
+  {
+    "id": 89,
+    "title": "Какво е AI regulation?",
+    "slug": "kakvo-e-ai-regulation",
+    "content_type": "definition",
+    "category": "AI_ETHICS",
+    "target_keyword": "AI регулация",
+    "secondary_keywords": [
+      "законодателство",
+      "governance"
+    ],
+    "brief": "Explain regulations governing AI development and use.",
+    "status": "pending"
+  },
+  {
+    "id": 90,
+    "title": "Какво е AI за устойчивост?",
+    "slug": "kakvo-e-ai-za-ustoychivost",
+    "content_type": "definition",
+    "category": "AI_ETHICS",
+    "target_keyword": "устойчивост",
+    "secondary_keywords": [
+      "sustainability",
+      "green AI"
+    ],
+    "brief": "Describe AI environmental impact and green AI practices.",
+    "status": "pending"
+  },
+  {
+    "id": 91,
+    "title": "Какво е AI privacy?",
+    "slug": "kakvo-e-ai-privacy",
+    "content_type": "definition",
+    "category": "AI_ETHICS",
+    "target_keyword": "поверителност",
+    "secondary_keywords": [
+      "data privacy",
+      "GDPR"
+    ],
+    "brief": "Explain privacy concerns in AI data collection and use.",
+    "status": "pending"
+  },
+  {
+    "id": 92,
+    "title": "Какво е AI security?",
+    "slug": "kakvo-e-ai-security",
+    "content_type": "definition",
+    "category": "AI_ETHICS",
+    "target_keyword": "сигурност",
+    "secondary_keywords": [
+      "cybersecurity",
+      "threats"
+    ],
+    "brief": "Describe security risks and protections for AI systems.",
+    "status": "pending"
+  },
+  {
+    "id": 93,
+    "title": "Какво е responsible AI?",
+    "slug": "kakvo-e-responsible-ai",
+    "content_type": "definition",
+    "category": "AI_ETHICS",
+    "target_keyword": "отговорен AI",
+    "secondary_keywords": [
+      "ethics",
+      "best practices"
+    ],
+    "brief": "Define principles of responsible AI development.",
+    "status": "pending"
+  },
+  {
+    "id": 94,
+    "title": "Какво е AI governance?",
+    "slug": "kakvo-e-ai-governance",
+    "content_type": "definition",
+    "category": "AI_ETHICS",
+    "target_keyword": "управление",
+    "secondary_keywords": [
+      "governance",
+      "policy"
+    ],
+    "brief": "Explain organizational AI governance frameworks.",
+    "status": "pending"
+  },
+  {
+    "id": 95,
+    "title": "Какво е AI fairness?",
+    "slug": "kakvo-e-ai-fairness",
+    "content_type": "definition",
+    "category": "AI_ETHICS",
+    "target_keyword": "справедливост",
+    "secondary_keywords": [
+      "equity",
+      "discrimination"
+    ],
+    "brief": "Describe ensuring fairness in AI systems.",
+    "status": "pending"
+  },
+  {
+    "id": 96,
+    "title": "Какво е AI accountability?",
+    "slug": "kakvo-e-ai-accountability",
+    "content_type": "definition",
+    "category": "AI_ETHICS",
+    "target_keyword": "отчетност",
+    "secondary_keywords": [
+      "responsibility",
+      "liability"
+    ],
+    "brief": "Explain accountability for AI decisions and actions.",
+    "status": "pending"
+  },
+  {
+    "id": 97,
+    "title": "Какво е AI за достъпност?",
+    "slug": "kakvo-e-ai-za-dostapnost",
+    "content_type": "definition",
+    "category": "AI_ETHICS",
+    "target_keyword": "достъпност",
+    "secondary_keywords": [
+      "accessibility",
+      "inclusion"
+    ],
+    "brief": "Introduce AI improving accessibility for people with disabilities.",
+    "status": "pending"
+  },
+  {
+    "id": 98,
+    "title": "Какво е AI safety?",
+    "slug": "kakvo-e-ai-safety",
+    "content_type": "definition",
+    "category": "AI_ETHICS",
+    "target_keyword": "безопасност",
+    "secondary_keywords": [
+      "safety",
+      "risk mitigation"
+    ],
+    "brief": "Describe ensuring AI systems are safe and beneficial.",
+    "status": "pending"
+  },
+  {
+    "id": 99,
+    "title": "Какво е AGI (Artificial General Intelligence)?",
+    "slug": "kakvo-e-agi-artificial-general-intelligence",
+    "content_type": "definition",
+    "category": "AI_TRENDS",
+    "target_keyword": "AGI",
+    "secondary_keywords": [
+      "обща изкуствена интелигентност",
+      "superintelligence"
+    ],
+    "brief": "Define AGI as human-level artificial intelligence.",
+    "status": "pending"
+  },
+  {
+    "id": 100,
+    "title": "Какво е multimodal AI?",
+    "slug": "kakvo-e-multimodal-ai",
+    "content_type": "definition",
+    "category": "AI_TRENDS",
+    "target_keyword": "мултимодален AI",
+    "secondary_keywords": [
+      "vision and language",
+      "GPT-4V"
+    ],
+    "brief": "Explain AI processing multiple data types together.",
+    "status": "pending"
+  },
+  {
+    "id": 101,
+    "title": "Какво е AI chips?",
+    "slug": "kakvo-e-ai-chips",
+    "content_type": "definition",
+    "category": "AI_TRENDS",
+    "target_keyword": "AI чипове",
+    "secondary_keywords": [
+      "hardware",
+      "GPU",
+      "TPU"
+    ],
+    "brief": "Describe specialized hardware accelerating AI.",
+    "status": "pending"
+  },
+  {
+    "id": 102,
+    "title": "Какво е edge AI?",
+    "slug": "kakvo-e-edge-ai",
+    "content_type": "definition",
+    "category": "AI_TRENDS",
+    "target_keyword": "edge AI",
+    "secondary_keywords": [
+      "on-device",
+      "IoT"
+    ],
+    "brief": "Explain AI running on local devices vs cloud.",
+    "status": "pending"
+  },
+  {
+    "id": 103,
+    "title": "Какво е federated learning?",
+    "slug": "kakvo-e-federated-learning",
+    "content_type": "definition",
+    "category": "AI_TRENDS",
+    "target_keyword": "federated learning",
+    "secondary_keywords": [
+      "distributed",
+      "privacy"
+    ],
+    "brief": "Introduce training AI across distributed devices privately.",
+    "status": "pending"
+  },
+  {
+    "id": 104,
+    "title": "Какво е AI за здравеопазване?",
+    "slug": "kakvo-e-ai-za-zdraveopazvane",
+    "content_type": "definition",
+    "category": "AI_TRENDS",
+    "target_keyword": "AI здравеопазване",
+    "secondary_keywords": [
+      "medical AI",
+      "diagnosis"
+    ],
+    "brief": "Describe AI revolutionizing healthcare and medicine.",
+    "status": "pending"
+  },
+  {
+    "id": 105,
+    "title": "Какво е AI за образование?",
+    "slug": "kakvo-e-ai-za-obrazovanie",
+    "content_type": "definition",
+    "category": "AI_TRENDS",
+    "target_keyword": "AI образование",
+    "secondary_keywords": [
+      "EdTech",
+      "personalized learning"
+    ],
+    "brief": "Explain AI transforming education and learning.",
+    "status": "pending"
+  },
+  {
+    "id": 106,
+    "title": "Какво е AI за климат?",
+    "slug": "kakvo-e-ai-za-klimat",
+    "content_type": "definition",
+    "category": "AI_TRENDS",
+    "target_keyword": "AI климат",
+    "secondary_keywords": [
+      "climate change",
+      "sustainability"
+    ],
+    "brief": "Introduce AI tackling climate and environmental challenges.",
+    "status": "pending"
+  },
+  {
+    "id": 107,
+    "title": "Какво е AI за наука?",
+    "slug": "kakvo-e-ai-za-nauka",
+    "content_type": "definition",
+    "category": "AI_TRENDS",
+    "target_keyword": "AI наука",
+    "secondary_keywords": [
+      "research",
+      "discovery"
+    ],
+    "brief": "Describe AI accelerating scientific research and discovery.",
+    "status": "pending"
+  },
+  {
+    "id": 108,
+    "title": "Какво е quantum AI?",
+    "slug": "kakvo-e-quantum-ai",
+    "content_type": "definition",
+    "category": "AI_TRENDS",
+    "target_keyword": "квантов AI",
+    "secondary_keywords": [
+      "quantum computing",
+      "QML"
+    ],
+    "brief": "Explain intersection of quantum computing and AI.",
+    "status": "pending"
+  },
+  {
+    "id": 109,
+    "title": "Какво е neuromorphic computing?",
+    "slug": "kakvo-e-neuromorphic-computing",
+    "content_type": "definition",
+    "category": "AI_TRENDS",
+    "target_keyword": "neuromorphic",
+    "secondary_keywords": [
+      "brain-inspired",
+      "hardware"
+    ],
+    "brief": "Introduce brain-inspired computing architectures.",
+    "status": "pending"
+  },
+  {
+    "id": 110,
+    "title": "Какво е AI за роботика?",
+    "slug": "kakvo-e-ai-za-robotika",
+    "content_type": "definition",
+    "category": "AI_TRENDS",
+    "target_keyword": "AI роботика",
+    "secondary_keywords": [
+      "robotics",
+      "automation"
+    ],
+    "brief": "Describe AI powering intelligent robots.",
+    "status": "pending"
+  },
+  {
+    "id": 111,
+    "title": "Какво е AI за автономни превозни средства?",
+    "slug": "kakvo-e-ai-za-avtonomni-prevozni-sredstva",
+    "content_type": "definition",
+    "category": "AI_TRENDS",
+    "target_keyword": "автономни коли",
+    "secondary_keywords": [
+      "self-driving",
+      "autonomous vehicles"
+    ],
+    "brief": "Explain AI enabling self-driving vehicles.",
+    "status": "pending"
+  },
+  {
+    "id": 112,
+    "title": "Как да използвам ChatGPT ефективно?",
+    "slug": "kak-da-izpolzvam-chatgpt-efektivno",
+    "content_type": "howto",
+    "category": "AI_BASICS",
+    "target_keyword": "ChatGPT",
+    "secondary_keywords": [
+      "prompt",
+      "tips"
+    ],
+    "brief": "Practical guide to getting better ChatGPT results.",
+    "status": "pending"
+  },
+  {
+    "id": 113,
+    "title": "Как да напиша добър prompt?",
+    "slug": "kak-da-napisha-dobar-prompt",
+    "content_type": "howto",
+    "category": "AI_BASICS",
+    "target_keyword": "prompt writing",
+    "secondary_keywords": [
+      "промпт",
+      "AI communication"
+    ],
+    "brief": "Step-by-step prompt writing best practices.",
+    "status": "pending"
+  },
+  {
+    "id": 114,
+    "title": "Как да започна с AI като начинаещ?",
+    "slug": "kak-da-zapochna-s-ai-kato-nachinaesht",
+    "content_type": "howto",
+    "category": "AI_BASICS",
+    "target_keyword": "AI за начинаещи",
+    "secondary_keywords": [
+      "learning path",
+      "tutorial"
+    ],
+    "brief": "Beginner roadmap to learning AI fundamentals.",
+    "status": "pending"
+  },
+  {
+    "id": 115,
+    "title": "Как да избера правилния AI модел?",
+    "slug": "kak-da-izbera-pravilniya-ai-model",
+    "content_type": "howto",
+    "category": "AI_BASICS",
+    "target_keyword": "избор на модел",
+    "secondary_keywords": [
+      "GPT",
+      "Claude",
+      "Gemini"
+    ],
+    "brief": "Compare and choose between AI models for your needs.",
+    "status": "pending"
+  },
+  {
+    "id": 116,
+    "title": "Как да използвам Claude AI?",
+    "slug": "kak-da-izpolzvam-claude-ai",
+    "content_type": "howto",
+    "category": "AI_BASICS",
+    "target_keyword": "Claude",
+    "secondary_keywords": [
+      "Anthropic",
+      "tutorial"
+    ],
+    "brief": "Getting started guide for Claude AI assistant.",
+    "status": "pending"
+  },
+  {
+    "id": 117,
+    "title": "Как да използвам Google Gemini?",
+    "slug": "kak-da-izpolzvam-google-gemini",
+    "content_type": "howto",
+    "category": "AI_BASICS",
+    "target_keyword": "Gemini",
+    "secondary_keywords": [
+      "Google AI",
+      "guide"
+    ],
+    "brief": "Practical tutorial for using Google Gemini.",
+    "status": "pending"
+  },
+  {
+    "id": 118,
+    "title": "Как да общувам с AI на български?",
+    "slug": "kak-da-obshtuvam-s-ai-na-balgarski",
+    "content_type": "howto",
+    "category": "AI_BASICS",
+    "target_keyword": "български AI",
+    "secondary_keywords": [
+      "language",
+      "localization"
+    ],
+    "brief": "Tips for effective AI interaction in Bulgarian.",
+    "status": "pending"
+  },
+  {
+    "id": 119,
+    "title": "Как да проверя дали текст е писан от AI?",
+    "slug": "kak-da-proverya-dali-tekst-e-pisan-ot-ai",
+    "content_type": "howto",
+    "category": "AI_BASICS",
+    "target_keyword": "AI detection",
+    "secondary_keywords": [
+      "detection",
+      "authenticity"
+    ],
+    "brief": "Methods to identify AI-generated content.",
+    "status": "pending"
+  },
+  {
+    "id": 120,
+    "title": "Как да използвам AI за учене?",
+    "slug": "kak-da-izpolzvam-ai-za-uchene",
+    "content_type": "howto",
+    "category": "AI_BASICS",
+    "target_keyword": "AI учене",
+    "secondary_keywords": [
+      "education",
+      "studying"
+    ],
+    "brief": "Leverage AI tools for effective learning.",
+    "status": "pending"
+  },
+  {
+    "id": 121,
+    "title": "Как да задам въпрос на AI?",
+    "slug": "kak-da-zadam-vapros-na-ai",
+    "content_type": "howto",
+    "category": "AI_BASICS",
+    "target_keyword": "въпроси",
+    "secondary_keywords": [
+      "prompting",
+      "communication"
+    ],
+    "brief": "Framework for asking AI effective questions.",
+    "status": "pending"
+  },
+  {
+    "id": 122,
+    "title": "Как да разбера AI терминологията?",
+    "slug": "kak-da-razbera-ai-terminologiyata",
+    "content_type": "howto",
+    "category": "AI_BASICS",
+    "target_keyword": "термини",
+    "secondary_keywords": [
+      "glossary",
+      "vocabulary"
+    ],
+    "brief": "Decode common AI terms and jargon.",
+    "status": "pending"
+  },
+  {
+    "id": 123,
+    "title": "Как да използвам AI безплатно?",
+    "slug": "kak-da-izpolzvam-ai-bezplatno",
+    "content_type": "howto",
+    "category": "AI_BASICS",
+    "target_keyword": "безплатен AI",
+    "secondary_keywords": [
+      "free tools",
+      "budget"
+    ],
+    "brief": "Access powerful AI tools without paying.",
+    "status": "pending"
+  },
+  {
+    "id": 124,
+    "title": "Как да организирам AI чатове?",
+    "slug": "kak-da-organiziram-ai-chatove",
+    "content_type": "howto",
+    "category": "AI_BASICS",
+    "target_keyword": "организация",
+    "secondary_keywords": [
+      "workflow",
+      "productivity"
+    ],
+    "brief": "Organize and manage AI conversations effectively.",
+    "status": "pending"
+  },
+  {
+    "id": 125,
+    "title": "Как да използвам AI за мозъчна атака?",
+    "slug": "kak-da-izpolzvam-ai-za-mozachna-ataka",
+    "content_type": "howto",
+    "category": "AI_BASICS",
+    "target_keyword": "brainstorming",
+    "secondary_keywords": [
+      "идеи",
+      "creativity"
+    ],
+    "brief": "Use AI for generating and refining ideas.",
+    "status": "pending"
+  },
+  {
+    "id": 126,
+    "title": "Как да генерирам изображения с Midjourney?",
+    "slug": "kak-da-generiram-izobrazheniya-s-midjourney",
+    "content_type": "howto",
+    "category": "AI_TOOLS",
+    "target_keyword": "Midjourney",
+    "secondary_keywords": [
+      "image generation",
+      "tutorial"
+    ],
+    "brief": "Step-by-step Midjourney image creation guide.",
+    "status": "pending"
+  },
+  {
+    "id": 127,
+    "title": "Как да използвам Stable Diffusion?",
+    "slug": "kak-da-izpolzvam-stable-diffusion",
+    "content_type": "howto",
+    "category": "AI_TOOLS",
+    "target_keyword": "Stable Diffusion",
+    "secondary_keywords": [
+      "installation",
+      "setup"
+    ],
+    "brief": "Install and use Stable Diffusion locally.",
+    "status": "pending"
+  },
+  {
+    "id": 128,
+    "title": "Как да създам AI изображения безплатно?",
+    "slug": "kak-da-sazdam-ai-izobrazheniya-bezplatno",
+    "content_type": "howto",
+    "category": "AI_TOOLS",
+    "target_keyword": "безплатни изображения",
+    "secondary_keywords": [
+      "free tools",
+      "DALL-E"
+    ],
+    "brief": "Generate images with free AI tools.",
+    "status": "pending"
+  },
+  {
+    "id": 129,
+    "title": "Как да използвам GitHub Copilot?",
+    "slug": "kak-da-izpolzvam-github-copilot",
+    "content_type": "howto",
+    "category": "AI_TOOLS",
+    "target_keyword": "Copilot",
+    "secondary_keywords": [
+      "coding",
+      "programming"
+    ],
+    "brief": "Set up and use Copilot for coding assistance.",
+    "status": "pending"
+  },
+  {
+    "id": 130,
+    "title": "Как да настроя Cursor AI?",
+    "slug": "kak-da-nastroya-cursor-ai",
+    "content_type": "howto",
+    "category": "AI_TOOLS",
+    "target_keyword": "Cursor",
+    "secondary_keywords": [
+      "setup",
+      "IDE"
+    ],
+    "brief": "Install and configure Cursor AI code editor.",
+    "status": "pending"
+  },
+  {
+    "id": 131,
+    "title": "Как да автоматизирам работа с AI?",
+    "slug": "kak-da-avtomatiziram-rabota-s-ai",
+    "content_type": "howto",
+    "category": "AI_TOOLS",
+    "target_keyword": "автоматизация",
+    "secondary_keywords": [
+      "workflow",
+      "n8n",
+      "Zapier"
+    ],
+    "brief": "Automate tasks using AI and workflow tools.",
+    "status": "pending"
+  },
+  {
+    "id": 132,
+    "title": "Как да използвам AI за копирайтинг?",
+    "slug": "kak-da-izpolzvam-ai-za-kopirayting",
+    "content_type": "howto",
+    "category": "AI_TOOLS",
+    "target_keyword": "копирайтинг",
+    "secondary_keywords": [
+      "Jasper",
+      "Copy.ai"
+    ],
+    "brief": "Write marketing copy with AI tools.",
+    "status": "pending"
+  },
+  {
+    "id": 133,
+    "title": "Как да подобря писането си с Grammarly?",
+    "slug": "kak-da-podobrya-pisaneto-si-s-grammarly",
+    "content_type": "howto",
+    "category": "AI_TOOLS",
+    "target_keyword": "Grammarly",
+    "secondary_keywords": [
+      "writing",
+      "editing"
+    ],
+    "brief": "Use Grammarly AI for better writing.",
+    "status": "pending"
+  },
+  {
+    "id": 134,
+    "title": "Как да създам AI видео?",
+    "slug": "kak-da-sazdam-ai-video",
+    "content_type": "howto",
+    "category": "AI_TOOLS",
+    "target_keyword": "AI видео",
+    "secondary_keywords": [
+      "Runway",
+      "video generation"
+    ],
+    "brief": "Generate and edit videos with AI.",
+    "status": "pending"
+  },
+  {
+    "id": 135,
+    "title": "Как да клонирам глас с AI?",
+    "slug": "kak-da-kloniram-glas-s-ai",
+    "content_type": "howto",
+    "category": "AI_TOOLS",
+    "target_keyword": "voice cloning",
+    "secondary_keywords": [
+      "ElevenLabs",
+      "TTS"
+    ],
+    "brief": "Clone voices using ElevenLabs and similar tools.",
+    "status": "pending"
+  },
+  {
+    "id": 136,
+    "title": "Как да транскрибирам аудио с AI?",
+    "slug": "kak-da-transkribiram-audio-s-ai",
+    "content_type": "howto",
+    "category": "AI_TOOLS",
+    "target_keyword": "transcription",
+    "secondary_keywords": [
+      "Whisper",
+      "speech-to-text"
+    ],
+    "brief": "Convert audio to text with Whisper AI.",
+    "status": "pending"
+  },
+  {
+    "id": 137,
+    "title": "Как да използвам Hugging Face?",
+    "slug": "kak-da-izpolzvam-hugging-face",
+    "content_type": "howto",
+    "category": "AI_TOOLS",
+    "target_keyword": "Hugging Face",
+    "secondary_keywords": [
+      "models",
+      "community"
+    ],
+    "brief": "Navigate and use Hugging Face model hub.",
+    "status": "pending"
+  },
+  {
+    "id": 138,
+    "title": "Как да интегрирам AI в Notion?",
+    "slug": "kak-da-integriram-ai-v-notion",
+    "content_type": "howto",
+    "category": "AI_TOOLS",
+    "target_keyword": "Notion AI",
+    "secondary_keywords": [
+      "productivity",
+      "integration"
+    ],
+    "brief": "Leverage AI features in Notion workspace.",
+    "status": "pending"
+  },
+  {
+    "id": 139,
+    "title": "Как да използвам LangChain?",
+    "slug": "kak-da-izpolzvam-langchain",
+    "content_type": "howto",
+    "category": "AI_TOOLS",
+    "target_keyword": "LangChain",
+    "secondary_keywords": [
+      "development",
+      "framework"
+    ],
+    "brief": "Build LLM applications with LangChain.",
+    "status": "pending"
+  },
+  {
+    "id": 140,
+    "title": "Как да напиша перфектен prompt?",
+    "slug": "kak-da-napisha-perfekten-prompt",
+    "content_type": "howto",
+    "category": "AI_TIPS",
+    "target_keyword": "perfect prompt",
+    "secondary_keywords": [
+      "optimization",
+      "tips"
+    ],
+    "brief": "Advanced techniques for optimal prompts.",
+    "status": "pending"
+  },
+  {
+    "id": 141,
+    "title": "Как да избегна AI халюцинации?",
+    "slug": "kak-da-izbegna-ai-halyutsinatsii",
+    "content_type": "howto",
+    "category": "AI_TIPS",
+    "target_keyword": "халюцинации",
+    "secondary_keywords": [
+      "accuracy",
+      "verification"
+    ],
+    "brief": "Reduce and detect AI hallucinations.",
+    "status": "pending"
+  },
+  {
+    "id": 142,
+    "title": "Как да използвам chain-of-thought?",
+    "slug": "kak-da-izpolzvam-chain-of-thought",
+    "content_type": "howto",
+    "category": "AI_TIPS",
+    "target_keyword": "chain-of-thought",
+    "secondary_keywords": [
+      "reasoning",
+      "prompting"
+    ],
+    "brief": "Apply CoT prompting for better reasoning.",
+    "status": "pending"
+  },
+  {
+    "id": 143,
+    "title": "Как да оптимизирам context window?",
+    "slug": "kak-da-optimiziram-context-window",
+    "content_type": "howto",
+    "category": "AI_TIPS",
+    "target_keyword": "context optimization",
+    "secondary_keywords": [
+      "memory",
+      "tokens"
+    ],
+    "brief": "Manage long conversations and context effectively.",
+    "status": "pending"
+  },
+  {
+    "id": 144,
+    "title": "Как да използвам few-shot примери?",
+    "slug": "kak-da-izpolzvam-few-shot-primeri",
+    "content_type": "howto",
+    "category": "AI_TIPS",
+    "target_keyword": "few-shot",
+    "secondary_keywords": [
+      "examples",
+      "training"
+    ],
+    "brief": "Provide examples for better AI outputs.",
+    "status": "pending"
+  },
+  {
+    "id": 145,
+    "title": "Как да настроя temperature правилно?",
+    "slug": "kak-da-nastroya-temperature-pravilno",
+    "content_type": "howto",
+    "category": "AI_TIPS",
+    "target_keyword": "temperature",
+    "secondary_keywords": [
+      "creativity",
+      "control"
+    ],
+    "brief": "Adjust temperature for desired output style.",
+    "status": "pending"
+  },
+  {
+    "id": 146,
+    "title": "Как да създам custom GPT?",
+    "slug": "kak-da-sazdam-custom-gpt",
+    "content_type": "howto",
+    "category": "AI_TIPS",
+    "target_keyword": "custom GPT",
+    "secondary_keywords": [
+      "customization",
+      "OpenAI"
+    ],
+    "brief": "Build personalized GPT for specific tasks.",
+    "status": "pending"
+  },
+  {
+    "id": 147,
+    "title": "Как да използвам system prompts?",
+    "slug": "kak-da-izpolzvam-system-prompts",
+    "content_type": "howto",
+    "category": "AI_TIPS",
+    "target_keyword": "system prompt",
+    "secondary_keywords": [
+      "configuration",
+      "behavior"
+    ],
+    "brief": "Configure AI behavior with system prompts.",
+    "status": "pending"
+  },
+  {
+    "id": 148,
+    "title": "Как да верифицирам AI отговори?",
+    "slug": "kak-da-verifitsiram-ai-otgovori",
+    "content_type": "howto",
+    "category": "AI_TIPS",
+    "target_keyword": "верификация",
+    "secondary_keywords": [
+      "fact-checking",
+      "accuracy"
+    ],
+    "brief": "Verify and validate AI-generated information.",
+    "status": "pending"
+  },
+  {
+    "id": 149,
+    "title": "Как да комбинирам различни AI инструменти?",
+    "slug": "kak-da-kombiniram-razlichni-ai-instrumenti",
+    "content_type": "howto",
+    "category": "AI_TIPS",
+    "target_keyword": "комбиниране",
+    "secondary_keywords": [
+      "workflow",
+      "integration"
+    ],
+    "brief": "Chain multiple AI tools for better results.",
+    "status": "pending"
+  },
+  {
+    "id": 150,
+    "title": "Как да съхранявам добри промпти?",
+    "slug": "kak-da-sahranyavam-dobri-prompti",
+    "content_type": "howto",
+    "category": "AI_TIPS",
+    "target_keyword": "prompt library",
+    "secondary_keywords": [
+      "organization",
+      "templates"
+    ],
+    "brief": "Build and manage prompt template library.",
+    "status": "pending"
+  },
+  {
+    "id": 151,
+    "title": "Как да използвам AI за изследвания?",
+    "slug": "kak-da-izpolzvam-ai-za-izsledvaniya",
+    "content_type": "howto",
+    "category": "AI_TIPS",
+    "target_keyword": "research",
+    "secondary_keywords": [
+      "analysis",
+      "information"
+    ],
+    "brief": "Conduct research effectively with AI assistance.",
+    "status": "pending"
+  },
+  {
+    "id": 152,
+    "title": "Как да редактирам AI текст?",
+    "slug": "kak-da-redaktiram-ai-tekst",
+    "content_type": "howto",
+    "category": "AI_TIPS",
+    "target_keyword": "редакция",
+    "secondary_keywords": [
+      "editing",
+      "refinement"
+    ],
+    "brief": "Edit and improve AI-generated content.",
+    "status": "pending"
+  },
+  {
+    "id": 153,
+    "title": "Как да използвам AI итеративно?",
+    "slug": "kak-da-izpolzvam-ai-iterativno",
+    "content_type": "howto",
+    "category": "AI_TIPS",
+    "target_keyword": "iteration",
+    "secondary_keywords": [
+      "refinement",
+      "improvement"
+    ],
+    "brief": "Refine outputs through iterative prompting.",
+    "status": "pending"
+  },
+  {
+    "id": 154,
+    "title": "Как да автоматизирам бизнес процеси с AI?",
+    "slug": "kak-da-avtomatiziram-biznes-protsesi-s-ai",
+    "content_type": "howto",
+    "category": "AI_BUSINESS",
+    "target_keyword": "автоматизация",
+    "secondary_keywords": [
+      "workflow",
+      "efficiency"
+    ],
+    "brief": "Automate business workflows using AI.",
+    "status": "pending"
+  },
+  {
+    "id": 155,
+    "title": "Как да създам AI chatbot за сайт?",
+    "slug": "kak-da-sazdam-ai-chatbot-za-sayt",
+    "content_type": "howto",
+    "category": "AI_BUSINESS",
+    "target_keyword": "chatbot",
+    "secondary_keywords": [
+      "customer service",
+      "implementation"
+    ],
+    "brief": "Build and deploy AI chatbot for website.",
+    "status": "pending"
+  },
+  {
+    "id": 156,
+    "title": "Как да използвам AI за маркетинг?",
+    "slug": "kak-da-izpolzvam-ai-za-marketing",
+    "content_type": "howto",
+    "category": "AI_BUSINESS",
+    "target_keyword": "AI маркетинг",
+    "secondary_keywords": [
+      "campaigns",
+      "automation"
+    ],
+    "brief": "Implement AI in marketing strategy.",
+    "status": "pending"
+  },
+  {
+    "id": 157,
+    "title": "Как да подобря SEO с AI?",
+    "slug": "kak-da-podobrya-seo-s-ai",
+    "content_type": "howto",
+    "category": "AI_BUSINESS",
+    "target_keyword": "AI SEO",
+    "secondary_keywords": [
+      "optimization",
+      "content"
+    ],
+    "brief": "Use AI tools to improve search rankings.",
+    "status": "pending"
+  },
+  {
+    "id": 158,
+    "title": "Как да анализирам данни с AI?",
+    "slug": "kak-da-analiziram-danni-s-ai",
+    "content_type": "howto",
+    "category": "AI_BUSINESS",
+    "target_keyword": "data analysis",
+    "secondary_keywords": [
+      "analytics",
+      "insights"
+    ],
+    "brief": "Analyze business data using AI tools.",
+    "status": "pending"
+  },
+  {
+    "id": 159,
+    "title": "Как да генерирам leads с AI?",
+    "slug": "kak-da-generiram-leads-s-ai",
+    "content_type": "howto",
+    "category": "AI_BUSINESS",
+    "target_keyword": "lead generation",
+    "secondary_keywords": [
+      "sales",
+      "automation"
+    ],
+    "brief": "Use AI for automated lead generation.",
+    "status": "pending"
+  },
+  {
+    "id": 160,
+    "title": "Как да персонализирам имейли с AI?",
+    "slug": "kak-da-personaliziram-imeyli-s-ai",
+    "content_type": "howto",
+    "category": "AI_BUSINESS",
+    "target_keyword": "имейл маркетинг",
+    "secondary_keywords": [
+      "personalization",
+      "automation"
+    ],
+    "brief": "Personalize email campaigns with AI.",
+    "status": "pending"
+  },
+  {
+    "id": 161,
+    "title": "Как да използвам AI за продажби?",
+    "slug": "kak-da-izpolzvam-ai-za-prodazhbi",
+    "content_type": "howto",
+    "category": "AI_BUSINESS",
+    "target_keyword": "AI продажби",
+    "secondary_keywords": [
+      "sales automation",
+      "CRM"
+    ],
+    "brief": "Boost sales with AI tools and automation.",
+    "status": "pending"
+  },
+  {
+    "id": 162,
+    "title": "Как да анализирам конкуренти с AI?",
+    "slug": "kak-da-analiziram-konkurenti-s-ai",
+    "content_type": "howto",
+    "category": "AI_BUSINESS",
+    "target_keyword": "competitive analysis",
+    "secondary_keywords": [
+      "research",
+      "intelligence"
+    ],
+    "brief": "Use AI for competitive intelligence gathering.",
+    "status": "pending"
+  },
+  {
+    "id": 163,
+    "title": "Как да създам съдържание с AI?",
+    "slug": "kak-da-sazdam-sadarzhanie-s-ai",
+    "content_type": "howto",
+    "category": "AI_BUSINESS",
+    "target_keyword": "content creation",
+    "secondary_keywords": [
+      "marketing",
+      "automation"
+    ],
+    "brief": "Generate marketing content at scale with AI.",
+    "status": "pending"
+  },
+  {
+    "id": 164,
+    "title": "Как да оптимизирам реклами с AI?",
+    "slug": "kak-da-optimiziram-reklami-s-ai",
+    "content_type": "howto",
+    "category": "AI_BUSINESS",
+    "target_keyword": "ad optimization",
+    "secondary_keywords": [
+      "advertising",
+      "performance"
+    ],
+    "brief": "Use AI to optimize ad campaigns.",
+    "status": "pending"
+  },
+  {
+    "id": 165,
+    "title": "Как да предвиждам продажби с AI?",
+    "slug": "kak-da-predvizhdam-prodazhbi-s-ai",
+    "content_type": "howto",
+    "category": "AI_BUSINESS",
+    "target_keyword": "forecasting",
+    "secondary_keywords": [
+      "prediction",
+      "analytics"
+    ],
+    "brief": "Forecast sales using AI predictive analytics.",
+    "status": "pending"
+  },
+  {
+    "id": 166,
+    "title": "Как да използвам AI за HR?",
+    "slug": "kak-da-izpolzvam-ai-za-hr",
+    "content_type": "howto",
+    "category": "AI_BUSINESS",
+    "target_keyword": "AI HR",
+    "secondary_keywords": [
+      "recruitment",
+      "hiring"
+    ],
+    "brief": "Implement AI in recruitment and HR processes.",
+    "status": "pending"
+  },
+  {
+    "id": 167,
+    "title": "Как да измервам ROI на AI инвестиции?",
+    "slug": "kak-da-izmervam-roi-na-ai-investitsii",
+    "content_type": "howto",
+    "category": "AI_BUSINESS",
+    "target_keyword": "ROI",
+    "secondary_keywords": [
+      "measurement",
+      "value"
+    ],
+    "brief": "Calculate return on AI tool investments.",
+    "status": "pending"
+  },
+  {
+    "id": 168,
+    "title": "Как да създам AI изкуство?",
+    "slug": "kak-da-sazdam-ai-izkustvo",
+    "content_type": "howto",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI art",
+    "secondary_keywords": [
+      "generation",
+      "creativity"
+    ],
+    "brief": "Create stunning AI art from scratch.",
+    "status": "pending"
+  },
+  {
+    "id": 169,
+    "title": "Как да напиша добър Midjourney prompt?",
+    "slug": "kak-da-napisha-dobar-midjourney-prompt",
+    "content_type": "howto",
+    "category": "AI_CREATIVE",
+    "target_keyword": "Midjourney prompt",
+    "secondary_keywords": [
+      "parameters",
+      "styles"
+    ],
+    "brief": "Master Midjourney prompting techniques.",
+    "status": "pending"
+  },
+  {
+    "id": 170,
+    "title": "Как да генерирам лого с AI?",
+    "slug": "kak-da-generiram-logo-s-ai",
+    "content_type": "howto",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI лого",
+    "secondary_keywords": [
+      "branding",
+      "design"
+    ],
+    "brief": "Design professional logos using AI.",
+    "status": "pending"
+  },
+  {
+    "id": 171,
+    "title": "Как да създам музика с AI?",
+    "slug": "kak-da-sazdam-muzika-s-ai",
+    "content_type": "howto",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI музика",
+    "secondary_keywords": [
+      "composition",
+      "generation"
+    ],
+    "brief": "Compose music with AI tools.",
+    "status": "pending"
+  },
+  {
+    "id": 172,
+    "title": "Как да редактирам снимки с AI?",
+    "slug": "kak-da-redaktiram-snimki-s-ai",
+    "content_type": "howto",
+    "category": "AI_CREATIVE",
+    "target_keyword": "photo editing",
+    "secondary_keywords": [
+      "enhancement",
+      "retouching"
+    ],
+    "brief": "Enhance photos using AI editing tools.",
+    "status": "pending"
+  },
+  {
+    "id": 173,
+    "title": "Как да премахна фон с AI?",
+    "slug": "kak-da-premahna-fon-s-ai",
+    "content_type": "howto",
+    "category": "AI_CREATIVE",
+    "target_keyword": "background removal",
+    "secondary_keywords": [
+      "editing",
+      "processing"
+    ],
+    "brief": "Remove backgrounds automatically with AI.",
+    "status": "pending"
+  },
+  {
+    "id": 174,
+    "title": "Как да създам AI аватар?",
+    "slug": "kak-da-sazdam-ai-avatar",
+    "content_type": "howto",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI avatar",
+    "secondary_keywords": [
+      "profile picture",
+      "generation"
+    ],
+    "brief": "Generate personalized AI avatars.",
+    "status": "pending"
+  },
+  {
+    "id": 175,
+    "title": "Как да напиша история с AI?",
+    "slug": "kak-da-napisha-istoriya-s-ai",
+    "content_type": "howto",
+    "category": "AI_CREATIVE",
+    "target_keyword": "storytelling",
+    "secondary_keywords": [
+      "writing",
+      "narrative"
+    ],
+    "brief": "Write creative stories with AI assistance.",
+    "status": "pending"
+  },
+  {
+    "id": 176,
+    "title": "Как да дизайнирам с AI?",
+    "slug": "kak-da-dizayniram-s-ai",
+    "content_type": "howto",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI design",
+    "secondary_keywords": [
+      "graphics",
+      "creativity"
+    ],
+    "brief": "Create graphic designs using AI tools.",
+    "status": "pending"
+  },
+  {
+    "id": 177,
+    "title": "Как да анимирам изображения с AI?",
+    "slug": "kak-da-animiram-izobrazheniya-s-ai",
+    "content_type": "howto",
+    "category": "AI_CREATIVE",
+    "target_keyword": "animation",
+    "secondary_keywords": [
+      "motion",
+      "video"
+    ],
+    "brief": "Animate still images with AI.",
+    "status": "pending"
+  },
+  {
+    "id": 178,
+    "title": "Как да подобря качеството на изображения с AI?",
+    "slug": "kak-da-podobrya-kachestvoto-na-izobrazheniya-s-ai",
+    "content_type": "howto",
+    "category": "AI_CREATIVE",
+    "target_keyword": "upscaling",
+    "secondary_keywords": [
+      "enhancement",
+      "quality"
+    ],
+    "brief": "Upscale and enhance image quality with AI.",
+    "status": "pending"
+  },
+  {
+    "id": 179,
+    "title": "Как да създам AI видео от текст?",
+    "slug": "kak-da-sazdam-ai-video-ot-tekst",
+    "content_type": "howto",
+    "category": "AI_CREATIVE",
+    "target_keyword": "text-to-video",
+    "secondary_keywords": [
+      "generation",
+      "Sora"
+    ],
+    "brief": "Generate videos from text descriptions.",
+    "status": "pending"
+  },
+  {
+    "id": 180,
+    "title": "Как да използвам AI за брандинг?",
+    "slug": "kak-da-izpolzvam-ai-za-branding",
+    "content_type": "howto",
+    "category": "AI_CREATIVE",
+    "target_keyword": "branding",
+    "secondary_keywords": [
+      "identity",
+      "design"
+    ],
+    "brief": "Build brand identity with AI tools.",
+    "status": "pending"
+  },
+  {
+    "id": 181,
+    "title": "Как да създам 3D модел с AI?",
+    "slug": "kak-da-sazdam-3d-model-s-ai",
+    "content_type": "howto",
+    "category": "AI_CREATIVE",
+    "target_keyword": "3D modeling",
+    "secondary_keywords": [
+      "generation",
+      "design"
+    ],
+    "brief": "Generate 3D models using AI.",
+    "status": "pending"
+  },
+  {
+    "id": 182,
+    "title": "Как да интегрирам OpenAI API?",
+    "slug": "kak-da-integriram-openai-api",
+    "content_type": "howto",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "OpenAI API",
+    "secondary_keywords": [
+      "integration",
+      "development"
+    ],
+    "brief": "Integrate OpenAI API into applications.",
+    "status": "pending"
+  },
+  {
+    "id": 183,
+    "title": "Как да създам AI приложение?",
+    "slug": "kak-da-sazdam-ai-prilozhenie",
+    "content_type": "howto",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "AI app",
+    "secondary_keywords": [
+      "development",
+      "build"
+    ],
+    "brief": "Build AI-powered application from scratch.",
+    "status": "pending"
+  },
+  {
+    "id": 184,
+    "title": "Как да използвам LangChain за RAG?",
+    "slug": "kak-da-izpolzvam-langchain-za-rag",
+    "content_type": "howto",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "RAG",
+    "secondary_keywords": [
+      "retrieval",
+      "implementation"
+    ],
+    "brief": "Implement RAG system with LangChain.",
+    "status": "pending"
+  },
+  {
+    "id": 185,
+    "title": "Как да fine-tune AI модел?",
+    "slug": "kak-da-fine-tune-ai-model",
+    "content_type": "howto",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "fine-tuning",
+    "secondary_keywords": [
+      "training",
+      "customization"
+    ],
+    "brief": "Fine-tune models for specific use cases.",
+    "status": "pending"
+  },
+  {
+    "id": 186,
+    "title": "Как да deploy-на AI модел?",
+    "slug": "kak-da-deploy-na-ai-model",
+    "content_type": "howto",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "deployment",
+    "secondary_keywords": [
+      "production",
+      "MLOps"
+    ],
+    "brief": "Deploy AI models to production.",
+    "status": "pending"
+  },
+  {
+    "id": 187,
+    "title": "Как да създам vector database?",
+    "slug": "kak-da-sazdam-vector-database",
+    "content_type": "howto",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "vector DB",
+    "secondary_keywords": [
+      "embeddings",
+      "setup"
+    ],
+    "brief": "Set up vector database for AI apps.",
+    "status": "pending"
+  },
+  {
+    "id": 188,
+    "title": "Как да използвам embeddings?",
+    "slug": "kak-da-izpolzvam-embeddings",
+    "content_type": "howto",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "embeddings",
+    "secondary_keywords": [
+      "semantic search",
+      "implementation"
+    ],
+    "brief": "Implement embeddings for semantic search.",
+    "status": "pending"
+  },
+  {
+    "id": 189,
+    "title": "Как да оптимизирам AI разходи?",
+    "slug": "kak-da-optimiziram-ai-razhodi",
+    "content_type": "howto",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "cost optimization",
+    "secondary_keywords": [
+      "budget",
+      "efficiency"
+    ],
+    "brief": "Reduce costs when using AI APIs.",
+    "status": "pending"
+  },
+  {
+    "id": 190,
+    "title": "Как да тествам AI модел?",
+    "slug": "kak-da-testvam-ai-model",
+    "content_type": "howto",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "testing",
+    "secondary_keywords": [
+      "evaluation",
+      "validation"
+    ],
+    "brief": "Test and evaluate AI model performance.",
+    "status": "pending"
+  },
+  {
+    "id": 191,
+    "title": "Как да използвам TensorFlow?",
+    "slug": "kak-da-izpolzvam-tensorflow",
+    "content_type": "howto",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "TensorFlow",
+    "secondary_keywords": [
+      "ML",
+      "framework"
+    ],
+    "brief": "Get started with TensorFlow framework.",
+    "status": "pending"
+  },
+  {
+    "id": 192,
+    "title": "Как да използвам PyTorch?",
+    "slug": "kak-da-izpolzvam-pytorch",
+    "content_type": "howto",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "PyTorch",
+    "secondary_keywords": [
+      "deep learning",
+      "tutorial"
+    ],
+    "brief": "Begin developing with PyTorch.",
+    "status": "pending"
+  },
+  {
+    "id": 193,
+    "title": "Как да създам AI pipeline?",
+    "slug": "kak-da-sazdam-ai-pipeline",
+    "content_type": "howto",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "ML pipeline",
+    "secondary_keywords": [
+      "workflow",
+      "automation"
+    ],
+    "brief": "Build end-to-end ML pipeline.",
+    "status": "pending"
+  },
+  {
+    "id": 194,
+    "title": "Как да обработвам данни за AI?",
+    "slug": "kak-da-obrabotvam-danni-za-ai",
+    "content_type": "howto",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "data processing",
+    "secondary_keywords": [
+      "preprocessing",
+      "cleaning"
+    ],
+    "brief": "Prepare data for machine learning.",
+    "status": "pending"
+  },
+  {
+    "id": 195,
+    "title": "Как да версионирам AI модели?",
+    "slug": "kak-da-versioniram-ai-modeli",
+    "content_type": "howto",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "versioning",
+    "secondary_keywords": [
+      "MLOps",
+      "management"
+    ],
+    "brief": "Version and manage ML models effectively.",
+    "status": "pending"
+  },
+  {
+    "id": 196,
+    "title": "Как да използвам AI етично?",
+    "slug": "kak-da-izpolzvam-ai-etichno",
+    "content_type": "howto",
+    "category": "AI_ETHICS",
+    "target_keyword": "етика",
+    "secondary_keywords": [
+      "responsible use",
+      "guidelines"
+    ],
+    "brief": "Follow ethical guidelines when using AI.",
+    "status": "pending"
+  },
+  {
+    "id": 197,
+    "title": "Как да открия bias в AI?",
+    "slug": "kak-da-otkriya-bias-v-ai",
+    "content_type": "howto",
+    "category": "AI_ETHICS",
+    "target_keyword": "bias detection",
+    "secondary_keywords": [
+      "fairness",
+      "audit"
+    ],
+    "brief": "Identify and mitigate bias in AI systems.",
+    "status": "pending"
+  },
+  {
+    "id": 198,
+    "title": "Как да защитя данните си при AI?",
+    "slug": "kak-da-zashtitya-dannite-si-pri-ai",
+    "content_type": "howto",
+    "category": "AI_ETHICS",
+    "target_keyword": "privacy",
+    "secondary_keywords": [
+      "data protection",
+      "security"
+    ],
+    "brief": "Protect personal data when using AI.",
+    "status": "pending"
+  },
+  {
+    "id": 199,
+    "title": "Как да съм прозрачен с AI използване?",
+    "slug": "kak-da-sam-prozrachen-s-ai-izpolzvane",
+    "content_type": "howto",
+    "category": "AI_ETHICS",
+    "target_keyword": "transparency",
+    "secondary_keywords": [
+      "disclosure",
+      "ethics"
+    ],
+    "brief": "Disclose AI use transparently and responsibly.",
+    "status": "pending"
+  },
+  {
+    "id": 200,
+    "title": "Как да използвам AI устойчиво?",
+    "slug": "kak-da-izpolzvam-ai-ustoychivo",
+    "content_type": "howto",
+    "category": "AI_ETHICS",
+    "target_keyword": "sustainability",
+    "secondary_keywords": [
+      "environment",
+      "green AI"
+    ],
+    "brief": "Minimize environmental impact of AI usage.",
+    "status": "pending"
+  },
+  {
+    "id": 201,
+    "title": "Как да проверя AI за дискриминация?",
+    "slug": "kak-da-proverya-ai-za-diskriminatsiya",
+    "content_type": "howto",
+    "category": "AI_ETHICS",
+    "target_keyword": "discrimination",
+    "secondary_keywords": [
+      "fairness",
+      "testing"
+    ],
+    "brief": "Test AI systems for discriminatory outcomes.",
+    "status": "pending"
+  },
+  {
+    "id": 202,
+    "title": "Как да обясня AI решения?",
+    "slug": "kak-da-obyasnya-ai-resheniya",
+    "content_type": "howto",
+    "category": "AI_ETHICS",
+    "target_keyword": "explainability",
+    "secondary_keywords": [
+      "XAI",
+      "transparency"
+    ],
+    "brief": "Make AI decisions interpretable and explainable.",
+    "status": "pending"
+  },
+  {
+    "id": 203,
+    "title": "Как да спазвам GDPR с AI?",
+    "slug": "kak-da-spazvam-gdpr-s-ai",
+    "content_type": "howto",
+    "category": "AI_ETHICS",
+    "target_keyword": "GDPR",
+    "secondary_keywords": [
+      "compliance",
+      "privacy"
+    ],
+    "brief": "Ensure GDPR compliance in AI applications.",
+    "status": "pending"
+  },
+  {
+    "id": 204,
+    "title": "Как да осигуря AI сигурност?",
+    "slug": "kak-da-osigurya-ai-sigurnost",
+    "content_type": "howto",
+    "category": "AI_ETHICS",
+    "target_keyword": "security",
+    "secondary_keywords": [
+      "protection",
+      "cyber"
+    ],
+    "brief": "Secure AI systems from threats and attacks.",
+    "status": "pending"
+  },
+  {
+    "id": 205,
+    "title": "Как да създам отговорна AI политика?",
+    "slug": "kak-da-sazdam-otgovorna-ai-politika",
+    "content_type": "howto",
+    "category": "AI_ETHICS",
+    "target_keyword": "policy",
+    "secondary_keywords": [
+      "governance",
+      "framework"
+    ],
+    "brief": "Develop responsible AI usage policies.",
+    "status": "pending"
+  },
+  {
+    "id": 206,
+    "title": "Как да балансирам AI иновации и етика?",
+    "slug": "kak-da-balansiram-ai-inovatsii-i-etika",
+    "content_type": "howto",
+    "category": "AI_ETHICS",
+    "target_keyword": "баланс",
+    "secondary_keywords": [
+      "innovation",
+      "responsibility"
+    ],
+    "brief": "Balance innovation with ethical AI practices.",
+    "status": "pending"
+  },
+  {
+    "id": 207,
+    "title": "Как да обучавам екип за AI етика?",
+    "slug": "kak-da-obuchavam-ekip-za-ai-etika",
+    "content_type": "howto",
+    "category": "AI_ETHICS",
+    "target_keyword": "обучение",
+    "secondary_keywords": [
+      "training",
+      "awareness"
+    ],
+    "brief": "Train teams on ethical AI principles.",
+    "status": "pending"
+  },
+  {
+    "id": 208,
+    "title": "Как да докладвам AI инциденти?",
+    "slug": "kak-da-dokladvam-ai-intsidenti",
+    "content_type": "howto",
+    "category": "AI_ETHICS",
+    "target_keyword": "incident reporting",
+    "secondary_keywords": [
+      "accountability",
+      "transparency"
+    ],
+    "brief": "Report and handle AI-related incidents.",
+    "status": "pending"
+  },
+  {
+    "id": 209,
+    "title": "Как да оценя AI въздействие?",
+    "slug": "kak-da-otsenya-ai-vazdeystvie",
+    "content_type": "howto",
+    "category": "AI_ETHICS",
+    "target_keyword": "impact assessment",
+    "secondary_keywords": [
+      "evaluation",
+      "responsibility"
+    ],
+    "brief": "Assess social and ethical impact of AI.",
+    "status": "pending"
+  },
+  {
+    "id": 210,
+    "title": "Как да се подготвя за AGI?",
+    "slug": "kak-da-se-podgotvya-za-agi",
+    "content_type": "howto",
+    "category": "AI_TRENDS",
+    "target_keyword": "AGI",
+    "secondary_keywords": [
+      "future",
+      "preparation"
+    ],
+    "brief": "Prepare for artificial general intelligence era.",
+    "status": "pending"
+  },
+  {
+    "id": 211,
+    "title": "Как да използвам multimodal AI?",
+    "slug": "kak-da-izpolzvam-multimodal-ai",
+    "content_type": "howto",
+    "category": "AI_TRENDS",
+    "target_keyword": "multimodal",
+    "secondary_keywords": [
+      "GPT-4V",
+      "implementation"
+    ],
+    "brief": "Leverage multimodal AI capabilities.",
+    "status": "pending"
+  },
+  {
+    "id": 212,
+    "title": "Как да следя AI новини?",
+    "slug": "kak-da-sledya-ai-novini",
+    "content_type": "howto",
+    "category": "AI_TRENDS",
+    "target_keyword": "AI news",
+    "secondary_keywords": [
+      "trends",
+      "updates"
+    ],
+    "brief": "Stay updated with latest AI developments.",
+    "status": "pending"
+  },
+  {
+    "id": 213,
+    "title": "Как да инвестирам в AI умения?",
+    "slug": "kak-da-investiram-v-ai-umeniya",
+    "content_type": "howto",
+    "category": "AI_TRENDS",
+    "target_keyword": "AI умения",
+    "secondary_keywords": [
+      "learning",
+      "career"
+    ],
+    "brief": "Develop valuable AI skills for the future.",
+    "status": "pending"
+  },
+  {
+    "id": 214,
+    "title": "Как да използвам AI за климат?",
+    "slug": "kak-da-izpolzvam-ai-za-klimat",
+    "content_type": "howto",
+    "category": "AI_TRENDS",
+    "target_keyword": "climate AI",
+    "secondary_keywords": [
+      "environment",
+      "solutions"
+    ],
+    "brief": "Apply AI to climate change solutions.",
+    "status": "pending"
+  },
+  {
+    "id": 215,
+    "title": "Как да внедря edge AI?",
+    "slug": "kak-da-vnedrya-edge-ai",
+    "content_type": "howto",
+    "category": "AI_TRENDS",
+    "target_keyword": "edge AI",
+    "secondary_keywords": [
+      "on-device",
+      "IoT"
+    ],
+    "brief": "Implement AI on edge devices.",
+    "status": "pending"
+  },
+  {
+    "id": 216,
+    "title": "Как да използвам AI за здраве?",
+    "slug": "kak-da-izpolzvam-ai-za-zdrave",
+    "content_type": "howto",
+    "category": "AI_TRENDS",
+    "target_keyword": "health AI",
+    "secondary_keywords": [
+      "medical",
+      "wellness"
+    ],
+    "brief": "Use AI for health and medical applications.",
+    "status": "pending"
+  },
+  {
+    "id": 217,
+    "title": "Как да създам AI стартъп?",
+    "slug": "kak-da-sazdam-ai-startap",
+    "content_type": "howto",
+    "category": "AI_TRENDS",
+    "target_keyword": "AI startup",
+    "secondary_keywords": [
+      "business",
+      "entrepreneurship"
+    ],
+    "brief": "Launch AI-focused startup successfully.",
+    "status": "pending"
+  },
+  {
+    "id": 218,
+    "title": "Как да се адаптирам към AI промени?",
+    "slug": "kak-da-se-adaptiram-kam-ai-promeni",
+    "content_type": "howto",
+    "category": "AI_TRENDS",
+    "target_keyword": "адаптация",
+    "secondary_keywords": [
+      "change",
+      "future"
+    ],
+    "brief": "Adapt to rapid AI transformation.",
+    "status": "pending"
+  },
+  {
+    "id": 219,
+    "title": "Как да използвам AI в образованието?",
+    "slug": "kak-da-izpolzvam-ai-v-obrazovanieto",
+    "content_type": "howto",
+    "category": "AI_TRENDS",
+    "target_keyword": "education",
+    "secondary_keywords": [
+      "learning",
+      "teaching"
+    ],
+    "brief": "Integrate AI into educational practice.",
+    "status": "pending"
+  },
+  {
+    "id": 220,
+    "title": "Как да участвам в AI общност?",
+    "slug": "kak-da-uchastvam-v-ai-obshtnost",
+    "content_type": "howto",
+    "category": "AI_TRENDS",
+    "target_keyword": "community",
+    "secondary_keywords": [
+      "networking",
+      "collaboration"
+    ],
+    "brief": "Join and contribute to AI communities.",
+    "status": "pending"
+  },
+  {
+    "id": 221,
+    "title": "Как да се защитя от AI заплахи?",
+    "slug": "kak-da-se-zashtitya-ot-ai-zaplahi",
+    "content_type": "howto",
+    "category": "AI_TRENDS",
+    "target_keyword": "AI threats",
+    "secondary_keywords": [
+      "security",
+      "safety"
+    ],
+    "brief": "Protect against AI-related threats and risks.",
+    "status": "pending"
+  },
+  {
+    "id": 222,
+    "title": "Как да подготвя кариерата си за AI ерата?",
+    "slug": "kak-da-podgotvya-karierata-si-za-ai-erata",
+    "content_type": "howto",
+    "category": "AI_TRENDS",
+    "target_keyword": "кариера",
+    "secondary_keywords": [
+      "future of work",
+      "skills"
+    ],
+    "brief": "Future-proof career in AI-driven economy.",
+    "status": "pending"
+  },
+  {
+    "id": 223,
+    "title": "ChatGPT vs Claude AI",
+    "slug": "chatgpt-vs-claude-ai",
+    "content_type": "comparison",
+    "category": "AI_BASICS",
+    "target_keyword": "ChatGPT vs Claude",
+    "secondary_keywords": [
+      "comparison",
+      "AI models"
+    ],
+    "brief": "Compare ChatGPT and Claude capabilities, strengths, pricing.",
+    "status": "pending"
+  },
+  {
+    "id": 224,
+    "title": "GPT-4 vs GPT-3.5",
+    "slug": "gpt-4-vs-gpt-3-5",
+    "content_type": "comparison",
+    "category": "AI_BASICS",
+    "target_keyword": "GPT-4 vs GPT-3.5",
+    "secondary_keywords": [
+      "OpenAI",
+      "models"
+    ],
+    "brief": "Differences between GPT versions and upgrade value.",
+    "status": "pending"
+  },
+  {
+    "id": 225,
+    "title": "ChatGPT vs Google Gemini",
+    "slug": "chatgpt-vs-google-gemini",
+    "content_type": "comparison",
+    "category": "AI_BASICS",
+    "target_keyword": "ChatGPT vs Gemini",
+    "secondary_keywords": [
+      "comparison",
+      "LLM"
+    ],
+    "brief": "Compare OpenAI ChatGPT with Google Gemini.",
+    "status": "pending"
+  },
+  {
+    "id": 226,
+    "title": "Claude vs Gemini",
+    "slug": "claude-vs-gemini",
+    "content_type": "comparison",
+    "category": "AI_BASICS",
+    "target_keyword": "Claude vs Gemini",
+    "secondary_keywords": [
+      "Anthropic",
+      "Google"
+    ],
+    "brief": "Head-to-head comparison of Claude and Gemini.",
+    "status": "pending"
+  },
+  {
+    "id": 227,
+    "title": "Безплатен vs платен ChatGPT",
+    "slug": "bezplaten-vs-platen-chatgpt",
+    "content_type": "comparison",
+    "category": "AI_BASICS",
+    "target_keyword": "free vs paid",
+    "secondary_keywords": [
+      "pricing",
+      "features"
+    ],
+    "brief": "Compare free and paid ChatGPT tiers.",
+    "status": "pending"
+  },
+  {
+    "id": 228,
+    "title": "AI vs машинно обучение",
+    "slug": "ai-vs-mashinno-obuchenie",
+    "content_type": "comparison",
+    "category": "AI_BASICS",
+    "target_keyword": "AI vs ML",
+    "secondary_keywords": [
+      "differences",
+      "concepts"
+    ],
+    "brief": "Distinguish between AI and machine learning.",
+    "status": "pending"
+  },
+  {
+    "id": 229,
+    "title": "Дълбоко обучение vs машинно обучение",
+    "slug": "dalboko-obuchenie-vs-mashinno-obuchenie",
+    "content_type": "comparison",
+    "category": "AI_BASICS",
+    "target_keyword": "deep learning vs ML",
+    "secondary_keywords": [
+      "neural networks",
+      "comparison"
+    ],
+    "brief": "Compare deep learning and traditional ML.",
+    "status": "pending"
+  },
+  {
+    "id": 230,
+    "title": "Supervised vs unsupervised learning",
+    "slug": "supervised-vs-unsupervised-learning",
+    "content_type": "comparison",
+    "category": "AI_BASICS",
+    "target_keyword": "supervised vs unsupervised",
+    "secondary_keywords": [
+      "learning types",
+      "ML"
+    ],
+    "brief": "Compare supervised and unsupervised learning approaches.",
+    "status": "pending"
+  },
+  {
+    "id": 231,
+    "title": "GPT vs BERT",
+    "slug": "gpt-vs-bert",
+    "content_type": "comparison",
+    "category": "AI_BASICS",
+    "target_keyword": "GPT vs BERT",
+    "secondary_keywords": [
+      "models",
+      "architectures"
+    ],
+    "brief": "Compare GPT and BERT model architectures.",
+    "status": "pending"
+  },
+  {
+    "id": 232,
+    "title": "Генеративен AI vs дискриминативен AI",
+    "slug": "generativen-ai-vs-diskriminativen-ai",
+    "content_type": "comparison",
+    "category": "AI_BASICS",
+    "target_keyword": "generative vs discriminative",
+    "secondary_keywords": [
+      "model types",
+      "AI"
+    ],
+    "brief": "Distinguish generative and discriminative AI models.",
+    "status": "pending"
+  },
+  {
+    "id": 233,
+    "title": "Narrow AI vs General AI",
+    "slug": "narrow-ai-vs-general-ai",
+    "content_type": "comparison",
+    "category": "AI_BASICS",
+    "target_keyword": "ANI vs AGI",
+    "secondary_keywords": [
+      "AI types",
+      "capabilities"
+    ],
+    "brief": "Compare narrow and general artificial intelligence.",
+    "status": "pending"
+  },
+  {
+    "id": 234,
+    "title": "AI асистенти vs търсачки",
+    "slug": "ai-asistenti-vs-tarsachki",
+    "content_type": "comparison",
+    "category": "AI_BASICS",
+    "target_keyword": "AI vs search",
+    "secondary_keywords": [
+      "comparison",
+      "tools"
+    ],
+    "brief": "Compare AI assistants with traditional search engines.",
+    "status": "pending"
+  },
+  {
+    "id": 235,
+    "title": "ChatGPT Plus vs Pro",
+    "slug": "chatgpt-plus-vs-pro",
+    "content_type": "comparison",
+    "category": "AI_BASICS",
+    "target_keyword": "Plus vs Pro",
+    "secondary_keywords": [
+      "OpenAI",
+      "pricing"
+    ],
+    "brief": "Compare ChatGPT subscription tiers.",
+    "status": "pending"
+  },
+  {
+    "id": 236,
+    "title": "Cloud AI vs локален AI",
+    "slug": "cloud-ai-vs-lokalen-ai",
+    "content_type": "comparison",
+    "category": "AI_BASICS",
+    "target_keyword": "cloud vs local",
+    "secondary_keywords": [
+      "deployment",
+      "privacy"
+    ],
+    "brief": "Compare cloud-based and local AI deployment.",
+    "status": "pending"
+  },
+  {
+    "id": 237,
+    "title": "Midjourney vs DALL-E",
+    "slug": "midjourney-vs-dall-e",
+    "content_type": "comparison",
+    "category": "AI_TOOLS",
+    "target_keyword": "Midjourney vs DALL-E",
+    "secondary_keywords": [
+      "image generation",
+      "comparison"
+    ],
+    "brief": "Compare top AI image generators.",
+    "status": "pending"
+  },
+  {
+    "id": 238,
+    "title": "Midjourney vs Stable Diffusion",
+    "slug": "midjourney-vs-stable-diffusion",
+    "content_type": "comparison",
+    "category": "AI_TOOLS",
+    "target_keyword": "Midjourney vs SD",
+    "secondary_keywords": [
+      "AI art",
+      "tools"
+    ],
+    "brief": "Compare Midjourney and Stable Diffusion features.",
+    "status": "pending"
+  },
+  {
+    "id": 239,
+    "title": "DALL-E vs Stable Diffusion",
+    "slug": "dall-e-vs-stable-diffusion",
+    "content_type": "comparison",
+    "category": "AI_TOOLS",
+    "target_keyword": "DALL-E vs SD",
+    "secondary_keywords": [
+      "OpenAI",
+      "open source"
+    ],
+    "brief": "Compare DALL-E and Stable Diffusion approaches.",
+    "status": "pending"
+  },
+  {
+    "id": 240,
+    "title": "GitHub Copilot vs Cursor",
+    "slug": "github-copilot-vs-cursor",
+    "content_type": "comparison",
+    "category": "AI_TOOLS",
+    "target_keyword": "Copilot vs Cursor",
+    "secondary_keywords": [
+      "coding",
+      "IDE"
+    ],
+    "brief": "Compare AI coding assistants.",
+    "status": "pending"
+  },
+  {
+    "id": 241,
+    "title": "Jasper vs Copy.ai",
+    "slug": "jasper-vs-copy-ai",
+    "content_type": "comparison",
+    "category": "AI_TOOLS",
+    "target_keyword": "Jasper vs Copy.ai",
+    "secondary_keywords": [
+      "copywriting",
+      "content"
+    ],
+    "brief": "Compare AI copywriting tools.",
+    "status": "pending"
+  },
+  {
+    "id": 242,
+    "title": "Notion AI vs ChatGPT",
+    "slug": "notion-ai-vs-chatgpt",
+    "content_type": "comparison",
+    "category": "AI_TOOLS",
+    "target_keyword": "Notion AI vs ChatGPT",
+    "secondary_keywords": [
+      "productivity",
+      "writing"
+    ],
+    "brief": "Compare integrated vs standalone AI writing.",
+    "status": "pending"
+  },
+  {
+    "id": 243,
+    "title": "Grammarly vs Писането с AI",
+    "slug": "grammarly-vs-pisaneto-s-ai",
+    "content_type": "comparison",
+    "category": "AI_TOOLS",
+    "target_keyword": "Grammarly vs AI",
+    "secondary_keywords": [
+      "editing",
+      "writing"
+    ],
+    "brief": "Compare grammar checker with generative AI.",
+    "status": "pending"
+  },
+  {
+    "id": 244,
+    "title": "Runway vs Pika",
+    "slug": "runway-vs-pika",
+    "content_type": "comparison",
+    "category": "AI_TOOLS",
+    "target_keyword": "Runway vs Pika",
+    "secondary_keywords": [
+      "video AI",
+      "generation"
+    ],
+    "brief": "Compare AI video generation platforms.",
+    "status": "pending"
+  },
+  {
+    "id": 245,
+    "title": "ElevenLabs vs Murf AI",
+    "slug": "elevenlabs-vs-murf-ai",
+    "content_type": "comparison",
+    "category": "AI_TOOLS",
+    "target_keyword": "ElevenLabs vs Murf",
+    "secondary_keywords": [
+      "voice AI",
+      "TTS"
+    ],
+    "brief": "Compare AI voice synthesis tools.",
+    "status": "pending"
+  },
+  {
+    "id": 246,
+    "title": "Whisper vs Google Speech-to-Text",
+    "slug": "whisper-vs-google-speech-to-text",
+    "content_type": "comparison",
+    "category": "AI_TOOLS",
+    "target_keyword": "Whisper vs Google",
+    "secondary_keywords": [
+      "transcription",
+      "STT"
+    ],
+    "brief": "Compare speech recognition services.",
+    "status": "pending"
+  },
+  {
+    "id": 247,
+    "title": "LangChain vs LlamaIndex",
+    "slug": "langchain-vs-llamaindex",
+    "content_type": "comparison",
+    "category": "AI_TOOLS",
+    "target_keyword": "LangChain vs LlamaIndex",
+    "secondary_keywords": [
+      "frameworks",
+      "development"
+    ],
+    "brief": "Compare LLM development frameworks.",
+    "status": "pending"
+  },
+  {
+    "id": 248,
+    "title": "Open source vs затворен код AI",
+    "slug": "open-source-vs-zatvoren-kod-ai",
+    "content_type": "comparison",
+    "category": "AI_TOOLS",
+    "target_keyword": "open vs closed",
+    "secondary_keywords": [
+      "licensing",
+      "models"
+    ],
+    "brief": "Compare open-source and proprietary AI tools.",
+    "status": "pending"
+  },
+  {
+    "id": 249,
+    "title": "Zapier vs n8n за AI",
+    "slug": "zapier-vs-n8n-za-ai",
+    "content_type": "comparison",
+    "category": "AI_TOOLS",
+    "target_keyword": "Zapier vs n8n",
+    "secondary_keywords": [
+      "automation",
+      "workflow"
+    ],
+    "brief": "Compare automation platforms for AI workflows.",
+    "status": "pending"
+  },
+  {
+    "id": 250,
+    "title": "Canva AI vs Midjourney",
+    "slug": "canva-ai-vs-midjourney",
+    "content_type": "comparison",
+    "category": "AI_TOOLS",
+    "target_keyword": "Canva vs Midjourney",
+    "secondary_keywords": [
+      "design",
+      "generation"
+    ],
+    "brief": "Compare integrated design AI with dedicated generator.",
+    "status": "pending"
+  },
+  {
+    "id": 251,
+    "title": "Zero-shot vs few-shot prompting",
+    "slug": "zero-shot-vs-few-shot-prompting",
+    "content_type": "comparison",
+    "category": "AI_TIPS",
+    "target_keyword": "zero-shot vs few-shot",
+    "secondary_keywords": [
+      "prompting",
+      "techniques"
+    ],
+    "brief": "Compare prompting approaches with and without examples.",
+    "status": "pending"
+  },
+  {
+    "id": 252,
+    "title": "Chain-of-thought vs стандартно промптване",
+    "slug": "chain-of-thought-vs-standartno-promptvane",
+    "content_type": "comparison",
+    "category": "AI_TIPS",
+    "target_keyword": "CoT vs standard",
+    "secondary_keywords": [
+      "reasoning",
+      "prompts"
+    ],
+    "brief": "Compare reasoning-focused vs direct prompting.",
+    "status": "pending"
+  },
+  {
+    "id": 253,
+    "title": "System prompt vs user prompt",
+    "slug": "system-prompt-vs-user-prompt",
+    "content_type": "comparison",
+    "category": "AI_TIPS",
+    "target_keyword": "system vs user",
+    "secondary_keywords": [
+      "configuration",
+      "prompting"
+    ],
+    "brief": "Distinguish system and user prompt roles.",
+    "status": "pending"
+  },
+  {
+    "id": 254,
+    "title": "Temperature 0 vs 1",
+    "slug": "temperature-0-vs-1",
+    "content_type": "comparison",
+    "category": "AI_TIPS",
+    "target_keyword": "temperature settings",
+    "secondary_keywords": [
+      "creativity",
+      "control"
+    ],
+    "brief": "Compare deterministic vs creative AI outputs.",
+    "status": "pending"
+  },
+  {
+    "id": 255,
+    "title": "Дълъг vs кратък context window",
+    "slug": "dalag-vs-kratak-context-window",
+    "content_type": "comparison",
+    "category": "AI_TIPS",
+    "target_keyword": "context length",
+    "secondary_keywords": [
+      "memory",
+      "limits"
+    ],
+    "brief": "Compare models with different context lengths.",
+    "status": "pending"
+  },
+  {
+    "id": 256,
+    "title": "Fine-tuning vs prompt engineering",
+    "slug": "fine-tuning-vs-prompt-engineering",
+    "content_type": "comparison",
+    "category": "AI_TIPS",
+    "target_keyword": "fine-tuning vs prompting",
+    "secondary_keywords": [
+      "customization",
+      "approaches"
+    ],
+    "brief": "Compare model customization methods.",
+    "status": "pending"
+  },
+  {
+    "id": 257,
+    "title": "RAG vs fine-tuning",
+    "slug": "rag-vs-fine-tuning",
+    "content_type": "comparison",
+    "category": "AI_TIPS",
+    "target_keyword": "RAG vs fine-tuning",
+    "secondary_keywords": [
+      "knowledge",
+      "customization"
+    ],
+    "brief": "Compare retrieval vs training for custom knowledge.",
+    "status": "pending"
+  },
+  {
+    "id": 258,
+    "title": "Custom GPT vs API интеграция",
+    "slug": "custom-gpt-vs-api-integratsiya",
+    "content_type": "comparison",
+    "category": "AI_TIPS",
+    "target_keyword": "custom GPT vs API",
+    "secondary_keywords": [
+      "implementation",
+      "development"
+    ],
+    "brief": "Compare no-code vs coded AI solutions.",
+    "status": "pending"
+  },
+  {
+    "id": 259,
+    "title": "Един голям prompt vs множество малки",
+    "slug": "edin-golyam-prompt-vs-mnozhestvo-malki",
+    "content_type": "comparison",
+    "category": "AI_TIPS",
+    "target_keyword": "prompt length",
+    "secondary_keywords": [
+      "strategy",
+      "optimization"
+    ],
+    "brief": "Compare single complex vs chained simple prompts.",
+    "status": "pending"
+  },
+  {
+    "id": 260,
+    "title": "Streaming vs batch AI отговори",
+    "slug": "streaming-vs-batch-ai-otgovori",
+    "content_type": "comparison",
+    "category": "AI_TIPS",
+    "target_keyword": "streaming vs batch",
+    "secondary_keywords": [
+      "response mode",
+      "UX"
+    ],
+    "brief": "Compare real-time vs complete AI responses.",
+    "status": "pending"
+  },
+  {
+    "id": 261,
+    "title": "Embeddings vs keyword търсене",
+    "slug": "embeddings-vs-keyword-tarsene",
+    "content_type": "comparison",
+    "category": "AI_TIPS",
+    "target_keyword": "semantic vs keyword",
+    "secondary_keywords": [
+      "search",
+      "relevance"
+    ],
+    "brief": "Compare semantic and keyword search approaches.",
+    "status": "pending"
+  },
+  {
+    "id": 262,
+    "title": "Prompt templates vs ad-hoc промпти",
+    "slug": "prompt-templates-vs-ad-hoc-prompti",
+    "content_type": "comparison",
+    "category": "AI_TIPS",
+    "target_keyword": "templates vs custom",
+    "secondary_keywords": [
+      "reusability",
+      "efficiency"
+    ],
+    "brief": "Compare reusable templates with custom prompts.",
+    "status": "pending"
+  },
+  {
+    "id": 263,
+    "title": "AI преформулиране vs оригинално писане",
+    "slug": "ai-preformulirane-vs-originalno-pisane",
+    "content_type": "comparison",
+    "category": "AI_TIPS",
+    "target_keyword": "rewriting vs writing",
+    "secondary_keywords": [
+      "strategy",
+      "content"
+    ],
+    "brief": "Compare AI editing existing vs creating new content.",
+    "status": "pending"
+  },
+  {
+    "id": 264,
+    "title": "Множество AI инструмента vs един",
+    "slug": "mnozhestvo-ai-instrumenta-vs-edin",
+    "content_type": "comparison",
+    "category": "AI_TIPS",
+    "target_keyword": "multiple vs single",
+    "secondary_keywords": [
+      "workflow",
+      "tools"
+    ],
+    "brief": "Compare specialized tools vs all-in-one AI.",
+    "status": "pending"
+  },
+  {
+    "id": 265,
+    "title": "AI chatbot vs човешка поддръжка",
+    "slug": "ai-chatbot-vs-choveshka-poddrazhka",
+    "content_type": "comparison",
+    "category": "AI_BUSINESS",
+    "target_keyword": "chatbot vs human",
+    "secondary_keywords": [
+      "customer service",
+      "comparison"
+    ],
+    "brief": "Compare automated vs human customer support.",
+    "status": "pending"
+  },
+  {
+    "id": 266,
+    "title": "AI генериране vs човешко копирайтване",
+    "slug": "ai-generirane-vs-choveshko-kopiraytvane",
+    "content_type": "comparison",
+    "category": "AI_BUSINESS",
+    "target_keyword": "AI vs human writing",
+    "secondary_keywords": [
+      "content",
+      "quality"
+    ],
+    "brief": "Compare AI and human-written marketing copy.",
+    "status": "pending"
+  },
+  {
+    "id": 267,
+    "title": "AI SEO инструменти vs традиционни",
+    "slug": "ai-seo-instrumenti-vs-traditsionni",
+    "content_type": "comparison",
+    "category": "AI_BUSINESS",
+    "target_keyword": "AI SEO vs traditional",
+    "secondary_keywords": [
+      "optimization",
+      "tools"
+    ],
+    "brief": "Compare AI-powered and traditional SEO tools.",
+    "status": "pending"
+  },
+  {
+    "id": 268,
+    "title": "AI анализ vs ръчен анализ на данни",
+    "slug": "ai-analiz-vs-rachen-analiz-na-danni",
+    "content_type": "comparison",
+    "category": "AI_BUSINESS",
+    "target_keyword": "AI vs manual analysis",
+    "secondary_keywords": [
+      "analytics",
+      "efficiency"
+    ],
+    "brief": "Compare automated and manual data analysis.",
+    "status": "pending"
+  },
+  {
+    "id": 269,
+    "title": "Автоматизация с AI vs традиционна",
+    "slug": "avtomatizatsiya-s-ai-vs-traditsionna",
+    "content_type": "comparison",
+    "category": "AI_BUSINESS",
+    "target_keyword": "AI vs traditional automation",
+    "secondary_keywords": [
+      "RPA",
+      "intelligence"
+    ],
+    "brief": "Compare intelligent vs rule-based automation.",
+    "status": "pending"
+  },
+  {
+    "id": 270,
+    "title": "AI персонализация vs сегментация",
+    "slug": "ai-personalizatsiya-vs-segmentatsiya",
+    "content_type": "comparison",
+    "category": "AI_BUSINESS",
+    "target_keyword": "personalization vs segmentation",
+    "secondary_keywords": [
+      "marketing",
+      "targeting"
+    ],
+    "brief": "Compare AI personalization with traditional segments.",
+    "status": "pending"
+  },
+  {
+    "id": 271,
+    "title": "Predictive AI vs описателна аналитика",
+    "slug": "predictive-ai-vs-opisatelna-analitika",
+    "content_type": "comparison",
+    "category": "AI_BUSINESS",
+    "target_keyword": "predictive vs descriptive",
+    "secondary_keywords": [
+      "forecasting",
+      "analytics"
+    ],
+    "brief": "Compare predictive and descriptive business analytics.",
+    "status": "pending"
+  },
+  {
+    "id": 272,
+    "title": "AI CRM vs традиционен CRM",
+    "slug": "ai-crm-vs-traditsionen-crm",
+    "content_type": "comparison",
+    "category": "AI_BUSINESS",
+    "target_keyword": "AI CRM vs traditional",
+    "secondary_keywords": [
+      "sales",
+      "technology"
+    ],
+    "brief": "Compare AI-enhanced and standard CRM systems.",
+    "status": "pending"
+  },
+  {
+    "id": 273,
+    "title": "AI реклами vs ръчни кампании",
+    "slug": "ai-reklami-vs-rachni-kampanii",
+    "content_type": "comparison",
+    "category": "AI_BUSINESS",
+    "target_keyword": "AI ads vs manual",
+    "secondary_keywords": [
+      "advertising",
+      "optimization"
+    ],
+    "brief": "Compare automated and manual ad management.",
+    "status": "pending"
+  },
+  {
+    "id": 274,
+    "title": "AI съдържание vs агенция",
+    "slug": "ai-sadarzhanie-vs-agentsiya",
+    "content_type": "comparison",
+    "category": "AI_BUSINESS",
+    "target_keyword": "AI vs agency",
+    "secondary_keywords": [
+      "content creation",
+      "cost"
+    ],
+    "brief": "Compare AI content generation with hiring agencies.",
+    "status": "pending"
+  },
+  {
+    "id": 275,
+    "title": "Вътрешен AI vs outsourcing",
+    "slug": "vatreshen-ai-vs-outsourcing",
+    "content_type": "comparison",
+    "category": "AI_BUSINESS",
+    "target_keyword": "in-house vs outsource",
+    "secondary_keywords": [
+      "strategy",
+      "implementation"
+    ],
+    "brief": "Compare building vs buying AI capabilities.",
+    "status": "pending"
+  },
+  {
+    "id": 276,
+    "title": "AI за B2B vs B2C",
+    "slug": "ai-za-b2b-vs-b2c",
+    "content_type": "comparison",
+    "category": "AI_BUSINESS",
+    "target_keyword": "B2B vs B2C AI",
+    "secondary_keywords": [
+      "applications",
+      "strategies"
+    ],
+    "brief": "Compare AI applications in B2B and B2C contexts.",
+    "status": "pending"
+  },
+  {
+    "id": 277,
+    "title": "Real-time AI vs batch обработка",
+    "slug": "real-time-ai-vs-batch-obrabotka",
+    "content_type": "comparison",
+    "category": "AI_BUSINESS",
+    "target_keyword": "real-time vs batch",
+    "secondary_keywords": [
+      "processing",
+      "business"
+    ],
+    "brief": "Compare real-time and scheduled AI processing.",
+    "status": "pending"
+  },
+  {
+    "id": 278,
+    "title": "AI dashboard vs традиционни отчети",
+    "slug": "ai-dashboard-vs-traditsionni-otcheti",
+    "content_type": "comparison",
+    "category": "AI_BUSINESS",
+    "target_keyword": "AI vs traditional reporting",
+    "secondary_keywords": [
+      "analytics",
+      "insights"
+    ],
+    "brief": "Compare AI-powered and traditional business reporting.",
+    "status": "pending"
+  },
+  {
+    "id": 279,
+    "title": "AI изкуство vs традиционно изкуство",
+    "slug": "ai-izkustvo-vs-traditsionno-izkustvo",
+    "content_type": "comparison",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI vs traditional art",
+    "secondary_keywords": [
+      "creativity",
+      "debate"
+    ],
+    "brief": "Compare AI-generated and human-created art.",
+    "status": "pending"
+  },
+  {
+    "id": 280,
+    "title": "AI музика vs човешка композиция",
+    "slug": "ai-muzika-vs-choveshka-kompozitsiya",
+    "content_type": "comparison",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI vs human music",
+    "secondary_keywords": [
+      "composition",
+      "creativity"
+    ],
+    "brief": "Compare AI and human music creation.",
+    "status": "pending"
+  },
+  {
+    "id": 281,
+    "title": "AI писане vs авторско писане",
+    "slug": "ai-pisane-vs-avtorsko-pisane",
+    "content_type": "comparison",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI vs author writing",
+    "secondary_keywords": [
+      "literature",
+      "creativity"
+    ],
+    "brief": "Compare AI-assisted and traditional writing.",
+    "status": "pending"
+  },
+  {
+    "id": 282,
+    "title": "Midjourney v5 vs v6",
+    "slug": "midjourney-v5-vs-v6",
+    "content_type": "comparison",
+    "category": "AI_CREATIVE",
+    "target_keyword": "Midjourney versions",
+    "secondary_keywords": [
+      "updates",
+      "features"
+    ],
+    "brief": "Compare Midjourney version capabilities.",
+    "status": "pending"
+  },
+  {
+    "id": 283,
+    "title": "AI дизайн vs графичен дизайнер",
+    "slug": "ai-dizayn-vs-grafichen-dizayner",
+    "content_type": "comparison",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI vs designer",
+    "secondary_keywords": [
+      "design",
+      "profession"
+    ],
+    "brief": "Compare AI design tools with professional designers.",
+    "status": "pending"
+  },
+  {
+    "id": 284,
+    "title": "AI фотография vs реална снимка",
+    "slug": "ai-fotografiya-vs-realna-snimka",
+    "content_type": "comparison",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI vs real photo",
+    "secondary_keywords": [
+      "synthetic",
+      "authentic"
+    ],
+    "brief": "Compare AI-generated and real photographs.",
+    "status": "pending"
+  },
+  {
+    "id": 285,
+    "title": "AI редакция vs Photoshop",
+    "slug": "ai-redaktsiya-vs-photoshop",
+    "content_type": "comparison",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI vs Photoshop",
+    "secondary_keywords": [
+      "editing",
+      "tools"
+    ],
+    "brief": "Compare AI auto-editing with manual Photoshop work.",
+    "status": "pending"
+  },
+  {
+    "id": 286,
+    "title": "Текст към изображение vs изображение към изображение",
+    "slug": "tekst-kam-izobrazhenie-vs-izobrazhenie-kam-izobrazhenie",
+    "content_type": "comparison",
+    "category": "AI_CREATIVE",
+    "target_keyword": "text-to-image vs img2img",
+    "secondary_keywords": [
+      "generation",
+      "methods"
+    ],
+    "brief": "Compare AI generation from text vs images.",
+    "status": "pending"
+  },
+  {
+    "id": 287,
+    "title": "AI анимация vs традиционна анимация",
+    "slug": "ai-animatsiya-vs-traditsionna-animatsiya",
+    "content_type": "comparison",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI vs traditional animation",
+    "secondary_keywords": [
+      "motion",
+      "production"
+    ],
+    "brief": "Compare AI and traditional animation workflows.",
+    "status": "pending"
+  },
+  {
+    "id": 288,
+    "title": "AI глас vs гласов актьор",
+    "slug": "ai-glas-vs-glasov-aktyor",
+    "content_type": "comparison",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI vs voice actor",
+    "secondary_keywords": [
+      "synthesis",
+      "performance"
+    ],
+    "brief": "Compare synthetic and human voice performances.",
+    "status": "pending"
+  },
+  {
+    "id": 289,
+    "title": "AI видео vs заснето видео",
+    "slug": "ai-video-vs-zasneto-video",
+    "content_type": "comparison",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI vs filmed video",
+    "secondary_keywords": [
+      "generation",
+      "production"
+    ],
+    "brief": "Compare AI-generated and filmed video content.",
+    "status": "pending"
+  },
+  {
+    "id": 290,
+    "title": "AI 3D vs 3D моделиране",
+    "slug": "ai-3d-vs-3d-modelirane",
+    "content_type": "comparison",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI vs 3D modeling",
+    "secondary_keywords": [
+      "generation",
+      "traditional"
+    ],
+    "brief": "Compare AI and manual 3D model creation.",
+    "status": "pending"
+  },
+  {
+    "id": 291,
+    "title": "AI стилизация vs ръчна",
+    "slug": "ai-stilizatsiya-vs-rachna",
+    "content_type": "comparison",
+    "category": "AI_CREATIVE",
+    "target_keyword": "AI vs manual style",
+    "secondary_keywords": [
+      "style transfer",
+      "art"
+    ],
+    "brief": "Compare automated and manual artistic stylization.",
+    "status": "pending"
+  },
+  {
+    "id": 292,
+    "title": "Генеративно AI vs редакция на AI",
+    "slug": "generativno-ai-vs-redaktsiya-na-ai",
+    "content_type": "comparison",
+    "category": "AI_CREATIVE",
+    "target_keyword": "generation vs editing",
+    "secondary_keywords": [
+      "creation",
+      "enhancement"
+    ],
+    "brief": "Compare creating new vs enhancing existing with AI.",
+    "status": "pending"
+  },
+  {
+    "id": 293,
+    "title": "TensorFlow vs PyTorch",
+    "slug": "tensorflow-vs-pytorch",
+    "content_type": "comparison",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "TensorFlow vs PyTorch",
+    "secondary_keywords": [
+      "frameworks",
+      "deep learning"
+    ],
+    "brief": "Compare major deep learning frameworks.",
+    "status": "pending"
+  },
+  {
+    "id": 294,
+    "title": "OpenAI API vs Anthropic API",
+    "slug": "openai-api-vs-anthropic-api",
+    "content_type": "comparison",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "OpenAI vs Anthropic",
+    "secondary_keywords": [
+      "APIs",
+      "integration"
+    ],
+    "brief": "Compare GPT and Claude API features.",
+    "status": "pending"
+  },
+  {
+    "id": 295,
+    "title": "Self-hosted vs cloud AI",
+    "slug": "self-hosted-vs-cloud-ai",
+    "content_type": "comparison",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "self-hosted vs cloud",
+    "secondary_keywords": [
+      "deployment",
+      "infrastructure"
+    ],
+    "brief": "Compare self-hosting and cloud AI services.",
+    "status": "pending"
+  },
+  {
+    "id": 296,
+    "title": "Pre-trained vs от нулата обучение",
+    "slug": "pre-trained-vs-ot-nulata-obuchenie",
+    "content_type": "comparison",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "pre-trained vs scratch",
+    "secondary_keywords": [
+      "training",
+      "efficiency"
+    ],
+    "brief": "Compare using pre-trained vs training from scratch.",
+    "status": "pending"
+  },
+  {
+    "id": 297,
+    "title": "Transfer learning vs fine-tuning",
+    "slug": "transfer-learning-vs-fine-tuning",
+    "content_type": "comparison",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "transfer vs fine-tuning",
+    "secondary_keywords": [
+      "adaptation",
+      "training"
+    ],
+    "brief": "Compare transfer learning and fine-tuning approaches.",
+    "status": "pending"
+  },
+  {
+    "id": 298,
+    "title": "CPU vs GPU за AI",
+    "slug": "cpu-vs-gpu-za-ai",
+    "content_type": "comparison",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "CPU vs GPU",
+    "secondary_keywords": [
+      "hardware",
+      "performance"
+    ],
+    "brief": "Compare CPU and GPU for AI workloads.",
+    "status": "pending"
+  },
+  {
+    "id": 299,
+    "title": "REST API vs SDK за AI",
+    "slug": "rest-api-vs-sdk-za-ai",
+    "content_type": "comparison",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "REST vs SDK",
+    "secondary_keywords": [
+      "integration",
+      "development"
+    ],
+    "brief": "Compare API integration approaches.",
+    "status": "pending"
+  },
+  {
+    "id": 300,
+    "title": "Batch inference vs real-time",
+    "slug": "batch-inference-vs-real-time",
+    "content_type": "comparison",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "batch vs real-time",
+    "secondary_keywords": [
+      "inference",
+      "deployment"
+    ],
+    "brief": "Compare batch and real-time AI inference.",
+    "status": "pending"
+  },
+  {
+    "id": 301,
+    "title": "On-premise vs cloud ML",
+    "slug": "on-premise-vs-cloud-ml",
+    "content_type": "comparison",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "on-premise vs cloud",
+    "secondary_keywords": [
+      "infrastructure",
+      "ML"
+    ],
+    "brief": "Compare on-premise and cloud ML infrastructure.",
+    "status": "pending"
+  },
+  {
+    "id": 302,
+    "title": "Open source модели vs API",
+    "slug": "open-source-modeli-vs-api",
+    "content_type": "comparison",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "open vs API",
+    "secondary_keywords": [
+      "deployment",
+      "models"
+    ],
+    "brief": "Compare hosting open models vs using APIs.",
+    "status": "pending"
+  },
+  {
+    "id": 303,
+    "title": "Vector DB vs традиционна база",
+    "slug": "vector-db-vs-traditsionna-baza",
+    "content_type": "comparison",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "vector vs traditional DB",
+    "secondary_keywords": [
+      "storage",
+      "embeddings"
+    ],
+    "brief": "Compare vector and traditional databases for AI.",
+    "status": "pending"
+  },
+  {
+    "id": 304,
+    "title": "Pinecone vs Weaviate",
+    "slug": "pinecone-vs-weaviate",
+    "content_type": "comparison",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "Pinecone vs Weaviate",
+    "secondary_keywords": [
+      "vector DB",
+      "comparison"
+    ],
+    "brief": "Compare vector database platforms.",
+    "status": "pending"
+  },
+  {
+    "id": 305,
+    "title": "LangChain vs custom код",
+    "slug": "langchain-vs-custom-kod",
+    "content_type": "comparison",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "framework vs custom",
+    "secondary_keywords": [
+      "development",
+      "flexibility"
+    ],
+    "brief": "Compare using frameworks vs building from scratch.",
+    "status": "pending"
+  },
+  {
+    "id": 306,
+    "title": "Managed AI vs самостоятелно deployment",
+    "slug": "managed-ai-vs-samostoyatelno-deployment",
+    "content_type": "comparison",
+    "category": "AI_DEVELOPMENT",
+    "target_keyword": "managed vs DIY",
+    "secondary_keywords": [
+      "MLOps",
+      "infrastructure"
+    ],
+    "brief": "Compare managed services and self-managed AI.",
+    "status": "pending"
+  },
+  {
+    "id": 307,
+    "title": "AI прозрачност vs поверителност",
+    "slug": "ai-prozrachnost-vs-poveritelnost",
+    "content_type": "comparison",
+    "category": "AI_ETHICS",
+    "target_keyword": "transparency vs privacy",
+    "secondary_keywords": [
+      "balance",
+      "ethics"
+    ],
+    "brief": "Balance transparency needs with privacy protection.",
+    "status": "pending"
+  },
+  {
+    "id": 308,
+    "title": "AI иновации vs регулации",
+    "slug": "ai-inovatsii-vs-regulatsii",
+    "content_type": "comparison",
+    "category": "AI_ETHICS",
+    "target_keyword": "innovation vs regulation",
+    "secondary_keywords": [
+      "policy",
+      "development"
+    ],
+    "brief": "Compare innovation speed with regulatory safety.",
+    "status": "pending"
+  },
+  {
+    "id": 309,
+    "title": "AI ефективност vs справедливост",
+    "slug": "ai-efektivnost-vs-spravedlivost",
+    "content_type": "comparison",
+    "category": "AI_ETHICS",
+    "target_keyword": "efficiency vs fairness",
+    "secondary_keywords": [
+      "optimization",
+      "ethics"
+    ],
+    "brief": "Balance AI performance with fair outcomes.",
+    "status": "pending"
+  },
+  {
+    "id": 310,
+    "title": "Отворен vs затворен AI модел",
+    "slug": "otvoren-vs-zatvoren-ai-model",
+    "content_type": "comparison",
+    "category": "AI_ETHICS",
+    "target_keyword": "open vs closed models",
+    "secondary_keywords": [
+      "safety",
+      "access"
+    ],
+    "brief": "Compare benefits of open vs proprietary AI.",
+    "status": "pending"
+  },
+  {
+    "id": 311,
+    "title": "AI автоматизация vs работни места",
+    "slug": "ai-avtomatizatsiya-vs-rabotni-mesta",
+    "content_type": "comparison",
+    "category": "AI_ETHICS",
+    "target_keyword": "automation vs jobs",
+    "secondary_keywords": [
+      "employment",
+      "economy"
+    ],
+    "brief": "Compare productivity gains with job displacement.",
+    "status": "pending"
+  },
+  {
+    "id": 312,
+    "title": "AI в големи компании vs малък бизнес",
+    "slug": "ai-v-golemi-kompanii-vs-malak-biznes",
+    "content_type": "comparison",
+    "category": "AI_ETHICS",
+    "target_keyword": "enterprise vs SMB",
+    "secondary_keywords": [
+      "access",
+      "equity"
+    ],
+    "brief": "Compare AI access and impact across business sizes.",
+    "status": "pending"
+  },
+  {
+    "id": 313,
+    "title": "Превантивни мерки vs пост-фактум регулации",
+    "slug": "prevantivni-merki-vs-post-faktum-regulatsii",
+    "content_type": "comparison",
+    "category": "AI_ETHICS",
+    "target_keyword": "proactive vs reactive",
+    "secondary_keywords": [
+      "governance",
+      "policy"
+    ],
+    "brief": "Compare preventive and reactive AI governance.",
+    "status": "pending"
+  },
+  {
+    "id": 314,
+    "title": "Глобални vs локални AI стандарти",
+    "slug": "globalni-vs-lokalni-ai-standarti",
+    "content_type": "comparison",
+    "category": "AI_ETHICS",
+    "target_keyword": "global vs local standards",
+    "secondary_keywords": [
+      "regulation",
+      "harmonization"
+    ],
+    "brief": "Compare international and regional AI regulations.",
+    "status": "pending"
+  },
+  {
+    "id": 315,
+    "title": "AI за доброто vs зло",
+    "slug": "ai-za-dobroto-vs-zlo",
+    "content_type": "comparison",
+    "category": "AI_ETHICS",
+    "target_keyword": "beneficial vs harmful",
+    "secondary_keywords": [
+      "dual use",
+      "safety"
+    ],
+    "brief": "Examine dual-use nature of AI technology.",
+    "status": "pending"
+  },
+  {
+    "id": 316,
+    "title": "Човешка преценка vs AI решения",
+    "slug": "choveshka-pretsenka-vs-ai-resheniya",
+    "content_type": "comparison",
+    "category": "AI_ETHICS",
+    "target_keyword": "human vs AI judgment",
+    "secondary_keywords": [
+      "accountability",
+      "authority"
+    ],
+    "brief": "Compare human and AI decision-making authority.",
+    "status": "pending"
+  },
+  {
+    "id": 317,
+    "title": "AI обяснимост vs точност",
+    "slug": "ai-obyasnimost-vs-tochnost",
+    "content_type": "comparison",
+    "category": "AI_ETHICS",
+    "target_keyword": "explainability vs accuracy",
+    "secondary_keywords": [
+      "XAI",
+      "tradeoffs"
+    ],
+    "brief": "Balance model interpretability with performance.",
+    "status": "pending"
+  },
+  {
+    "id": 318,
+    "title": "Бързо развитие vs отговорно внедряване",
+    "slug": "barzo-razvitie-vs-otgovorno-vnedryavane",
+    "content_type": "comparison",
+    "category": "AI_ETHICS",
+    "target_keyword": "speed vs responsibility",
+    "secondary_keywords": [
+      "deployment",
+      "ethics"
+    ],
+    "brief": "Balance rapid innovation with responsible deployment.",
+    "status": "pending"
+  },
+  {
+    "id": 319,
+    "title": "AI за наблюдение vs лични свободи",
+    "slug": "ai-za-nablyudenie-vs-lichni-svobodi",
+    "content_type": "comparison",
+    "category": "AI_ETHICS",
+    "target_keyword": "surveillance vs freedom",
+    "secondary_keywords": [
+      "privacy",
+      "security"
+    ],
+    "brief": "Compare security benefits with privacy concerns.",
+    "status": "pending"
+  },
+  {
+    "id": 320,
+    "title": "Proprietary data vs обществено достъпни данни",
+    "slug": "proprietary-data-vs-obshtestveno-dostapni-danni",
+    "content_type": "comparison",
+    "category": "AI_ETHICS",
+    "target_keyword": "proprietary vs public data",
+    "secondary_keywords": [
+      "training",
+      "ethics"
+    ],
+    "brief": "Compare private and public data for AI training.",
+    "status": "pending"
+  },
+  {
+    "id": 321,
+    "title": "AGI vs ANI",
+    "slug": "agi-vs-ani",
+    "content_type": "comparison",
+    "category": "AI_TRENDS",
+    "target_keyword": "AGI vs ANI",
+    "secondary_keywords": [
+      "artificial general intelligence",
+      "narrow AI"
+    ],
+    "brief": "Compare general and narrow artificial intelligence.",
+    "status": "pending"
+  },
+  {
+    "id": 322,
+    "title": "Multimodal AI vs специализирани модели",
+    "slug": "multimodal-ai-vs-spetsializirani-modeli",
+    "content_type": "comparison",
+    "category": "AI_TRENDS",
+    "target_keyword": "multimodal vs specialized",
+    "secondary_keywords": [
+      "versatility",
+      "performance"
+    ],
+    "brief": "Compare versatile vs specialized AI models.",
+    "status": "pending"
+  },
+  {
+    "id": 323,
+    "title": "Edge AI vs cloud AI",
+    "slug": "edge-ai-vs-cloud-ai",
+    "content_type": "comparison",
+    "category": "AI_TRENDS",
+    "target_keyword": "edge vs cloud",
+    "secondary_keywords": [
+      "deployment",
+      "latency"
+    ],
+    "brief": "Compare on-device and cloud AI processing.",
+    "status": "pending"
+  },
+  {
+    "id": 324,
+    "title": "Quantum AI vs класически AI",
+    "slug": "quantum-ai-vs-klasicheski-ai",
+    "content_type": "comparison",
+    "category": "AI_TRENDS",
+    "target_keyword": "quantum vs classical",
+    "secondary_keywords": [
+      "computing",
+      "future"
+    ],
+    "brief": "Compare quantum and classical AI computing.",
+    "status": "pending"
+  },
+  {
+    "id": 325,
+    "title": "Federated learning vs централно обучение",
+    "slug": "federated-learning-vs-tsentralno-obuchenie",
+    "content_type": "comparison",
+    "category": "AI_TRENDS",
+    "target_keyword": "federated vs centralized",
+    "secondary_keywords": [
+      "privacy",
+      "distributed"
+    ],
+    "brief": "Compare distributed and centralized training.",
+    "status": "pending"
+  },
+  {
+    "id": 326,
+    "title": "AI асистенти vs AI агенти",
+    "slug": "ai-asistenti-vs-ai-agenti",
+    "content_type": "comparison",
+    "category": "AI_TRENDS",
+    "target_keyword": "assistants vs agents",
+    "secondary_keywords": [
+      "autonomy",
+      "capability"
+    ],
+    "brief": "Compare reactive assistants with autonomous agents.",
+    "status": "pending"
+  },
+  {
+    "id": 327,
+    "title": "Специализиран AI vs общ AI",
+    "slug": "spetsializiran-ai-vs-obsht-ai",
+    "content_type": "comparison",
+    "category": "AI_TRENDS",
+    "target_keyword": "specialized vs general",
+    "secondary_keywords": [
+      "applications",
+      "scope"
+    ],
+    "brief": "Compare task-specific and general-purpose AI.",
+    "status": "pending"
+  },
+  {
+    "id": 328,
+    "title": "AI за потребители vs enterprise AI",
+    "slug": "ai-za-potrebiteli-vs-enterprise-ai",
+    "content_type": "comparison",
+    "category": "AI_TRENDS",
+    "target_keyword": "consumer vs enterprise",
+    "secondary_keywords": [
+      "markets",
+      "applications"
+    ],
+    "brief": "Compare consumer and business AI applications.",
+    "status": "pending"
+  },
+  {
+    "id": 329,
+    "title": "Current AI vs бъдещ AI",
+    "slug": "current-ai-vs-badesht-ai",
+    "content_type": "comparison",
+    "category": "AI_TRENDS",
+    "target_keyword": "current vs future",
+    "secondary_keywords": [
+      "capabilities",
+      "predictions"
+    ],
+    "brief": "Compare today capabilities with future potential.",
+    "status": "pending"
+  },
+  {
+    "id": 330,
+    "title": "AI chips vs универсални процесори",
+    "slug": "ai-chips-vs-universalni-protsesori",
+    "content_type": "comparison",
+    "category": "AI_TRENDS",
+    "target_keyword": "AI chips vs general CPU",
+    "secondary_keywords": [
+      "hardware",
+      "performance"
+    ],
+    "brief": "Compare specialized AI and general-purpose chips.",
+    "status": "pending"
+  },
+  {
+    "id": 331,
+    "title": "Neuromorphic vs традиционно AI hardware",
+    "slug": "neuromorphic-vs-traditsionno-ai-hardware",
+    "content_type": "comparison",
+    "category": "AI_TRENDS",
+    "target_keyword": "neuromorphic vs traditional",
+    "secondary_keywords": [
+      "computing",
+      "efficiency"
+    ],
+    "brief": "Compare brain-inspired and conventional AI chips.",
+    "status": "pending"
+  },
+  {
+    "id": 332,
+    "title": "AI за изследвания vs приложен AI",
+    "slug": "ai-za-izsledvaniya-vs-prilozhen-ai",
+    "content_type": "comparison",
+    "category": "AI_TRENDS",
+    "target_keyword": "research vs applied",
+    "secondary_keywords": [
+      "development",
+      "deployment"
+    ],
+    "brief": "Compare research AI and production applications.",
+    "status": "pending"
+  },
+  {
+    "id": 333,
+    "title": "Collaborative AI vs competitive AI",
+    "slug": "collaborative-ai-vs-competitive-ai",
+    "content_type": "comparison",
+    "category": "AI_TRENDS",
+    "target_keyword": "collaborative vs competitive",
+    "secondary_keywords": [
+      "development",
+      "ecosystem"
+    ],
+    "brief": "Compare open collaboration vs competitive AI development.",
+    "status": "pending"
+  }
+]

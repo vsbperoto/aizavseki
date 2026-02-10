@@ -83,6 +83,27 @@ export const SLUG_TO_PILLAR: Record<string, PillarKey> = Object.fromEntries(
   Object.entries(PILLAR_SLUGS).map(([key, slug]) => [slug, key as PillarKey])
 ) as Record<string, PillarKey>;
 
+export const RESOURCE_CATEGORIES = {
+  AI_BASICS: { name: "AI \u041E\u0441\u043D\u043E\u0432\u0438", slug: "ai-osnovi" },
+  AI_TOOLS: { name: "AI \u0418\u043D\u0441\u0442\u0440\u0443\u043C\u0435\u043D\u0442\u0438", slug: "ai-instrumenti" },
+  AI_TIPS: { name: "AI \u0421\u044A\u0432\u0435\u0442\u0438", slug: "ai-saveti" },
+  AI_BUSINESS: { name: "AI \u0437\u0430 \u0411\u0438\u0437\u043D\u0435\u0441\u0430", slug: "ai-za-biznesa" },
+  AI_CREATIVE: { name: "AI \u0437\u0430 \u0422\u0432\u043E\u0440\u0447\u0435\u0441\u0442\u0432\u043E", slug: "ai-za-tvorchestvo" },
+  AI_DEVELOPMENT: { name: "AI \u0420\u0430\u0437\u0440\u0430\u0431\u043E\u0442\u043A\u0430", slug: "ai-razrabotka" },
+  AI_ETHICS: { name: "AI \u0415\u0442\u0438\u043A\u0430", slug: "ai-etika" },
+  AI_TRENDS: { name: "AI \u0422\u0435\u043D\u0434\u0435\u043D\u0446\u0438\u0438", slug: "ai-tendentsii" },
+} as const;
+
+export type ResourceCategoryKey = keyof typeof RESOURCE_CATEGORIES;
+
+export const CONTENT_TYPES = {
+  definition: { name: "\u0414\u0435\u0444\u0438\u043D\u0438\u0446\u0438\u044F", label: "\u041A\u0430\u043A\u0432\u043E \u0435...?" },
+  howto: { name: "\u0420\u044A\u043A\u043E\u0432\u043E\u0434\u0441\u0442\u0432\u043E", label: "\u041A\u0430\u043A \u0434\u0430...?" },
+  comparison: { name: "\u0421\u0440\u0430\u0432\u043D\u0435\u043D\u0438\u0435", label: "X vs Y" },
+} as const;
+
+export type ContentTypeKey = keyof typeof CONTENT_TYPES;
+
 export const STATS = [
   { value: 50, suffix: "+", label: "публикации" },
   { value: 5, suffix: "", label: "теми" },

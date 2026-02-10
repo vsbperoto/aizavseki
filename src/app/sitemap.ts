@@ -59,5 +59,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Supabase not configured
   }
 
-  return [...staticEntries, ...pillarEntries, ...blogEntries];
+  let resourceEntries: MetadataRoute.Sitemap = [];
+  try {
+    const { createClient: createClient2 } = await import("@/lib/supabase/server");
+    const supabase2 = await createClient2();
+    const { data: resources } = await supabase2
+      .from("resources")
+      .select("slug, updated_at")
+      .order("published_at", { ascending: false });
+
+    const resourceList = (resources || []) as { slug: string; updated_at: string }[];
+
+    resourceEntries = resourceList.map((r) => ({
+      url: `${BASE_URL}/resources/${r.slug}`,
+      lastModified: new Date(r.updated_at),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    }));
+  } catch {
+    // Supabase not configured
+  }
+
+  return [...staticEntries, ...pillarEntries, ...blogEntries, ...resourceEntries];
 }

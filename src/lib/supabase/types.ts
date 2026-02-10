@@ -253,6 +253,78 @@ export interface Database {
         };
         Relationships: [];
       };
+      resources: {
+        Row: {
+          id: string;
+          slug: string;
+          title: string;
+          content_type: string;
+          category: string;
+          content: string;
+          meta_title: string | null;
+          meta_description: string | null;
+          key_takeaway: string | null;
+          faq_items: FaqItem[] | null;
+          target_keyword: string | null;
+          secondary_keywords: string[] | null;
+          image_url: string | null;
+          image_alt_text: string | null;
+          word_count: number;
+          quality_score: number | null;
+          related_resources: string[] | null;
+          published_at: string;
+          updated_at: string;
+          views: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          slug: string;
+          title: string;
+          content_type: string;
+          category: string;
+          content: string;
+          meta_title?: string | null;
+          meta_description?: string | null;
+          key_takeaway?: string | null;
+          faq_items?: Json | null;
+          target_keyword?: string | null;
+          secondary_keywords?: string[] | null;
+          image_url?: string | null;
+          image_alt_text?: string | null;
+          word_count?: number;
+          quality_score?: number | null;
+          related_resources?: string[] | null;
+          published_at?: string;
+          updated_at?: string;
+          views?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          slug?: string;
+          title?: string;
+          content_type?: string;
+          category?: string;
+          content?: string;
+          meta_title?: string | null;
+          meta_description?: string | null;
+          key_takeaway?: string | null;
+          faq_items?: Json | null;
+          target_keyword?: string | null;
+          secondary_keywords?: string[] | null;
+          image_url?: string | null;
+          image_alt_text?: string | null;
+          word_count?: number;
+          quality_score?: number | null;
+          related_resources?: string[] | null;
+          published_at?: string;
+          updated_at?: string;
+          views?: number;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       trending_topics: {
         Row: {
           id: string;
@@ -335,3 +407,4 @@ export type ContactSubmission = Database["public"]["Tables"]["contact_submission
 export type DataDeletionRequest = Database["public"]["Tables"]["data_deletion_requests"]["Row"];
 export type FacebookToken = Database["public"]["Tables"]["facebook_tokens"]["Row"];
 export type TrendingTopic = Database["public"]["Tables"]["trending_topics"]["Row"];
+export type Resource = Database["public"]["Tables"]["resources"]["Row"];
