@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { cn } from "@/lib/utils";
 
 interface PaginationProps {
   currentPage: number;
@@ -36,7 +35,7 @@ export function Pagination({ currentPage, totalPages, baseParams }: PaginationPr
   }
 
   return (
-    <nav aria-label="Навигация на страници" className="flex items-center justify-center gap-1 mt-12">
+    <nav aria-label={"\u041D\u0430\u0432\u0438\u0433\u0430\u0446\u0438\u044F \u043D\u0430 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0438"} className="flex items-center justify-center gap-1 mt-12">
       {currentPage > 1 && (
         <Link
           href={buildHref(currentPage - 1)}
@@ -51,16 +50,19 @@ export function Pagination({ currentPage, totalPages, baseParams }: PaginationPr
           <span key={`e${i}`} className="px-2 text-brand-gray/40">
             ...
           </span>
+        ) : p === currentPage ? (
+          <span
+            key={p}
+            aria-current="page"
+            className="rounded-lg px-3.5 py-2 text-sm font-medium bg-brand-cyan text-brand-dark"
+          >
+            {p}
+          </span>
         ) : (
           <Link
             key={p}
             href={buildHref(p)}
-            className={cn(
-              "rounded-lg px-3.5 py-2 text-sm font-medium transition-colors",
-              p === currentPage
-                ? "bg-brand-cyan text-brand-dark"
-                : "text-brand-gray hover:text-brand-white hover:bg-brand-navy-light"
-            )}
+            className="rounded-lg px-3.5 py-2 text-sm font-medium text-brand-gray hover:text-brand-white hover:bg-brand-navy-light transition-colors"
           >
             {p}
           </Link>

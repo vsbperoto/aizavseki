@@ -163,7 +163,7 @@ export default async function ResourcesPage({ searchParams }: ResourcesPageProps
 
         {/* Search */}
         <div className="mt-8">
-          <Suspense fallback={null}>
+          <Suspense fallback={<Skeleton className="h-12 w-full" />}>
             <ResourceSearch />
           </Suspense>
         </div>
@@ -171,14 +171,14 @@ export default async function ResourcesPage({ searchParams }: ResourcesPageProps
         {/* Stats bar + sort */}
         <div className="mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <ResourceStats activeType={type || null} counts={typeCounts} />
-          <Suspense fallback={null}>
+          <Suspense fallback={<Skeleton className="h-10 w-40" />}>
             <ResourceSort />
           </Suspense>
         </div>
 
         {/* Type + category filters */}
         <div className="mt-6">
-          <Suspense fallback={null}>
+          <Suspense fallback={<div className="space-y-4"><Skeleton className="h-10 w-full" /><Skeleton className="h-8 w-full" /></div>}>
             <ResourceTypeFilter />
           </Suspense>
         </div>

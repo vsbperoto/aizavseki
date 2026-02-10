@@ -1,6 +1,7 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { CONTENT_TYPES, RESOURCE_CATEGORIES } from "@/lib/constants";
 import type { ContentTypeKey, ResourceCategoryKey } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -11,29 +12,28 @@ const TYPE_COLORS: Record<ContentTypeKey, string> = {
   comparison: "#f59e0b",
 };
 
+function buildHref(searchParams: URLSearchParams, key: string, value: string | null) {
+  const params = new URLSearchParams(searchParams.toString());
+  if (value) {
+    params.set(key, value);
+  } else {
+    params.delete(key);
+  }
+  params.delete("page");
+  const qs = params.toString();
+  return `/resources${qs ? `?${qs}` : ""}`;
+}
+
 export function ResourceTypeFilter() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const activeType = searchParams.get("type");
   const activeCategory = searchParams.get("category");
 
-  function navigate(key: string, value: string | null) {
-    const params = new URLSearchParams(searchParams.toString());
-    if (value) {
-      params.set(key, value);
-    } else {
-      params.delete(key);
-    }
-    params.delete("page");
-    const qs = params.toString();
-    router.push(`/resources${qs ? `?${qs}` : ""}`);
-  }
-
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
-        <button
-          onClick={() => navigate("type", null)}
+        <Link
+          href={buildHref(searchParams, "type", null)}
           className={cn(
             "rounded-full px-4 py-2 text-sm font-medium transition-all",
             !activeType
@@ -42,12 +42,12 @@ export function ResourceTypeFilter() {
           )}
         >
           {"\u0412\u0441\u0438\u0447\u043A\u0438"}
-        </button>
+        </Link>
         {(Object.entries(CONTENT_TYPES) as [ContentTypeKey, (typeof CONTENT_TYPES)[ContentTypeKey]][]).map(
           ([key, type]) => (
-            <button
+            <Link
               key={key}
-              onClick={() => navigate("type", key)}
+              href={buildHref(searchParams, "type", key)}
               className={cn(
                 "rounded-full px-4 py-2 text-sm font-medium transition-all",
                 activeType === key
@@ -61,14 +61,14 @@ export function ResourceTypeFilter() {
               }
             >
               {type.label}
-            </button>
+            </Link>
           )
         )}
       </div>
 
       <div className="flex flex-wrap gap-2">
-        <button
-          onClick={() => navigate("category", null)}
+        <Link
+          href={buildHref(searchParams, "category", null)}
           className={cn(
             "rounded-full px-3 py-1.5 text-xs font-medium transition-all",
             !activeCategory
@@ -77,12 +77,12 @@ export function ResourceTypeFilter() {
           )}
         >
           {"\u0412\u0441\u0438\u0447\u043A\u0438 \u043A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u0438"}
-        </button>
+        </Link>
         {(Object.entries(RESOURCE_CATEGORIES) as [ResourceCategoryKey, (typeof RESOURCE_CATEGORIES)[ResourceCategoryKey]][]).map(
           ([key, cat]) => (
-            <button
+            <Link
               key={key}
-              onClick={() => navigate("category", key)}
+              href={buildHref(searchParams, "category", key)}
               className={cn(
                 "rounded-full px-3 py-1.5 text-xs font-medium transition-all",
                 activeCategory === key
@@ -91,7 +91,7 @@ export function ResourceTypeFilter() {
               )}
             >
               {cat.icon} {cat.name}
-            </button>
+            </Link>
           )
         )}
       </div>

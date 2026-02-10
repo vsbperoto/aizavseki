@@ -55,6 +55,7 @@ export function ResourceSearch() {
       {value && (
         <button
           onClick={handleClear}
+          aria-label={"\u0418\u0437\u0447\u0438\u0441\u0442\u0438 \u0442\u044A\u0440\u0441\u0435\u043D\u0435\u0442\u043E"}
           className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-gray/50 hover:text-brand-white transition-colors"
         >
           <X className="h-4 w-4" />

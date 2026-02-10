@@ -40,46 +40,49 @@ export function ResourceCard({ resource }: ResourceCardProps) {
   const isTopQuality = (resource.quality_score || 0) >= 8.5;
 
   return (
-    <Link href={`/resources/${resource.slug}`}>
-      <Card className={`group h-full flex flex-col ${borderClass}`} hover={false}>
-        <div className="flex items-center gap-2 mb-3">
-          <span
-            className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold"
-            style={{
-              backgroundColor: `${typeColor}15`,
-              color: typeColor,
-              border: `1px solid ${typeColor}30`,
-            }}
-          >
-            {typeConfig?.label || resource.content_type}
+    <Card className={`relative group h-full flex flex-col ${borderClass}`} hover={false}>
+      <div className="flex items-center gap-2 mb-3">
+        <span
+          className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold"
+          style={{
+            backgroundColor: `${typeColor}15`,
+            color: typeColor,
+            border: `1px solid ${typeColor}30`,
+          }}
+        >
+          {typeConfig?.label || resource.content_type}
+        </span>
+        {categoryConfig && (
+          <span className="text-xs text-brand-gray font-medium">
+            &middot; {categoryConfig.icon} {categoryConfig.name}
           </span>
-          {categoryConfig && (
-            <span className="text-xs text-brand-gray font-medium">
-              &middot; {categoryConfig.icon} {categoryConfig.name}
-            </span>
-          )}
-          {isTopQuality && (
-            <span className="ml-auto inline-flex items-center rounded-full bg-amber-500/10 px-2 py-0.5 text-xs font-semibold text-amber-400 border border-amber-500/20">
-              {"\u2605 \u0422\u043E\u043F"}
-            </span>
-          )}
-        </div>
-
-        <h3 className="font-heading text-lg font-semibold text-brand-white line-clamp-2 group-hover:text-brand-cyan transition-colors">
-          {resource.title}
-        </h3>
-
-        {resource.key_takeaway && (
-          <p className="mt-2 text-sm text-brand-gray line-clamp-3 flex-1">
-            {truncate(resource.key_takeaway.replace(/\*\*/g, ""), 150)}
-          </p>
         )}
+        {isTopQuality && (
+          <span className="ml-auto inline-flex items-center rounded-full bg-amber-500/10 px-2 py-0.5 text-xs font-semibold text-amber-400 border border-amber-500/20">
+            {"\u2605 \u0422\u043E\u043F"}
+          </span>
+        )}
+      </div>
 
-        <div className="mt-4 flex items-center justify-between text-xs text-brand-gray/60">
-          <span>{readingTime} {"\u043C\u0438\u043D \u0447\u0435\u0442\u0435\u043D\u0435"}</span>
-          <span>{resource.views} {"\u043F\u0440\u0435\u0433\u043B\u0435\u0434\u0430"}</span>
-        </div>
-      </Card>
-    </Link>
+      <h3 className="font-heading text-lg font-semibold text-brand-white line-clamp-2 group-hover:text-brand-cyan transition-colors">
+        <Link
+          href={`/resources/${resource.slug}`}
+          className="after:absolute after:inset-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/50 focus-visible:ring-offset-2 focus-visible:ring-offset-brand-dark focus-visible:rounded-2xl"
+        >
+          {resource.title}
+        </Link>
+      </h3>
+
+      {resource.key_takeaway && (
+        <p className="mt-2 text-sm text-brand-gray line-clamp-3 flex-1">
+          {truncate(resource.key_takeaway.replace(/\*\*/g, ""), 150)}
+        </p>
+      )}
+
+      <div className="mt-4 flex items-center justify-between text-xs text-brand-gray/60">
+        <span>{readingTime} {"\u043C\u0438\u043D \u0447\u0435\u0442\u0435\u043D\u0435"}</span>
+        <span>{resource.views} {"\u043F\u0440\u0435\u0433\u043B\u0435\u0434\u0430"}</span>
+      </div>
+    </Card>
   );
 }
