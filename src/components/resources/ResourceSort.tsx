@@ -1,43 +1,144 @@
 "use client";
 
+import { useState, useRef, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  ChevronDown,
+  SlidersHorizontal,
+  Eye,
+  Star,
+  Calendar,
+  ArrowDownAZ,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const SORT_OPTIONS = [
-  { value: "newest", label: "\u041D\u0430\u0439-\u043D\u043E\u0432\u0438" },
-  { value: "views", label: "\u041D\u0430\u0439-\u0447\u0435\u0442\u0435\u043D\u0438" },
-  { value: "quality", label: "\u041D\u0430\u0439-\u043A\u0430\u0447\u0435\u0441\u0442\u0432\u0435\u043D\u0438" },
-  { value: "title", label: "\u041F\u043E \u0437\u0430\u0433\u043B\u0430\u0432\u0438\u0435" },
+  { value: "newest", label: "\u041D\u0430\u0439-\u043D\u043E\u0432\u0438", icon: Calendar },
+  { value: "views", label: "\u041D\u0430\u0439-\u0447\u0435\u0442\u0435\u043D\u0438", icon: Eye },
+  { value: "quality", label: "\u0422\u043E\u043F \u043A\u0430\u0447\u0435\u0441\u0442\u0432\u043E", icon: Star },
+  { value: "title", label: "\u0410\u0437\u0431\u0443\u0447\u0435\u043D \u0440\u0435\u0434", icon: ArrowDownAZ },
 ] as const;
 
 export function ResourceSort() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const current = searchParams.get("sort") || "newest";
+  const currentSort = searchParams.get("sort") || "newest";
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
+  const activeIndex = SORT_OPTIONS.findIndex((o) => o.value === currentSort);
+  const activeOption = SORT_OPTIONS[activeIndex >= 0 ? activeIndex : 0];
+  const [focusedIndex, setFocusedIndex] = useState(-1);
+
+  function handleSort(value: string) {
     const params = new URLSearchParams(searchParams.toString());
-    const val = e.target.value;
-    if (val === "newest") {
+    if (value === "newest") {
       params.delete("sort");
     } else {
-      params.set("sort", val);
+      params.set("sort", value);
     }
     params.delete("page");
     const qs = params.toString();
     router.push(`/resources${qs ? `?${qs}` : ""}`);
+    setIsOpen(false);
   }
 
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
-    <select
-      value={current}
-      onChange={handleChange}
-      className="rounded-lg border border-brand-cyan/10 bg-brand-navy/50 px-3 py-2 text-sm text-brand-gray focus:border-brand-cyan/30 focus:outline-none focus:ring-1 focus:ring-brand-cyan/20 transition-colors"
-    >
-      {SORT_OPTIONS.map((opt) => (
-        <option key={opt.value} value={opt.value}>
-          {opt.label}
-        </option>
-      ))}
-    </select>
+    <div className="relative z-20" ref={containerRef}>
+      <button
+        onClick={() => { setIsOpen(!isOpen); setFocusedIndex(activeIndex >= 0 ? activeIndex : 0); }}
+        onKeyDown={(e) => {
+          if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setIsOpen(true);
+            setFocusedIndex(activeIndex >= 0 ? activeIndex : 0);
+          } else if (e.key === "Escape") {
+            setIsOpen(false);
+          }
+        }}
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        className="flex items-center gap-2 px-4 py-2.5 bg-brand-navy/60 backdrop-blur-md border border-brand-white/10 rounded-xl text-brand-gray hover:text-brand-white hover:bg-brand-navy hover:border-brand-white/20 transition-all duration-200 min-w-[180px] justify-between group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/50"
+      >
+        <div className="flex items-center gap-2">
+          <SlidersHorizontal className="w-4 h-4 text-brand-cyan" />
+          <span className="text-sm font-medium">{activeOption.label}</span>
+        </div>
+        <ChevronDown
+          className={cn(
+            "w-4 h-4 transition-transform duration-200",
+            isOpen && "rotate-180"
+          )}
+        />
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 10, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="absolute right-0 mt-2 w-56 rounded-xl border border-brand-white/10 bg-brand-navy/95 backdrop-blur-xl shadow-xl shadow-brand-dark/50 overflow-hidden"
+          >
+            <div
+              className="p-1.5"
+              role="listbox"
+              aria-activedescendant={focusedIndex >= 0 ? `sort-option-${SORT_OPTIONS[focusedIndex].value}` : undefined}
+              onKeyDown={(e) => {
+                if (e.key === "ArrowDown") {
+                  e.preventDefault();
+                  setFocusedIndex((prev) => Math.min(prev + 1, SORT_OPTIONS.length - 1));
+                } else if (e.key === "ArrowUp") {
+                  e.preventDefault();
+                  setFocusedIndex((prev) => Math.max(prev - 1, 0));
+                } else if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  if (focusedIndex >= 0) handleSort(SORT_OPTIONS[focusedIndex].value);
+                } else if (e.key === "Escape") {
+                  setIsOpen(false);
+                }
+              }}
+            >
+              {SORT_OPTIONS.map((option, idx) => (
+                <button
+                  key={option.value}
+                  id={`sort-option-${option.value}`}
+                  role="option"
+                  aria-selected={currentSort === option.value}
+                  onClick={() => handleSort(option.value)}
+                  onMouseEnter={() => setFocusedIndex(idx)}
+                  ref={(el) => { if (idx === focusedIndex && el) el.focus(); }}
+                  className={cn(
+                    "flex w-full items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all focus-visible:outline-none",
+                    currentSort === option.value
+                      ? "bg-brand-cyan/10 text-brand-cyan"
+                      : "text-brand-gray hover:bg-brand-white/5 hover:text-brand-white",
+                    focusedIndex === idx && currentSort !== option.value && "bg-brand-white/5 text-brand-white"
+                  )}
+                >
+                  <option.icon className="w-4 h-4" />
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
