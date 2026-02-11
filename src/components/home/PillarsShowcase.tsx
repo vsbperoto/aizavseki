@@ -29,10 +29,10 @@ export function PillarsShowcase() {
         <ScrollReveal>
           <div className="text-center">
             <h2 className="font-heading text-3xl font-bold text-brand-white sm:text-4xl">
-              5 теми, безкрайно знание
+              {"5 \u0442\u0435\u043C\u0438, \u0431\u0435\u0437\u043A\u0440\u0430\u0439\u043D\u043E \u0437\u043D\u0430\u043D\u0438\u0435"}
             </h2>
             <p className="mt-4 text-brand-gray text-lg">
-              Открий света на AI през нашите съдържателни стълбове
+              {"\u041E\u0442\u043A\u0440\u0438\u0439 \u0441\u0432\u0435\u0442\u0430 \u043D\u0430 AI \u043F\u0440\u0435\u0437 \u043D\u0430\u0448\u0438\u0442\u0435 \u0441\u044A\u0434\u044A\u0440\u0436\u0430\u0442\u0435\u043B\u043D\u0438 \u0441\u0442\u044A\u043B\u0431\u043E\u0432\u0435"}
             </p>
           </div>
         </ScrollReveal>
@@ -42,26 +42,33 @@ export function PillarsShowcase() {
             const Icon = ICONS[pillar.icon];
             return (
               <ScrollReveal key={key} delay={index * 0.1}>
-                <Card className="group text-center h-full">
+                <div className="group relative h-full">
+                  {/* Hover glow */}
                   <div
-                    className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl transition-transform group-hover:scale-110"
-                    style={{ backgroundColor: `${pillar.color}15` }}
-                  >
-                    <Icon
-                      className="h-7 w-7"
+                    className="pointer-events-none absolute -inset-px rounded-2xl blur-[40px] transition-all duration-500 opacity-0 group-hover:opacity-15"
+                    style={{ backgroundColor: pillar.color }}
+                  />
+                  <Card className="relative text-center h-full">
+                    <div
+                      className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl transition-transform group-hover:scale-110"
+                      style={{ backgroundColor: `${pillar.color}15` }}
+                    >
+                      <Icon
+                        className="h-7 w-7"
+                        style={{ color: pillar.color }}
+                      />
+                    </div>
+                    <h3
+                      className="font-heading text-lg font-semibold"
                       style={{ color: pillar.color }}
-                    />
-                  </div>
-                  <h3
-                    className="font-heading text-lg font-semibold"
-                    style={{ color: pillar.color }}
-                  >
-                    {pillar.label}
-                  </h3>
-                  <p className="mt-2 text-sm text-brand-gray">
-                    {pillar.description}
-                  </p>
-                </Card>
+                    >
+                      {pillar.label}
+                    </h3>
+                    <p className="mt-2 text-sm text-brand-gray">
+                      {pillar.description}
+                    </p>
+                  </Card>
+                </div>
               </ScrollReveal>
             );
           })}

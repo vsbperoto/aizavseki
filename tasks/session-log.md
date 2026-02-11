@@ -4,6 +4,70 @@
 
 ---
 
+## Session: 2026-02-10 (Site-Wide Visual Redesign)
+
+### What Was Done
+- Complete visual redesign of all remaining pages to match blog/resources quality
+- 15 files modified across 9 phases:
+  - Phase 1: 404 page — creative redesign with framer-motion animations, ambient blobs, SearchX icon, dual CTAs
+  - Phase 2: Contact page — ambient bg, card hover glow, animated success/error states with AnimatePresence
+  - Phase 3: About page — glass hero container, gradient-border value cards with hover glow, numbered process steps with dashed connectors
+  - Phase 4: Newsletter page — gradient heading, "Bezplatno" badge, glass benefits container
+  - Phase 5: Data deletion pages — ambient bg, ScrollReveal, hover arrow slide, **fixed critical bug** (dynamic Tailwind classes `bg-${color}-500/20` replaced with static STATUS_STYLES map)
+  - Phase 6: LegalPage wrapper — ambient bg, ScrollReveal, hover arrow slide, replaced broken `prose prose-invert` with explicit descendant selectors, section left borders
+  - Phase 7: Footer — gradient top border, bg gradient, glass brand column, social icon glow hover, link translate-x micro-interactions
+  - Phase 8: Homepage sections (6 files) — MissionSection ambient blob, PillarsShowcase hover glow, LatestPosts gradient borders + hover glow + reading time, HowItWorks ambient blob + step glow hover, SocialProof pink ambient blob + icon pulse, StatsCounter dividers + container hover glow
+  - Phase 9: Admin page — converted 100% inline styles to Tailwind, added ambient bg, glass containers, loading spinner
+
+### Last Known Good State
+- **Build Status:** ✅ Passing (0 errors, 32 pages, compiled in 1.9s)
+- **Dev Server:** Not tested (Supabase queries need live DB)
+- **Last Successful Command:** `npm run build`
+- **Git State:** master, uncommitted changes (ready to commit)
+
+### What Changed (Files Modified)
+- `src/app/not-found.tsx` — Rewrite: framer-motion animations, ambient bg, dual CTAs
+- `src/app/contact/page.tsx` — Ambient bg, card glow, AnimatePresence success/error
+- `src/app/about/page.tsx` — Glass hero, gradient value cards, process steps
+- `src/app/newsletter/page.tsx` — Badge, gradient heading, glass benefits
+- `src/app/data-deletion/page.tsx` — Ambient bg, ScrollReveal, animation, hover arrow
+- `src/app/data-deletion/status/page.tsx` — Fixed dynamic Tailwind bug, ambient bg, ScrollReveal
+- `src/components/legal/LegalPage.tsx` — Ambient bg, ScrollReveal, explicit typography selectors
+- `src/components/layout/Footer.tsx` — Gradient border, bg gradient, glow hovers, link micro-interactions
+- `src/components/home/MissionSection.tsx` — Ambient blob
+- `src/components/home/PillarsShowcase.tsx` — Card hover glow with pillar color
+- `src/components/home/LatestPosts.tsx` — Gradient border, hover glow, image overlay, reading time
+- `src/components/home/HowItWorks.tsx` — Ambient blob, step badge glow hover
+- `src/components/home/SocialProof.tsx` — Pink ambient blob, icon pulse, enhanced button glow
+- `src/components/home/StatsCounter.tsx` — Stat dividers, container hover glow
+- `src/app/admin/page.tsx` — Full inline-to-Tailwind conversion, ambient bg, glass, loading spinner
+
+### Active Decisions
+- Used `"use client"` on 404 page for framer-motion (server component not possible with motion)
+- Newsletter page kept as server component — uses ScrollReveal for animation instead of motion.li (preserves metadata export)
+- Data deletion status: replaced dynamic `bg-${color}-500/20` with STATUS_STYLES static map (Tailwind requires static classes)
+- LegalPage: used Tailwind descendant selectors `[&_h2]`, `[&_strong]` etc. instead of typography plugin
+- Footer: removed old `border-t` in favor of gradient `h-px` separator
+- Admin: kept all API logic unchanged, only visual conversion
+
+### Known Issues
+- None
+
+### Next Steps (Priority Order)
+1. Run `/design-review` for final quality gate
+2. Commit + push all changes to Vercel
+3. Fact-check Wave 1 (original 58 shorter articles)
+4. n8n credential config + workflow activation
+
+### ⚠️ DO NOT Touch
+- JSON-LD on about page (AboutPage schema) — preserved exactly
+- All API routes unchanged
+- Blog/Resources components — just redesigned in prior session
+- Navbar and HeroSection — already polished, not touched
+- NewsletterCTA component — already had glow effects, not touched
+
+---
+
 ## Session: 2026-02-10 (Blog Section Visual Redesign)
 
 ### What Was Done
