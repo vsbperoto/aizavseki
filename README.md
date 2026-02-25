@@ -41,3 +41,11 @@ Configure two projects from this same repository:
 2. Agent UI project:
    - Root Directory: `apps/agent`
    - Domain: `agent.aizavseki.eu`
+
+## Agent runtime environment
+
+For `apps/agent`, configure these environment variables:
+
+- `OPENCLAW_GATEWAY_BASE_URL` (example: `https://api.agent.aizavseki.eu`)
+- `OPENCLAW_GATEWAY_TOKEN` (Gateway token/password bearer value)
+- `OPENCLAW_AGENT_ID` (optional, defaults to `main`)

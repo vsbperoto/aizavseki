@@ -6,6 +6,76 @@
 
 ---
 
+## UPDATE: 2026-02-25 (Agent Chat Live + Gemini Runtime Auth)
+
+### What changed
+- Implemented live chat transport in `apps/agent`:
+  - Added server route `apps/agent/src/app/api/chat/route.ts` (POST).
+  - Route forwards messages to OpenClaw OpenAI-compatible endpoint (`/v1/chat/completions`) using server-side env vars.
+  - Updated `apps/agent/src/app/page.tsx` to a working multi-session chat UI (send/receive, local history, session switching).
+- Fixed backend TLS for API subdomain:
+  - Nginx/certificate corrected so `api.agent.aizavseki.eu` serves a valid cert for the API host.
+- Configured OpenClaw model stack for content workflows:
+  - Default model: `google/gemini-3-flash-preview`
+  - Fallback: `google/gemini-3-pro-preview`
+  - Image model: `google/gemini-3-pro-image-preview` (Nano Banana Pro path)
+  - Image fallback: `google/gemini-2.5-flash-image-preview` (Nano Banana path)
+- Added VM runtime auth via OpenClaw state `.env`:
+  - `GEMINI_API_KEY` configured on the VM (masked; not logged in plaintext here).
+
+### Live verification
+- `openclaw models status` now resolves Google auth from env and shows configured model/image defaults.
+- Live API smoke test succeeded:
+  - `POST https://api.agent.aizavseki.eu/v1/chat/completions`
+  - Response returned `READY_OK` from `openclaw:main`.
+
+### Current status
+- Chat backend is now live and responding through OpenClaw + Gemini.
+- `apps/agent` frontend route is ready to consume this endpoint once Vercel env vars are set for the agent project.
+
+### Remaining item for full "content creator" scope
+- Dedicated Veo 3.1 generation flow is not yet wired as a first-class tool/skill in this repo.
+- Next step is a custom skill/tool endpoint for video generation (Veo), then exposing it in agent prompts/UI actions.
+
+## UPDATE: 2026-02-25 (Monorepo Split + Production Domain Finalization)
+
+### What changed
+- The `aizavseki` repository was converted into an npm workspaces monorepo.
+- Frontend is now split into two deployable apps:
+  - `apps/web` (main site)
+  - `apps/agent` (standalone agent UI)
+- Removed old subdomain rewrite logic in `web` middleware.
+- Added permanent redirects from `https://aizavseki.eu/agent` to `https://agent.aizavseki.eu`.
+- Build and lint checks passed after migration (`web` and `agent` builds pass; `web` lint has warnings only).
+- Commit with monorepo split and fixes: `059ce9f` (pushed to `master`).
+
+### Current production domain model
+- `aizavseki.eu` -> Vercel web project (`apps/web`)
+- `www.aizavseki.eu` -> Vercel web project (`apps/web`)
+- `agent.aizavseki.eu` -> Vercel agent project (`apps/agent`)
+- `api.agent.aizavseki.eu` -> GCP VM (`34.179.162.48`) for OpenClaw backend/WebSocket
+
+### DNS (final expected records)
+- `A @` -> `76.76.21.21`
+- `CNAME www` -> `c9cb24517be55fd0.vercel-dns-017.com`
+- `CNAME agent` -> `c9cb24517be55fd0.vercel-dns-017.com`
+- `A api.agent` -> `34.179.162.48`
+
+### Architecture decision for OpenClaw codebase
+- Do not place the full OpenClaw repository under `apps/`.
+- If consolidated into this monorepo, place it under `services/openclaw` (backend service), not `apps/*`.
+- Preferred options:
+  1. Keep OpenClaw as a separate repository (cleanest deployment boundary).
+  2. Import OpenClaw into `services/openclaw` using `git subtree` (recommended over copying a nested `.git` repo).
+  3. Use a git submodule only if the team is comfortable with submodule workflow overhead.
+
+### Next recommended step
+- Start custom-agent backend work in OpenClaw:
+  - model defaults
+  - tool/skill wiring
+  - auth and tenant boundaries
+  - API contract for `apps/agent`
+
 ## 🏗️ 1. Infrastructure Infrastructure
 - **Cloud Provider:** Google Cloud Platform (GCP)
 - **VM Instance Name:** `content-agent`
@@ -66,10 +136,14 @@ The current dashboard is the **OpenClaw Administrator Gateway**, designed for ma
    ```
 
 ## 🚀 6. Next Steps / Current Goals
-1. **Modify OpenClaw Local Codebase:**
-   - Change the primary underlying model. OpenClaw defaults to Anthropic's `claude-opus-4-6`. Search the codebase (likely in `src/config/defaults.ts` and `src/agents/defaults.ts`) to inject the official **Google GenAI models** (Gemini, Veo, Imagen).
+1. **Frontend UI Complete (Vercel Integration):**
+   - The user-facing conversational UI was built cleanly into the `aizavseki` web app (`src/app/agent/page.tsx`).
+   - Rather than creating a monorepo, a multi-tenant DNS setup was deployed:
+     - `agent.aizavseki.eu` (A Record) points to **Vercel** (`76.76.21.21`). Next.js `middleware.ts` intercepts requests to this subdomain and silently serves the `/agent` page.
+     - `api.agent.aizavseki.eu` (A Record) points to the **GCP VM** (`34.179.162.48`), which acts as the secret backend engine for WebSocket connectivity (`wss://api.agent.aizavseki.eu/api/v1/ws`).
+
+2. **Modify OpenClaw Local Codebase (NEXT STEP):**
+   - Change the primary underlying model. OpenClaw defaults to Anthropic's `claude-opus-4-6`. Search the `openclaw` codebase (likely in `src/config/defaults.ts` and `src/agents/defaults.ts`) to inject the official **Google GenAI models** (Gemini, Veo, Imagen).
    - Write/Enable any custom native skills needed for content creation.
-   - Commit and push to `main` so the deployment pipeline pushes the custom backend live.
-2. **Custom "Next.js" Frontend (Vercel):**
-   - The user-facing conversational UI needs to be built inside the `aizavseki` web app.
-   - Using standard WebSockets, connect the sleek frontend to `wss://agent.aizavseki.eu/api/v1/ws` behind the scenes to completely hide OpenClaw's metadata and complex session IDs from the user's browser toolbar.
+   - Commit and push to `main` so the deployment pipeline pushes the custom backend live via Watchtower.
+   - NOTE: **You do not need to update SSH keys to the VM** since GitHub Actions and Watchtower completely automate deployment now! You just push code to Github!

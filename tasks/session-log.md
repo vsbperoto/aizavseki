@@ -4,6 +4,108 @@
 
 ---
 
+## Session: 2026-02-25 (Agent Chat Runtime Working with Gemini)
+
+### What Was Done
+- Implemented real chat flow in `apps/agent`:
+  - Added `apps/agent/src/app/api/chat/route.ts` to proxy client messages to OpenClaw (`/v1/chat/completions`).
+  - Replaced static agent page with interactive multi-session UI in `apps/agent/src/app/page.tsx`.
+  - Added local chat persistence, send state, and API error handling.
+- Verified GCP VM runtime (`content-agent`) and OpenClaw container health.
+- Fixed API host TLS/cert coverage for `api.agent.aizavseki.eu`.
+- Set OpenClaw model defaults for this phase:
+  - primary: `google/gemini-3-flash-preview`
+  - fallback: `google/gemini-3-pro-preview`
+  - image primary: `google/gemini-3-pro-image-preview`
+  - image fallback: `google/gemini-2.5-flash-image-preview`
+- Configured runtime provider auth on VM through OpenClaw state `.env` (`GEMINI_API_KEY`).
+- Validated live completion path with a production endpoint smoke test.
+
+### Last Known Good State
+- **OpenClaw API:** Passing
+  - `POST https://api.agent.aizavseki.eu/v1/chat/completions` returns assistant output.
+- **Model Status:** Passing
+  - `docker exec openclaw node openclaw.mjs models status` shows Google model defaults + env auth detected.
+- **Agent App Build/Lint (local):**
+  - `apps/agent` compiles with current codebase changes (route + UI).
+
+### Active Decisions
+- Prioritized "working chat first" over full account/profile/history backend.
+- Used OpenClaw OpenAI-compatible HTTP endpoint for reliability and simpler integration vs direct WS protocol.
+- Stored Gemini auth for gateway runtime in VM state env file (faster and deterministic vs interactive auth profile input).
+
+### Known Issues
+- `agent.aizavseki.eu/api/chat` currently returns 404/405 until the agent Vercel project has the correct deployment + env wiring.
+- Veo 3.1 generation is not yet implemented as a dedicated skill/tool in this app.
+
+### Next Steps (Priority Order)
+1. Ensure Vercel env vars are set on the `apps/agent` project:
+   - `OPENCLAW_GATEWAY_BASE_URL`
+   - `OPENCLAW_GATEWAY_TOKEN`
+   - optional `OPENCLAW_AGENT_ID`
+2. Add auth + persistence layer for user accounts, chat history, and profiles.
+3. Implement Veo 3.1 video-generation skill/tool path and expose it in UI actions.
+
+### DO NOT Touch
+- Current DNS split:
+  - `agent.aizavseki.eu` -> Vercel agent app
+  - `api.agent.aizavseki.eu` -> GCP VM OpenClaw backend
+- VM OpenClaw state path: `/home/adzho_mustafov/openclaw-data`
+
+## Session: 2026-02-25 (Monorepo Split + Agent Domain Finalization)
+
+### What Was Done
+- Converted `aizavseki` from single-app Next.js to npm workspaces monorepo.
+- Moved existing site into `apps/web`.
+- Created new standalone agent UI app in `apps/agent` and migrated old `/agent` page there.
+- Removed `agent.aizavseki.eu` host rewrite logic from web middleware.
+- Added permanent redirects from `/agent` on web -> `https://agent.aizavseki.eu`.
+- Added monorepo scripts at root (`dev:web`, `dev:agent`, `build:*`, `lint:*`).
+- Updated README and `.gitignore` for workspace layout.
+- Fixed build-root issues for Next 16 Turbopack via monorepo root config.
+- Fixed web lint errors (quote escaping in legal pages + navbar mobile close pattern).
+- Committed and pushed migration + fixes:
+  - Commit: `059ce9f`
+  - Branch: `master`
+  - Remote: `origin/master`
+
+### Last Known Good State
+- **Build Status:** ✅ Passing
+  - `npm run build:web` -> pass
+  - `npm run build:agent` -> pass
+- **Lint Status:** ✅ No errors
+  - `npm run lint:web` -> warnings only
+  - `npm run lint:agent` -> pass
+- **Vercel:** Both projects build successfully after setting proper Root Directory.
+
+### Domain / DNS Final State
+- `A @` -> `76.76.21.21` (Vercel apex)
+- `CNAME www` -> `c9cb24517be55fd0.vercel-dns-017.com`
+- `CNAME agent` -> `c9cb24517be55fd0.vercel-dns-017.com`
+- `A api.agent` -> `34.179.162.48` (GCP VM / OpenClaw backend)
+
+### Active Decisions
+- Keep frontend split: `apps/web` and `apps/agent`.
+- Keep backend endpoint split: `api.agent.aizavseki.eu` served by VM.
+- Do not place OpenClaw backend code under `apps/*`; if moved into this repo, use `services/openclaw`.
+
+### Known Issues
+- `apps/web` has remaining non-blocking lint warnings (unused vars/no-img/unused directive).
+- Next.js middleware deprecation warning still present (can migrate to `proxy` later).
+
+### Next Steps (Priority Order)
+1. Configure/verify env vars per Vercel project (`apps/web` vs `apps/agent`).
+2. Start OpenClaw custom backend work (models/tools/auth/tenant boundaries).
+3. Decide repository strategy for OpenClaw:
+   - keep separate repo, or
+   - import into `services/openclaw` (subtree preferred).
+
+### ⚠️ DO NOT Touch
+- DNS records for `agent` and `api.agent` split (currently correct and stable).
+- `openclaw-deployment-log.md` history sections; append-only updates only.
+
+---
+
 ## Session: 2026-02-10 (Site-Wide Visual Redesign)
 
 ### What Was Done
