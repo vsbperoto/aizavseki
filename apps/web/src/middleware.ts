@@ -4,20 +4,6 @@ import { NextResponse, type NextRequest } from "next/server";
 const AI_BOTS = ["GPTBot", "ClaudeBot", "PerplexityBot", "Google-Extended", "Bingbot", "ChatGPT-User"];
 
 export async function middleware(request: NextRequest) {
-  const url = request.nextUrl.clone();
-  const hostname = request.headers.get("host");
-
-  // Multi-tenant rewrite: If the user visits the agent subdomain, route them to our custom UI
-  if (
-    hostname === "agent.aizavseki.eu" &&
-    !url.pathname.startsWith("/agent") &&
-    !url.pathname.startsWith("/api") &&
-    !url.pathname.startsWith("/_next")
-  ) {
-    url.pathname = `/agent${url.pathname === "/" ? "" : url.pathname}`;
-    return NextResponse.rewrite(url);
-  }
-
   // Log AI bot visits
   const ua = request.headers.get("user-agent") || "";
   const matchedBot = AI_BOTS.find((bot) => ua.includes(bot));

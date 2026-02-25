@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# aizavseki monorepo
 
-## Getting Started
+This repository is an npm workspaces monorepo with two Next.js apps:
 
-First, run the development server:
+- `apps/web` - main website (`aizavseki.eu`)
+- `apps/agent` - standalone AI agent UI (`agent.aizavseki.eu`)
+
+## Requirements
+
+- Node.js 20+
+- npm 10+
+
+## Install
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Run locally
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run dev:web
+npm run dev:agent
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Build and lint
 
-## Learn More
+```bash
+npm run build:web
+npm run build:agent
+npm run lint:web
+npm run lint:agent
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Vercel setup
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Configure two projects from this same repository:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Main website project:
+   - Root Directory: `apps/web`
+2. Agent UI project:
+   - Root Directory: `apps/agent`
+   - Domain: `agent.aizavseki.eu`

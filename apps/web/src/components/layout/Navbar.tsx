@@ -19,10 +19,6 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    setIsMobileOpen(false);
-  }, [pathname]);
-
   return (
     <>
       <nav
@@ -99,6 +95,7 @@ export function Navbar() {
                 >
                   <Link
                     href={link.href}
+                    onClick={() => setIsMobileOpen(false)}
                     className={cn(
                       "text-2xl font-heading font-semibold transition-colors",
                       pathname === link.href
@@ -117,6 +114,7 @@ export function Navbar() {
               >
                 <Link
                   href="/newsletter"
+                  onClick={() => setIsMobileOpen(false)}
                   className="mt-4 rounded-full bg-gradient-to-r from-brand-cyan to-accent-purple px-8 py-3 text-lg font-bold text-brand-dark"
                 >
                   Абонирай се

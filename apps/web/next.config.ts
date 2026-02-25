@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
+import path from "node:path";
 
 const nextConfig: NextConfig = {
+  turbopack: {
+    root: path.resolve(process.cwd(), "../.."),
+  },
   images: {
     remotePatterns: [
       {
@@ -39,6 +43,20 @@ const nextConfig: NextConfig = {
             value: "camera=(), microphone=(), geolocation=()",
           },
         ],
+      },
+    ];
+  },
+  async redirects() {
+    return [
+      {
+        source: "/agent",
+        destination: "https://agent.aizavseki.eu",
+        permanent: true,
+      },
+      {
+        source: "/agent/:path*",
+        destination: "https://agent.aizavseki.eu/:path*",
+        permanent: true,
       },
     ];
   },
