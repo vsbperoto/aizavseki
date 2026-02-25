@@ -1,31 +1,37 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Plus, Send, Sparkles, Trash2 } from "lucide-react";
+import type { User } from "@supabase/supabase-js";
+import { Loader2, LogOut, Plus, Send, Sparkles, Trash2 } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 
-type MessageRole = "user" | "assistant";
-
-type ChatMessage = {
+type AgentProfile = {
   id: string;
-  role: MessageRole;
-  content: string;
-  createdAt: number;
+  agentName: string;
+  persona: {
+    tone: string;
+    niche: string;
+    audience: string;
+    channels: string[];
+    outputStyle: string;
+    signatureStyle: string;
+    constraints: string;
+    goals: string;
+  };
 };
 
-type ChatSession = {
+type Conversation = {
   id: string;
   title: string;
-  createdAt: number;
-  updatedAt: number;
-  messages: ChatMessage[];
+  messageCount: number;
 };
 
-type ChatApiResponse = {
-  content?: string;
-  error?: string;
+type Message = {
+  id: string;
+  role: "user" | "assistant" | "system" | "tool";
+  content: string;
+  createdAt: string;
 };
-
-const STORAGE_KEY = "aizavseki-agent-sessions-v1";
 
 function createId() {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
@@ -34,258 +40,388 @@ function createId() {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
-function getDefaultSession(): ChatSession {
-  const now = Date.now();
-  return {
-    id: createId(),
-    title: "New chat",
-    createdAt: now,
-    updatedAt: now,
-    messages: [],
-  };
-}
-
-function clampText(input: string, max = 80) {
-  const normalized = input.replace(/\s+/g, " ").trim();
-  if (normalized.length <= max) {
-    return normalized;
+async function apiFetch<T>(url: string, init?: RequestInit) {
+  const response = await fetch(url, init);
+  const payload = (await response.json()) as T & { error?: string };
+  if (!response.ok) {
+    throw new Error(payload.error || "Request failed.");
   }
-  return `${normalized.slice(0, max - 3)}...`;
+  return payload as T;
 }
 
 export default function AgentPage() {
-  const [sessions, setSessions] = useState<ChatSession[]>([]);
-  const [activeSessionId, setActiveSessionId] = useState<string>("");
+  const supabase = useMemo(() => createClient(), []);
+  const messagesRef = useRef<HTMLDivElement | null>(null);
+
+  const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<AgentProfile | null>(null);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [activeConversationId, setActiveConversationId] = useState("");
+  const [messages, setMessages] = useState<Message[]>([]);
   const [draft, setDraft] = useState("");
-  const [isSending, setIsSending] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [setupName, setSetupName] = useState("My Content Creator");
+  const [setupTone, setSetupTone] = useState("clear and practical");
+  const [isLoading, setIsLoading] = useState(true);
+  const [isBusy, setIsBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) {
-        const initial = getDefaultSession();
-        setSessions([initial]);
-        setActiveSessionId(initial.id);
-        return;
-      }
-
-      const parsed = JSON.parse(raw) as ChatSession[];
-      if (!Array.isArray(parsed) || parsed.length === 0) {
-        const initial = getDefaultSession();
-        setSessions([initial]);
-        setActiveSessionId(initial.id);
-        return;
-      }
-
-      const normalized = parsed
-        .filter((session) => session && typeof session.id === "string")
-        .map((session) => ({
-          ...session,
-          messages: Array.isArray(session.messages) ? session.messages : [],
-        }))
-        .sort((a, b) => b.updatedAt - a.updatedAt);
-
-      if (normalized.length === 0) {
-        const initial = getDefaultSession();
-        setSessions([initial]);
-        setActiveSessionId(initial.id);
-        return;
-      }
-
-      setSessions(normalized);
-      setActiveSessionId(normalized[0].id);
-    } catch {
-      const initial = getDefaultSession();
-      setSessions([initial]);
-      setActiveSessionId(initial.id);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (sessions.length === 0) {
-      return;
-    }
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions));
-  }, [sessions]);
-
-  useEffect(() => {
-    messagesContainerRef.current?.scrollTo({
-      top: messagesContainerRef.current.scrollHeight,
+    messagesRef.current?.scrollTo({
+      top: messagesRef.current.scrollHeight,
       behavior: "smooth",
     });
-  }, [activeSessionId, sessions, isSending]);
+  }, [messages.length, isBusy]);
 
-  const activeSession = useMemo(
-    () => sessions.find((session) => session.id === activeSessionId),
-    [sessions, activeSessionId],
-  );
+  useEffect(() => {
+    let isMounted = true;
+    async function bootstrap() {
+      const {
+        data: { user: currentUser },
+      } = await supabase.auth.getUser();
+      if (!isMounted) {
+        return;
+      }
+      setUser(currentUser || null);
+      setIsLoading(false);
+    }
+    void bootstrap();
 
-  function updateActiveSession(updater: (session: ChatSession) => ChatSession) {
-    setSessions((current) =>
-      current
-        .map((session) =>
-          session.id === activeSessionId ? updater(session) : session,
-        )
-        .sort((a, b) => b.updatedAt - a.updatedAt),
-    );
-  }
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!isMounted) {
+        return;
+      }
+      setUser(session?.user || null);
+      setError(null);
+    });
 
-  function createNewChat() {
-    const next = getDefaultSession();
-    setSessions((current) => [next, ...current]);
-    setActiveSessionId(next.id);
+    return () => {
+      isMounted = false;
+      subscription.unsubscribe();
+    };
+  }, [supabase]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function loadData() {
+      if (!user) {
+        setProfile(null);
+        setConversations([]);
+        setActiveConversationId("");
+        setMessages([]);
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        const [setupData, conversationData] = await Promise.all([
+          apiFetch<{ profile: AgentProfile | null }>("/api/agent/setup"),
+          apiFetch<{ conversations: Conversation[] }>("/api/conversations"),
+        ]);
+
+        if (cancelled) {
+          return;
+        }
+
+        setProfile(setupData.profile);
+        setSetupName(setupData.profile?.agentName || "My Content Creator");
+        setSetupTone(setupData.profile?.persona.tone || "clear and practical");
+        setConversations(conversationData.conversations || []);
+
+        const firstConversation = conversationData.conversations?.[0];
+        if (firstConversation) {
+          setActiveConversationId(firstConversation.id);
+          const messageData = await apiFetch<{ messages: Message[] }>(
+            `/api/conversations/${firstConversation.id}/messages`,
+          );
+          if (!cancelled) {
+            setMessages(messageData.messages || []);
+          }
+        }
+      } catch (loadError) {
+        if (!cancelled) {
+          setError(loadError instanceof Error ? loadError.message : "Failed to load data.");
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      }
+    }
+    void loadData();
+    return () => {
+      cancelled = true;
+    };
+  }, [user]);
+
+  async function signIn() {
     setError(null);
+    setIsBusy(true);
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    });
+    if (signInError) {
+      setError(signInError.message);
+    }
+    setIsBusy(false);
   }
 
-  function deleteSession(sessionId: string) {
-    setSessions((current) => {
-      const remaining = current.filter((session) => session.id !== sessionId);
-      if (remaining.length > 0) {
-        return remaining;
-      }
-      return [getDefaultSession()];
+  async function signUp() {
+    setError(null);
+    setIsBusy(true);
+    const { error: signUpError } = await supabase.auth.signUp({
+      email: email.trim(),
+      password,
     });
+    if (signUpError) {
+      setError(signUpError.message);
+    }
+    setIsBusy(false);
+  }
 
-    setActiveSessionId((currentActive) => {
-      if (currentActive !== sessionId) {
-        return currentActive;
-      }
-      const remaining = sessions.filter((session) => session.id !== sessionId);
-      if (remaining.length > 0) {
-        return remaining[0].id;
-      }
-      return "";
+  async function signOut() {
+    await supabase.auth.signOut();
+  }
+
+  async function saveSetup() {
+    setError(null);
+    setIsBusy(true);
+    try {
+      const payload = await apiFetch<{ profile: AgentProfile }>("/api/agent/setup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          agentName: setupName,
+          tone: setupTone,
+          niche: "content creation",
+          audience: "small business owners",
+          channels: ["Instagram", "TikTok"],
+          outputStyle: "actionable",
+          signatureStyle: "hook + value + CTA",
+          constraints: "",
+          goals: "Generate content every day",
+        }),
+      });
+      setProfile(payload.profile);
+    } catch (setupError) {
+      setError(setupError instanceof Error ? setupError.message : "Failed to save setup.");
+    } finally {
+      setIsBusy(false);
+    }
+  }
+
+  async function newConversation() {
+    setError(null);
+    const payload = await apiFetch<{ conversation: Conversation }>("/api/conversations", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title: "New chat" }),
     });
+    setConversations((current) => [payload.conversation, ...current]);
+    setActiveConversationId(payload.conversation.id);
+    setMessages([]);
+  }
+
+  async function selectConversation(conversationId: string) {
+    setActiveConversationId(conversationId);
+    const payload = await apiFetch<{ messages: Message[] }>(
+      `/api/conversations/${conversationId}/messages`,
+    );
+    setMessages(payload.messages || []);
+  }
+
+  async function deleteConversation(conversationId: string) {
+    await apiFetch<{ ok: boolean }>(`/api/conversations/${conversationId}`, {
+      method: "DELETE",
+    });
+    const remaining = conversations.filter((conversation) => conversation.id !== conversationId);
+    setConversations(remaining);
+    if (activeConversationId === conversationId) {
+      setActiveConversationId(remaining[0]?.id || "");
+      if (remaining[0]?.id) {
+        await selectConversation(remaining[0].id);
+      } else {
+        setMessages([]);
+      }
+    }
   }
 
   async function sendMessage() {
     const trimmed = draft.trim();
-    if (!trimmed || !activeSession || isSending) {
+    if (!trimmed || isBusy || !profile) {
       return;
     }
 
-    setDraft("");
-    setError(null);
-    setIsSending(true);
+    let conversationId = activeConversationId;
+    if (!conversationId) {
+      const payload = await apiFetch<{ conversation: Conversation }>("/api/conversations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: "New chat" }),
+      });
+      conversationId = payload.conversation.id;
+      setConversations((current) => [payload.conversation, ...current]);
+      setActiveConversationId(conversationId);
+    }
 
-    const userMessage: ChatMessage = {
-      id: createId(),
+    const optimisticUserMessage: Message = {
+      id: `tmp-${createId()}`,
       role: "user",
       content: trimmed,
-      createdAt: Date.now(),
+      createdAt: new Date().toISOString(),
     };
 
-    updateActiveSession((session) => {
-      const nextMessages = [...session.messages, userMessage];
-      return {
-        ...session,
-        messages: nextMessages,
-        title:
-          session.messages.length === 0 ? clampText(trimmed, 40) : session.title,
-        updatedAt: Date.now(),
-      };
-    });
+    setDraft("");
+    setIsBusy(true);
+    setMessages((current) => [...current, optimisticUserMessage]);
 
     try {
-      const response = await fetch("/api/chat", {
+      const payload = await apiFetch<{
+        conversation: Conversation;
+        userMessage: Message;
+        assistantMessage: Message;
+      }>("/api/chat", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          chatId: activeSession.id,
-          messages: [...activeSession.messages, userMessage].map((message) => ({
-            role: message.role,
-            content: message.content,
-          })),
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ conversationId, message: trimmed }),
       });
 
-      const payload = (await response.json()) as ChatApiResponse;
-      if (!response.ok || !payload.content) {
-        throw new Error(payload.error || "Failed to get a response.");
-      }
-
-      const assistantMessage: ChatMessage = {
-        id: createId(),
-        role: "assistant",
-        content: payload.content,
-        createdAt: Date.now(),
-      };
-
-      updateActiveSession((session) => ({
-        ...session,
-        messages: [...session.messages, assistantMessage],
-        updatedAt: Date.now(),
-      }));
-    } catch (requestError) {
-      const message =
-        requestError instanceof Error
-          ? requestError.message
-          : "Request failed.";
-      setError(message);
+      setMessages((current) => [
+        ...current.filter((message) => message.id !== optimisticUserMessage.id),
+        payload.userMessage,
+        payload.assistantMessage,
+      ]);
+      setConversations((current) => [
+        payload.conversation,
+        ...current.filter((conversation) => conversation.id !== payload.conversation.id),
+      ]);
+    } catch (chatError) {
+      setMessages((current) =>
+        current.filter((message) => message.id !== optimisticUserMessage.id),
+      );
+      setError(chatError instanceof Error ? chatError.message : "Failed to send message.");
     } finally {
-      setIsSending(false);
+      setIsBusy(false);
     }
   }
 
-  function handleComposerKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
-    if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault();
-      void sendMessage();
-    }
+  if (isLoading) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-brand-dark text-brand-white">
+        <Loader2 className="w-5 h-5 text-brand-cyan animate-spin" />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-brand-dark text-brand-white p-6">
+        <div className="w-full max-w-sm rounded-xl border border-brand-white/10 bg-brand-navy/60 p-6 space-y-3">
+          {error && <p className="text-sm text-red-300">{error}</p>}
+          <input
+            className="w-full rounded-lg border border-brand-white/10 bg-brand-dark/60 px-3 py-2"
+            placeholder="Email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          <input
+            className="w-full rounded-lg border border-brand-white/10 bg-brand-dark/60 px-3 py-2"
+            placeholder="Password"
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+          <div className="flex gap-2">
+            <button
+              onClick={() => void signIn()}
+              className="flex-1 rounded-lg bg-brand-cyan text-brand-dark py-2 text-sm font-semibold"
+            >
+              Sign in
+            </button>
+            <button
+              onClick={() => void signUp()}
+              className="flex-1 rounded-lg border border-brand-cyan/40 text-brand-cyan py-2 text-sm font-semibold"
+            >
+              Sign up
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!profile) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-brand-dark text-brand-white p-6">
+        <div className="w-full max-w-xl rounded-xl border border-brand-white/10 bg-brand-navy/60 p-6 space-y-3">
+          {error && <p className="text-sm text-red-300">{error}</p>}
+          <input
+            className="w-full rounded-lg border border-brand-white/10 bg-brand-dark/60 px-3 py-2"
+            value={setupName}
+            onChange={(event) => setSetupName(event.target.value)}
+            placeholder="Agent name"
+          />
+          <input
+            className="w-full rounded-lg border border-brand-white/10 bg-brand-dark/60 px-3 py-2"
+            value={setupTone}
+            onChange={(event) => setSetupTone(event.target.value)}
+            placeholder="Tone"
+          />
+          <div className="flex gap-2">
+            <button
+              onClick={() => void saveSetup()}
+              className="inline-flex items-center gap-2 rounded-lg bg-brand-cyan text-brand-dark py-2 px-4 text-sm font-semibold"
+            >
+              <Sparkles className="w-4 h-4" />
+              Save setup
+            </button>
+            <button
+              onClick={() => void signOut()}
+              className="inline-flex items-center gap-2 rounded-lg border border-brand-white/20 py-2 px-4 text-sm"
+            >
+              <LogOut className="w-4 h-4" />
+              Sign out
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="flex h-screen bg-brand-dark text-brand-white overflow-hidden">
-      <aside className="w-72 border-r border-brand-white/5 hidden md:flex flex-col bg-brand-dark/50 backdrop-blur-md z-10">
-        <div className="p-4 border-b border-brand-white/5 space-y-3">
+      <aside className="w-72 border-r border-brand-white/10 hidden md:flex flex-col bg-brand-navy/30">
+        <div className="p-4 border-b border-brand-white/10 space-y-2">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-display font-medium text-brand-cyan flex items-center gap-2">
-              <Sparkles className="w-5 h-5" />
-              AI Assistant
-            </h2>
+            <p className="text-sm text-brand-cyan">{profile.agentName}</p>
+            <button onClick={() => void signOut()} className="text-xs text-brand-gray/70">
+              Logout
+            </button>
           </div>
           <button
-            type="button"
-            onClick={createNewChat}
-            className="w-full flex items-center justify-center gap-2 rounded-xl border border-brand-cyan/30 bg-brand-cyan/10 px-3 py-2 text-sm font-medium text-brand-cyan hover:bg-brand-cyan/20 transition-colors"
+            onClick={() => void newConversation()}
+            className="w-full inline-flex items-center justify-center gap-2 rounded-lg border border-brand-cyan/40 bg-brand-cyan/10 py-2 text-sm text-brand-cyan"
           >
             <Plus className="w-4 h-4" />
             New chat
           </button>
         </div>
-
         <div className="flex-1 overflow-y-auto p-3 space-y-2">
-          {sessions.map((session) => (
-            <div
-              key={session.id}
-              className={`group rounded-xl border px-3 py-2 transition-colors ${
-                session.id === activeSessionId
-                  ? "border-brand-cyan/40 bg-brand-cyan/10"
-                  : "border-brand-white/10 bg-brand-navy/20 hover:bg-brand-navy/40"
-              }`}
-            >
-              <button
-                type="button"
-                onClick={() => setActiveSessionId(session.id)}
-                className="w-full text-left"
-              >
-                <p className="text-sm font-medium text-brand-white truncate">
-                  {session.title || "Untitled chat"}
-                </p>
-                <p className="text-xs text-brand-gray/70 mt-1">
-                  {session.messages.length} messages
-                </p>
+          {conversations.map((conversation) => (
+            <div key={conversation.id} className="rounded-lg border border-brand-white/10 p-2">
+              <button className="w-full text-left" onClick={() => void selectConversation(conversation.id)}>
+                <p className="text-sm truncate">{conversation.title}</p>
+                <p className="text-xs text-brand-gray/70">{conversation.messageCount} messages</p>
               </button>
               <button
-                type="button"
-                onClick={() => deleteSession(session.id)}
-                className="mt-2 hidden group-hover:flex items-center gap-1 text-xs text-brand-gray/70 hover:text-red-300"
+                onClick={() => void deleteConversation(conversation.id)}
+                className="mt-1 inline-flex items-center gap-1 text-xs text-brand-gray/70 hover:text-red-300"
               >
-                <Trash2 className="w-3.5 h-3.5" />
+                <Trash2 className="w-3 h-3" />
                 Delete
               </button>
             </div>
@@ -293,85 +429,64 @@ export default function AgentPage() {
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col relative">
-        <div className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-[radial-gradient(ellipse_60%_60%_at_50%_0%,rgba(2,191,223,0.15),rgba(0,0,0,0))] pointer-events-none" />
-
-        <div
-          ref={messagesContainerRef}
-          className="flex-1 overflow-y-auto p-4 md:p-8 relative z-10"
-        >
-          {!activeSession || activeSession.messages.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center text-center max-w-2xl mx-auto">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-brand-cyan/20 to-brand-cyan/5 border border-brand-cyan/20 flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(0,212,255,0.15)]">
-                <Sparkles className="w-8 h-8 text-brand-cyan" />
+      <main className="flex-1 flex flex-col">
+        <div ref={messagesRef} className="flex-1 overflow-y-auto p-4 md:p-8">
+          <div className="max-w-4xl mx-auto space-y-4">
+            {messages.length === 0 && (
+              <div className="text-center py-20">
+                <Sparkles className="w-10 h-10 mx-auto text-brand-cyan mb-4" />
+                <p className="text-brand-gray/80">Start chatting with your personalized agent.</p>
               </div>
-              <h1 className="text-4xl md:text-5xl font-display font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-br from-brand-white via-brand-white to-brand-cyan/60">
-                How can I help you today?
-              </h1>
-              <p className="text-brand-gray/80 text-lg">
-                Ask anything to start a live conversation with your OpenClaw
-                agent.
-              </p>
-            </div>
-          ) : (
-            <div className="max-w-4xl mx-auto space-y-4 pb-4">
-              {activeSession.messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`rounded-2xl px-4 py-3 border ${
-                    message.role === "user"
-                      ? "ml-auto max-w-[85%] bg-brand-cyan/15 border-brand-cyan/30"
-                      : "mr-auto max-w-[90%] bg-brand-navy/60 border-brand-white/10"
-                  }`}
-                >
-                  <p className="text-sm leading-relaxed whitespace-pre-wrap">
-                    {message.content}
-                  </p>
-                </div>
-              ))}
-
-              {isSending && (
-                <div className="mr-auto max-w-[90%] rounded-2xl px-4 py-3 border bg-brand-navy/60 border-brand-white/10">
-                  <p className="text-sm text-brand-gray/80">
-                    Assistant is thinking...
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
+            )}
+            {messages.map((message) => (
+              <div
+                key={message.id}
+                className={`rounded-xl border px-4 py-3 ${
+                  message.role === "user"
+                    ? "ml-auto max-w-[85%] bg-brand-cyan/15 border-brand-cyan/30"
+                    : "mr-auto max-w-[90%] bg-brand-navy/50 border-brand-white/10"
+                }`}
+              >
+                <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+              </div>
+            ))}
+            {isBusy && (
+              <div className="mr-auto max-w-[90%] rounded-xl border border-brand-white/10 px-4 py-3 bg-brand-navy/50">
+                <p className="text-sm text-brand-gray/70">Thinking...</p>
+              </div>
+            )}
+          </div>
         </div>
-
-        <div className="p-4 md:p-6 w-full max-w-4xl mx-auto relative z-20 shrink-0">
+        <div className="p-4 md:p-6 max-w-4xl w-full mx-auto">
           {error && (
-            <div className="mb-3 rounded-xl border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm text-red-200">
+            <div className="mb-3 rounded-lg border border-red-400/30 bg-red-500/10 px-3 py-2 text-sm text-red-200">
               {error}
             </div>
           )}
-
-          <div className="relative flex items-end bg-brand-navy/60 border border-brand-white/10 rounded-2xl shadow-2xl p-2 backdrop-blur-xl focus-within:ring-1 focus-within:ring-brand-cyan/50 focus-within:border-brand-cyan/50 transition-all">
+          <div className="relative rounded-xl border border-brand-white/10 bg-brand-navy/60 p-2">
             <textarea
               value={draft}
               onChange={(event) => setDraft(event.target.value)}
-              onKeyDown={handleComposerKeyDown}
-              disabled={isSending || !activeSession}
-              className="flex-1 bg-transparent border-none text-brand-white placeholder-brand-gray/50 resize-none max-h-40 min-h-[44px] px-4 py-3 focus:outline-none focus:ring-0 disabled:opacity-60"
+              onKeyDown={(event) => {
+                if (event.key === "Enter" && !event.shiftKey) {
+                  event.preventDefault();
+                  void sendMessage();
+                }
+              }}
+              className="w-full min-h-[46px] max-h-40 resize-none bg-transparent px-3 py-2 focus:outline-none"
               placeholder="Message your agent..."
-              rows={1}
             />
             <button
-              type="button"
               onClick={() => void sendMessage()}
-              disabled={isSending || !draft.trim() || !activeSession}
-              className="absolute right-3 bottom-2.5 bg-brand-cyan text-brand-dark rounded-xl p-2.5 hover:bg-brand-cyan/80 transition-all hover:scale-105 active:scale-95 shadow-[0_0_15px_rgba(0,212,255,0.3)] disabled:opacity-50 disabled:hover:scale-100"
+              disabled={isBusy || !draft.trim()}
+              className="absolute right-3 bottom-3 rounded-lg bg-brand-cyan p-2 text-brand-dark disabled:opacity-50"
             >
-              <Send className="w-4 h-4 ml-0.5" />
+              <Send className="w-4 h-4" />
             </button>
           </div>
-          <p className="text-xs text-brand-gray/40 text-center mt-3 font-medium">
-            AI can make mistakes. Verified by OpenClaw Engine.
-          </p>
         </div>
       </main>
     </div>
   );
 }
+

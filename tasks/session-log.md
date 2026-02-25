@@ -4,6 +4,77 @@
 
 ---
 
+## Session: 2026-02-25 (Per-User Agent Setup: Auth, Memory, Persona)
+
+### What Was Done
+- Implemented Supabase-backed multi-user foundations in `apps/agent`:
+  - Added Supabase client/server helpers in:
+    - `apps/agent/src/lib/supabase/client.ts`
+    - `apps/agent/src/lib/supabase/server.ts`
+  - Added auth context helper:
+    - `apps/agent/src/lib/api/auth.ts`
+  - Added memory/context utilities and shared agent row types:
+    - `apps/agent/src/lib/agent/memory.ts`
+    - `apps/agent/src/lib/agent/types.ts`
+- Replaced local-only chat flow with server-backed API surface:
+  - `GET/POST /api/agent/setup`
+  - `GET/POST /api/conversations`
+  - `DELETE /api/conversations/[id]`
+  - `GET /api/conversations/[id]/messages`
+  - `GET /api/memory/graph`
+  - Rebuilt `POST /api/chat` orchestration to:
+    - validate authenticated user + conversation ownership
+    - inject persona + summary + graph memory into system prompt
+    - persist user/assistant messages
+    - extract and store entities/facts/relations
+    - refresh summaries on cadence
+    - log usage events
+- Reworked `apps/agent/src/app/page.tsx` to support:
+  - auth (sign in/sign up/sign out)
+  - setup flow for persona bootstrap
+  - persistent conversations/messages from API
+  - chat send + optimistic UX
+- Added agent middleware for Supabase session cookie propagation:
+  - `apps/agent/src/middleware.ts`
+- Added SQL migration draft for new tables/RLS/indexes:
+  - `tasks/migrations/create_agent_memory_tables.sql`
+- Updated workspace deps:
+  - `apps/agent/package.json` now includes `@supabase/ssr` and `@supabase/supabase-js`.
+
+### Last Known Good State
+- `npm run lint:agent` -> pass
+- `npm run build:agent` -> pass
+- Build output includes dynamic API routes and middleware/proxy entry.
+- Supabase migration applied successfully to project `ogdeziynjtxglhbuctgb`:
+  - migration name: `create_agent_memory_tables`
+  - new tables created and verified with RLS enabled:
+    - `agent_profiles`
+    - `conversations`
+    - `messages`
+    - `memory_entities`
+    - `memory_relations`
+    - `memory_facts`
+    - `memory_summaries`
+    - `usage_events`
+
+### Active Decisions
+- Kept OpenClaw as shared model gateway; tenant separation handled at app/API data layer.
+- Implemented graph-memory extraction heuristically in this pass (fast to ship, upgradeable later).
+- Added non-throwing client-side Supabase env fallback to avoid static prerender failures during build.
+
+### Next Steps (Priority Order)
+1. Apply `tasks/migrations/create_agent_memory_tables.sql` in Supabase.
+2. Set `apps/agent` Vercel env vars:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+   - `OPENCLAW_GATEWAY_BASE_URL`
+   - `OPENCLAW_GATEWAY_TOKEN`
+   - optional `OPENCLAW_AGENT_ID`
+3. Smoke test end-to-end:
+   - signup -> setup -> create chat -> verify memory graph endpoint updates.
+4. Add Veo/Nano Banana tool actions into UI after base chat stability confirms.
+
 ## Session: 2026-02-25 (Agent Chat Runtime Working with Gemini)
 
 ### What Was Done
