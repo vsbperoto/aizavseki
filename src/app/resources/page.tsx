@@ -2,19 +2,18 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { ResourceGrid } from "@/components/resources/ResourceGrid";
-import { ResourceTypeFilter } from "@/components/resources/ResourceTypeFilter";
-import { ResourceSearch } from "@/components/resources/ResourceSearch";
-import { ResourceSort } from "@/components/resources/ResourceSort";
-import { ResourceHero } from "@/components/resources/ResourceHero";
+import { CompactHero } from "@/components/resources/CompactHero";
+import { LearningHubLayout } from "@/components/resources/LearningHubLayout";
+import { ResourcesSidebar } from "@/components/resources/ResourcesSidebar";
+import { CategoryShowcase } from "@/components/resources/CategoryShowcase";
+import { ResultsHeader } from "@/components/resources/ResultsHeader";
 import { Pagination } from "@/components/resources/Pagination";
 import { Skeleton } from "@/components/ui/Skeleton";
-import Link from "next/link";
-import { BookOpen } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "AI \u0420\u0435\u0441\u0443\u0440\u0441\u0438 \u2014 333 \u0441\u0442\u0430\u0442\u0438\u0438 \u0437\u0430 \u0438\u0437\u043A\u0443\u0441\u0442\u0432\u0435\u043D \u0438\u043D\u0442\u0435\u043B\u0435\u043A\u0442",
+  title: "AI \u0420\u0435\u0441\u0443\u0440\u0441\u0438 \u2014 333 \u0441\u0442\u0430\u0442\u0438\u0438 \u0437\u0430 \u0438\u0437\u043a\u0443\u0441\u0442\u0432\u0435\u043d \u0438\u043d\u0442\u0435\u043b\u0435\u043a\u0442",
   description:
-    "\u0414\u0435\u0444\u0438\u043D\u0438\u0446\u0438\u0438, \u0440\u044A\u043A\u043E\u0432\u043E\u0434\u0441\u0442\u0432\u0430 \u0438 \u0441\u0440\u0430\u0432\u043D\u0435\u043D\u0438\u044F \u0437\u0430 AI \u043D\u0430 \u0431\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438. \u041F\u044A\u043B\u043D\u0430 \u0440\u0435\u0444\u0435\u0440\u0435\u043D\u0442\u043D\u0430 \u0431\u0438\u0431\u043B\u0438\u043E\u0442\u0435\u043A\u0430 \u0437\u0430 \u0438\u0437\u043A\u0443\u0441\u0442\u0432\u0435\u043D \u0438\u043D\u0442\u0435\u043B\u0435\u043A\u0442.",
+    "\u0414\u0435\u0444\u0438\u043d\u0438\u0446\u0438\u0438, \u0440\u044a\u043a\u043e\u0432\u043e\u0434\u0441\u0442\u0432\u0430 \u0438 \u0441\u0440\u0430\u0432\u043d\u0435\u043d\u0438\u044f \u0437\u0430 AI \u043d\u0430 \u0431\u044a\u043b\u0433\u0430\u0440\u0441\u043a\u0438. \u041f\u044a\u043b\u043d\u0430 \u0440\u0435\u0444\u0435\u0440\u0435\u043d\u0442\u043d\u0430 \u0431\u0438\u0431\u043b\u0438\u043e\u0442\u0435\u043a\u0430 \u0437\u0430 \u0438\u0437\u043a\u0443\u0441\u0442\u0432\u0435\u043d \u0438\u043d\u0442\u0435\u043b\u0435\u043a\u0442.",
   alternates: { canonical: "https://aizavseki.eu/resources" },
 };
 
@@ -35,6 +34,40 @@ interface ResourcesPageProps {
 const LISTING_COLUMNS =
   "id, slug, title, content_type, category, key_takeaway, word_count, quality_score, views, published_at" as const;
 
+// Build a clear-param href on the server (no useSearchParams needed)
+function buildClearHref(
+  params: { type?: string; category?: string; sort?: string; q?: string },
+  removeKey: string
+): string {
+  const p = new URLSearchParams();
+  if (params.type && removeKey !== "type") p.set("type", params.type);
+  if (params.category && removeKey !== "category") p.set("category", params.category);
+  if (params.sort && params.sort !== "newest") p.set("sort", params.sort);
+  if (params.q && removeKey !== "q") p.set("q", params.q);
+  const qs = p.toString();
+  return `/resources${qs ? `?${qs}` : ""}`;
+}
+
+function SidebarSkeleton() {
+  return (
+    <div className="w-full lg:w-72 shrink-0">
+      <div className="glass rounded-2xl p-4 space-y-3">
+        <Skeleton className="h-10 w-full rounded-xl" />
+        <Skeleton className="h-px w-full" />
+        <Skeleton className="h-3 w-24 rounded" />
+        {Array.from({ length: 3 }).map((_, i) => (
+          <Skeleton key={i} className="h-10 w-full rounded-xl" />
+        ))}
+        <Skeleton className="h-px w-full" />
+        <Skeleton className="h-3 w-24 rounded" />
+        {Array.from({ length: 8 }).map((_, i) => (
+          <Skeleton key={i} className="h-9 w-full rounded-xl" />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default async function ResourcesPage({
   searchParams,
 }: ResourcesPageProps) {
@@ -42,6 +75,9 @@ export default async function ResourcesPage({
   const currentPage = Math.max(1, parseInt(pageParam || "1", 10) || 1);
   const offset = (currentPage - 1) * PER_PAGE;
   const supabase = await createClient();
+
+  // Determine if any filter is active (gates CategoryShowcase vs grid)
+  const isFiltered = !!(type || category || (q && q.trim()));
 
   // Build base query
   let query = supabase
@@ -97,7 +133,7 @@ export default async function ResourcesPage({
   const totalCount = count || 0;
   const totalPages = Math.ceil(totalCount / PER_PAGE);
 
-  // Count per type
+  // Count per type (exact when category/search active, ~111 approximation otherwise)
   let typeCounts = { definition: 111, howto: 111, comparison: 111 };
   if (category || q) {
     const buildCountQuery = (ct: string) => {
@@ -126,6 +162,10 @@ export default async function ResourcesPage({
     };
   }
 
+  // Pre-build clear hrefs for ResultsHeader (server-side, no useSearchParams needed)
+  const clearTypeHref = buildClearHref({ type, category, sort, q }, "type");
+  const clearCategoryHref = buildClearHref({ type, category, sort, q }, "category");
+
   // Base URL params for pagination links
   const baseParams = new URLSearchParams();
   if (type) baseParams.set("type", type);
@@ -133,12 +173,15 @@ export default async function ResourcesPage({
   if (sort && sort !== "newest") baseParams.set("sort", sort);
   if (q) baseParams.set("q", q);
 
+  // Active filters count for mobile toggle badge
+  const activeFiltersCount = [type, category, q?.trim()].filter(Boolean).length;
+
   const collectionJsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: "AI \u0420\u0435\u0441\u0443\u0440\u0441\u0438",
     description:
-      "\u0414\u0435\u0444\u0438\u043D\u0438\u0446\u0438\u0438, \u0440\u044A\u043A\u043E\u0432\u043E\u0434\u0441\u0442\u0432\u0430 \u0438 \u0441\u0440\u0430\u0432\u043D\u0435\u043D\u0438\u044F \u0437\u0430 AI \u043D\u0430 \u0431\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438",
+      "\u0414\u0435\u0444\u0438\u043d\u0438\u0446\u0438\u0438, \u0440\u044a\u043a\u043e\u0432\u043e\u0434\u0441\u0442\u0432\u0430 \u0438 \u0441\u0440\u0430\u0432\u043d\u0435\u043d\u0438\u044f \u0437\u0430 AI \u043d\u0430 \u0431\u044a\u043b\u0433\u0430\u0440\u0441\u043a\u0438",
     url: "https://aizavseki.eu/resources",
     numberOfItems: totalCount,
     inLanguage: "bg",
@@ -154,89 +197,70 @@ export default async function ResourcesPage({
       {/* Global Glow Effect */}
       <div className="absolute top-[-150px] left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(2,191,223,0.12),rgba(0,0,0,0))] z-0 pointer-events-none" />
 
-      <div className="relative z-10 mx-auto max-w-[1400px] flex w-full pt-16 sm:pt-20">
-        {/* Sidebar Navigation */}
-        <aside className="w-64 flex-shrink-0 hidden lg:block sticky top-[4rem] sm:top-[5rem] h-[calc(100vh-4rem)] sm:h-[calc(100vh-5rem)] overflow-y-auto py-8 pr-6 border-r border-brand-white/5 scrollbar-hide">
-          <Suspense fallback={<Skeleton className="h-[400px] w-full" />}>
-            <ResourceTypeFilter />
-          </Suspense>
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-20">
 
-          <div className="mt-8 border-t border-brand-white/5 pt-8">
-            <Link
-              href="/resources/rechnik"
-              className="group flex items-center justify-between px-2 py-1.5 text-sm text-brand-gray/80 hover:text-brand-cyan rounded-md hover:bg-brand-white/5 transition-colors"
-            >
-              <div className="flex items-center gap-2">
-                <BookOpen className="h-4 w-4" />
-                <span>AI Речник</span>
-              </div>
-            </Link>
-          </div>
-        </aside>
+        {/* COMPACT HERO */}
+        <CompactHero totalCount={totalCount || 333} />
 
-        {/* Main Content */}
-        <main className="flex-1 py-12 px-4 sm:px-6 lg:px-12 max-w-5xl">
-          <div className="mb-4 text-sm text-brand-gray/40 flex items-center gap-2">
-            <Link href="/" className="hover:text-brand-cyan transition-colors">Начало</Link>
-            <span className="text-brand-white/10">/</span>
-            <span className="text-brand-gray/60">Ресурси</span>
-          </div>
-
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-brand-white via-brand-white to-brand-cyan/60 mb-6 leading-[1.1] font-display">
-            AI Ресурси
-          </h1>
-          <p className="text-lg text-brand-white/70 mb-12 max-w-2xl leading-relaxed">
-            Най-голямата колекция от дефиниции, ръководства и сравнения за изкуствен интелект на български език.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center gap-4 mb-16">
-            <div className="flex-1 w-full">
-              <Suspense fallback={<Skeleton className="h-10 w-full" />}>
-                <ResourceSearch />
-              </Suspense>
-            </div>
-            <div className="w-full sm:w-auto">
-              <Suspense fallback={<Skeleton className="h-10 w-full" />}>
-                <ResourceSort />
-              </Suspense>
-            </div>
-            {/* Mobile Category Dropdown - rendered only on small screens */}
-            <div className="w-full lg:hidden">
-              <Suspense fallback={<Skeleton className="h-10 w-full" />}>
-                <ResourceTypeFilter />
-              </Suspense>
-            </div>
-          </div>
-
-          <div className="min-h-[400px]">
-            <Suspense
-              fallback={
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {Array.from({ length: 6 }).map((_, i) => (
-                    <Skeleton
-                      key={i}
-                      className="h-80 w-full rounded-2xl bg-brand-white/5"
-                    />
-                  ))}
-                </div>
-              }
-            >
-              <ResourceGrid
-                resources={resources}
+        {/* TWO-COLUMN LEARNING HUB */}
+        <LearningHubLayout
+          activeFiltersCount={activeFiltersCount}
+          sidebar={
+            <Suspense fallback={<SidebarSkeleton />}>
+              <ResourcesSidebar counts={typeCounts} />
+            </Suspense>
+          }
+        >
+          {isFiltered ? (
+            <>
+              {/* Results header with active filter badges + sort */}
+              <ResultsHeader
                 totalCount={totalCount}
                 currentPage={currentPage}
                 perPage={PER_PAGE}
-                searchQuery={q || undefined}
+                searchQuery={q}
+                activeType={type}
+                activeCategory={category}
+                clearTypeHref={clearTypeHref}
+                clearCategoryHref={clearCategoryHref}
               />
-            </Suspense>
-          </div>
 
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            baseParams={baseParams}
-          />
-        </main>
+              {/* Resource grid */}
+              <div className="min-h-[400px]">
+                <Suspense
+                  fallback={
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {Array.from({ length: 6 }).map((_, i) => (
+                        <Skeleton
+                          key={i}
+                          className="h-80 w-full rounded-2xl bg-brand-navy/50"
+                        />
+                      ))}
+                    </div>
+                  }
+                >
+                  <ResourceGrid
+                    resources={resources}
+                    totalCount={totalCount}
+                    currentPage={currentPage}
+                    perPage={PER_PAGE}
+                    searchQuery={q || undefined}
+                  />
+                </Suspense>
+              </div>
+
+              {/* Pagination */}
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                baseParams={baseParams}
+              />
+            </>
+          ) : (
+            /* Default landing state — category showcase */
+            <CategoryShowcase typeCounts={typeCounts} />
+          )}
+        </LearningHubLayout>
       </div>
     </div>
   );
