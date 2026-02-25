@@ -52,7 +52,7 @@ export function Pagination({
         {currentPage > 1 ? (
           <Link
             href={buildHref(currentPage - 1)}
-            className="p-2.5 rounded-xl text-brand-gray hover:text-brand-white hover:bg-brand-white/5 transition-all"
+            className="p-2.5 rounded-xl text-brand-gray/60 hover:text-brand-white hover:bg-brand-white/5 transition-all"
           >
             <ChevronLeft className="w-5 h-5" />
           </Link>
@@ -66,7 +66,7 @@ export function Pagination({
           <>
             <Link
               href={buildHref(1)}
-              className="w-10 h-10 flex items-center justify-center rounded-xl text-sm font-medium text-brand-gray hover:text-brand-white hover:bg-brand-white/5 transition-all"
+              className="w-10 h-10 flex items-center justify-center rounded-xl text-sm font-medium text-brand-gray/60 hover:text-brand-white hover:bg-brand-white/5 transition-all"
             >
               1
             </Link>
@@ -81,16 +81,16 @@ export function Pagination({
             <span
               key={p}
               aria-current="page"
-              className="w-10 h-10 flex items-center justify-center rounded-xl text-sm font-medium text-brand-dark bg-brand-cyan shadow-[0_0_15px_rgba(0,212,255,0.4)] relative overflow-hidden"
+              className="w-10 h-10 flex items-center justify-center rounded-xl text-sm font-medium text-brand-dark bg-brand-cyan shadow-[0_0_15px_rgba(2,191,223,0.3)] relative overflow-hidden"
             >
               <span className="relative z-10">{p}</span>
-              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-black/10 to-transparent" />
             </span>
           ) : (
             <Link
               key={p}
               href={buildHref(p)}
-              className="w-10 h-10 flex items-center justify-center rounded-xl text-sm font-medium text-brand-gray hover:text-brand-white hover:bg-brand-white/5 transition-all"
+              className="w-10 h-10 flex items-center justify-center rounded-xl text-sm font-medium text-brand-gray/60 hover:text-brand-white hover:bg-brand-white/5 transition-all"
             >
               {p}
             </Link>
@@ -104,7 +104,7 @@ export function Pagination({
             )}
             <Link
               href={buildHref(totalPages)}
-              className="w-10 h-10 flex items-center justify-center rounded-xl text-sm font-medium text-brand-gray hover:text-brand-white hover:bg-brand-white/5 transition-all"
+              className="w-10 h-10 flex items-center justify-center rounded-xl text-sm font-medium text-brand-gray/60 hover:text-brand-white hover:bg-brand-white/5 transition-all"
             >
               {totalPages}
             </Link>
@@ -115,7 +115,7 @@ export function Pagination({
         {currentPage < totalPages ? (
           <Link
             href={buildHref(currentPage + 1)}
-            className="p-2.5 rounded-xl text-brand-gray hover:text-brand-white hover:bg-brand-white/5 transition-all"
+            className="p-2.5 rounded-xl text-brand-gray/60 hover:text-brand-white hover:bg-brand-white/5 transition-all"
           >
             <ChevronRight className="w-5 h-5" />
           </Link>

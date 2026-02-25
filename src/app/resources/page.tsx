@@ -145,87 +145,98 @@ export default async function ResourcesPage({
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-brand-dark text-brand-gray/90 font-sans selection:bg-brand-cyan selection:text-brand-dark">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
       />
 
-      {/* Background Gradient */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-brand-navy-light/20 to-transparent" />
-      </div>
+      {/* Global Glow Effect */}
+      <div className="absolute top-[-150px] left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(2,191,223,0.12),rgba(0,0,0,0))] z-0 pointer-events-none" />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-20">
-        {/* HERO */}
-        <ResourceHero counts={typeCounts} activeType={type || null} />
+      <div className="relative z-10 mx-auto max-w-[1400px] flex w-full pt-16 sm:pt-20">
+        {/* Sidebar Navigation */}
+        <aside className="w-64 flex-shrink-0 hidden lg:block sticky top-[4rem] sm:top-[5rem] h-[calc(100vh-4rem)] sm:h-[calc(100vh-5rem)] overflow-y-auto py-8 pr-6 border-r border-brand-white/5 scrollbar-hide">
+          <Suspense fallback={<Skeleton className="h-[400px] w-full" />}>
+            <ResourceTypeFilter />
+          </Suspense>
 
-        {/* AI Rechnik link */}
-        <div className="mb-8 flex justify-center">
-          <Link
-            href="/resources/rechnik"
-            className="inline-flex items-center gap-2 rounded-xl border border-brand-cyan/20 bg-brand-cyan/5 px-4 py-2.5 text-sm text-brand-cyan hover:bg-brand-cyan/10 hover:border-brand-cyan/30 transition-all backdrop-blur-sm"
-          >
-            <BookOpen className="h-4 w-4" />
-            {"AI \u0420\u0435\u0447\u043D\u0438\u043A \u2014 \u0422\u0435\u0440\u043C\u0438\u043D\u0438 \u043D\u0430 \u0431\u044A\u043B\u0433\u0430\u0440\u0441\u043A\u0438"}
-          </Link>
-        </div>
-
-        {/* CONTROLS — sticky toolbar */}
-        <div className="sticky top-16 sm:top-20 z-40 bg-brand-dark/80 backdrop-blur-xl border border-brand-white/5 rounded-2xl p-4 shadow-2xl shadow-black/50 mb-10 transition-all">
-          <div className="flex flex-col gap-6">
-            <Suspense
-              fallback={<Skeleton className="h-14 w-full rounded-xl" />}
+          <div className="mt-8 border-t border-brand-white/5 pt-8">
+            <Link
+              href="/resources/rechnik"
+              className="group flex items-center justify-between px-2 py-1.5 text-sm text-brand-gray/80 hover:text-brand-cyan rounded-md hover:bg-brand-white/5 transition-colors"
             >
-              <ResourceSearch />
-            </Suspense>
-
-            <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-6">
-              <div className="flex-1 overflow-x-auto pb-2 lg:pb-0">
-                <Suspense fallback={<Skeleton className="h-10 w-full" />}>
-                  <ResourceTypeFilter />
-                </Suspense>
+              <div className="flex items-center gap-2">
+                <BookOpen className="h-4 w-4" />
+                <span>AI Речник</span>
               </div>
+            </Link>
+          </div>
+        </aside>
 
-              <div className="shrink-0">
-                <Suspense fallback={<Skeleton className="h-10 w-40" />}>
-                  <ResourceSort />
-                </Suspense>
-              </div>
+        {/* Main Content */}
+        <main className="flex-1 py-12 px-4 sm:px-6 lg:px-12 max-w-5xl">
+          <div className="mb-4 text-sm text-brand-gray/40 flex items-center gap-2">
+            <Link href="/" className="hover:text-brand-cyan transition-colors">Начало</Link>
+            <span className="text-brand-white/10">/</span>
+            <span className="text-brand-gray/60">Ресурси</span>
+          </div>
+
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-brand-white via-brand-white to-brand-cyan/60 mb-6 leading-[1.1] font-display">
+            AI Ресурси
+          </h1>
+          <p className="text-lg text-brand-white/70 mb-12 max-w-2xl leading-relaxed">
+            Най-голямата колекция от дефиниции, ръководства и сравнения за изкуствен интелект на български език.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center gap-4 mb-16">
+            <div className="flex-1 w-full">
+              <Suspense fallback={<Skeleton className="h-10 w-full" />}>
+                <ResourceSearch />
+              </Suspense>
+            </div>
+            <div className="w-full sm:w-auto">
+              <Suspense fallback={<Skeleton className="h-10 w-full" />}>
+                <ResourceSort />
+              </Suspense>
+            </div>
+            {/* Mobile Category Dropdown - rendered only on small screens */}
+            <div className="w-full lg:hidden">
+              <Suspense fallback={<Skeleton className="h-10 w-full" />}>
+                <ResourceTypeFilter />
+              </Suspense>
             </div>
           </div>
-        </div>
 
-        {/* RESULTS GRID */}
-        <div className="min-h-[400px]">
-          <Suspense
-            fallback={
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <Skeleton
-                    key={i}
-                    className="h-80 w-full rounded-2xl bg-brand-navy/50"
-                  />
-                ))}
-              </div>
-            }
-          >
-            <ResourceGrid
-              resources={resources}
-              totalCount={totalCount}
-              currentPage={currentPage}
-              perPage={PER_PAGE}
-              searchQuery={q || undefined}
-            />
-          </Suspense>
-        </div>
+          <div className="min-h-[400px]">
+            <Suspense
+              fallback={
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <Skeleton
+                      key={i}
+                      className="h-80 w-full rounded-2xl bg-brand-white/5"
+                    />
+                  ))}
+                </div>
+              }
+            >
+              <ResourceGrid
+                resources={resources}
+                totalCount={totalCount}
+                currentPage={currentPage}
+                perPage={PER_PAGE}
+                searchQuery={q || undefined}
+              />
+            </Suspense>
+          </div>
 
-        {/* PAGINATION */}
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          baseParams={baseParams}
-        />
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            baseParams={baseParams}
+          />
+        </main>
       </div>
     </div>
   );

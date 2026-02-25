@@ -28,22 +28,22 @@ export function ResourceTypeFilter() {
   const activeCategory = searchParams.get("category");
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-brand-gray uppercase tracking-wider">
+    <div className="mb-8">
+      <div className="flex items-center justify-between mb-3 px-2">
+        <h4 className="text-xs font-semibold text-brand-gray/60 uppercase tracking-wider">
           {"\u041A\u0430\u0442\u0435\u0433\u043E\u0440\u0438\u0438"}
-        </h3>
+        </h4>
         {activeCategory && (
           <Link
             href={buildHref(searchParams, "category", null)}
-            className="text-xs text-brand-cyan hover:text-brand-cyan-bright hover:underline transition-all"
+            className="text-xs text-brand-gray/60 hover:text-brand-cyan transition-all"
           >
-            {"\u0418\u0437\u0447\u0438\u0441\u0442\u0438 \u0444\u0438\u043B\u0442\u044A\u0440\u0430"}
+            {"\u0418\u0437\u0447\u0438\u0441\u0442\u0438"}
           </Link>
         )}
       </div>
 
-      <div className="flex flex-nowrap gap-3 overflow-x-auto pb-1">
+      <ul className="space-y-1">
         {(
           Object.entries(RESOURCE_CATEGORIES) as [
             ResourceCategoryKey,
@@ -51,47 +51,36 @@ export function ResourceTypeFilter() {
           ][]
         ).map(([key, cat]) => {
           const isActive = activeCategory === key;
-          return (
-            <Link
-              key={key}
-              href={
-                isActive
-                  ? buildHref(searchParams, "category", null)
-                  : buildHref(searchParams, "category", key)
-              }
-              className="relative group"
-            >
-              <div
-                className={cn(
-                  "relative z-10 flex items-center gap-2 px-4 py-2.5 rounded-xl border transition-all duration-300",
-                  isActive
-                    ? "bg-brand-navy border-brand-cyan/50 shadow-[0_0_15px_rgba(0,212,255,0.15)]"
-                    : "bg-brand-navy/40 border-brand-white/5 hover:border-brand-white/20 hover:bg-brand-navy"
-                )}
-              >
-                <span className="text-lg">{cat.icon}</span>
-                <span
-                  className={cn(
-                    "text-sm font-medium transition-colors",
-                    isActive
-                      ? "text-brand-white"
-                      : "text-brand-gray group-hover:text-brand-gray-light"
-                  )}
+
+          if (isActive) {
+            return (
+              <li key={key}>
+                <Link
+                  href={buildHref(searchParams, "category", null)}
+                  className="block px-2 py-1.5 flex justify-between items-center text-sm text-brand-cyan font-semibold bg-brand-navy border border-brand-cyan/20 rounded-md shadow-[0_0_15px_rgba(0,212,255,0.1)]"
                 >
-                  {cat.name}
-                </span>
-              </div>
-              {/* Active Glow */}
-              {isActive && (
-                <motion.div
-                  layoutId="category-glow"
-                  className="absolute inset-0 rounded-xl bg-gradient-to-r from-brand-cyan/20 to-transparent blur-md -z-10"
-                />
-              )}
-            </Link>
+                  <span className="flex items-center gap-2">
+                    <span className="text-base">{cat.icon}</span>
+                    {cat.name}
+                  </span>
+                </Link>
+              </li>
+            );
+          }
+
+          return (
+            <li key={key}>
+              <Link
+                href={buildHref(searchParams, "category", key)}
+                className="block px-2 py-1.5 flex items-center gap-2 text-sm text-brand-gray hover:text-brand-white rounded-md hover:bg-brand-white/5 transition-colors"
+              >
+                <span className="text-base">{cat.icon}</span>
+                {cat.name}
+              </Link>
+            </li>
           );
         })}
-      </div>
+      </ul>
     </div>
   );
 }

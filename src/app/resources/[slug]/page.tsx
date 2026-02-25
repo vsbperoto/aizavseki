@@ -2,14 +2,18 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { FaqSection } from "@/components/blog/FaqSection";
-import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { ArrowLeft, Eye, Clock } from "lucide-react";
+import {
+  Clock, Eye, BookOpen, FileText, ArrowRightLeft,
+  FileCode2, Sparkles, ArrowRight, ArrowLeft, Calendar,
+} from "lucide-react";
 import Link from "next/link";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { CONTENT_TYPES, RESOURCE_CATEGORIES } from "@/lib/constants";
-import type { Resource, FaqItem } from "@/lib/supabase/types";
 import type { ContentTypeKey, ResourceCategoryKey } from "@/lib/constants";
+import type { Resource, FaqItem } from "@/lib/supabase/types";
+import { BackButton } from "@/components/resources/BackButton";
+import { ReadingProgress } from "@/components/resources/ReadingProgress";
 
 interface ResourcePageProps {
   params: Promise<{ slug: string }>;
@@ -18,30 +22,19 @@ interface ResourcePageProps {
 export async function generateMetadata({ params }: ResourcePageProps): Promise<Metadata> {
   const { slug } = await params;
   const supabase = await createClient();
-  const { data } = await supabase
+  const { data: resource } = await supabase
     .from("resources")
-    .select("*")
+    .select("title, key_takeaway")
     .eq("slug", slug)
     .single();
 
-  const resource = data as Resource | null;
-  if (!resource) return { title: "\u0420\u0435\u0441\u0443\u0440\u0441\u044A\u0442 \u043D\u0435 \u0435 \u043D\u0430\u043C\u0435\u0440\u0435\u043D" };
+  if (!resource) return {};
 
   return {
-    title: resource.meta_title || resource.title,
-    description: resource.meta_description || resource.key_takeaway || undefined,
-    alternates: { canonical: `https://aizavseki.eu/resources/${slug}` },
-    openGraph: {
-      title: resource.meta_title || resource.title,
-      description: resource.meta_description || resource.key_takeaway || undefined,
-      type: "article",
-      publishedTime: resource.published_at,
-      images: resource.image_url ? [resource.image_url] : undefined,
-    },
+    title: `${resource.title} | AiZaVseki`,
+    description: resource.key_takeaway || "AI ресурс от AiZaVseki",
   };
 }
-
-export const revalidate = 3600;
 
 export default async function ResourcePage({ params }: ResourcePageProps) {
   const { slug } = await params;
@@ -53,15 +46,10 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
     .eq("slug", slug)
     .single();
 
-  const resource = data as Resource | null;
-  if (!resource) notFound();
+  if (!data) notFound();
 
-  const faqItems = (resource.faq_items || []) as FaqItem[];
-  const readingTime = Math.max(1, Math.ceil((resource.word_count || 0) / 200));
-  const typeConfig = CONTENT_TYPES[resource.content_type as ContentTypeKey];
-  const categoryConfig = RESOURCE_CATEGORIES[resource.category as ResourceCategoryKey];
+  const resource = data as Resource;
 
-  // Fetch related resources
   let relatedResources: Resource[] = [];
   if (resource.related_resources?.length) {
     const { data: related } = await supabase
@@ -72,209 +60,261 @@ export default async function ResourcePage({ params }: ResourcePageProps) {
     relatedResources = (related || []) as Resource[];
   }
 
-  // Article JSON-LD (type-specific)
-  const isDefinition = resource.content_type === "definition";
-  const articleType = isDefinition ? "DefinedTerm" : resource.content_type === "howto" ? "HowTo" : "Article";
-  const articleJsonLd = {
-    "@context": "https://schema.org",
-    "@type": articleType,
-    ...(isDefinition
-      ? {
-          name: resource.title,
-          description: resource.meta_description || resource.key_takeaway || undefined,
-          inDefinedTermSet: {
-            "@type": "DefinedTermSet",
-            name: "AI \u0420\u0435\u0441\u0443\u0440\u0441\u0438 \u2014 \u0414\u0435\u0444\u0438\u043D\u0438\u0446\u0438\u0438",
-            url: "https://aizavseki.eu/resources?type=definition",
-          },
-        }
-      : {
-          headline: resource.title,
-          description: resource.meta_description || resource.key_takeaway || undefined,
-        }),
-    image: resource.image_url || undefined,
-    datePublished: resource.published_at,
-    dateModified: resource.updated_at,
-    inLanguage: "bg",
-    author: {
-      "@type": "Organization",
-      name: "AiZaVseki",
-      url: "https://aizavseki.eu",
-    },
-    publisher: {
-      "@type": "Organization",
-      name: "AiZaVseki",
-      logo: {
-        "@type": "ImageObject",
-        url: "https://aizavseki.eu/opengraph-image",
-      },
-    },
-    mainEntityOfPage: `https://aizavseki.eu/resources/${slug}`,
-    isPartOf: {
-      "@type": "CollectionPage",
-      name: "AI \u0420\u0435\u0441\u0443\u0440\u0441\u0438",
-      url: "https://aizavseki.eu/resources",
-    },
-    ...(resource.content_type === "comparison" && { articleSection: "\u0421\u0440\u0430\u0432\u043D\u0435\u043D\u0438\u044F" }),
-    speakable: {
-      "@type": "SpeakableSpecification",
-      cssSelector: ["article h1", "article h2", ".key-takeaway"],
-    },
-  };
+  const faqItems = (resource.faq_items || []) as FaqItem[];
+  const readingTime = Math.max(1, Math.ceil((resource.word_count || 0) / 200));
+  const typeConfig = CONTENT_TYPES[resource.content_type as ContentTypeKey];
+  const categoryConfig = RESOURCE_CATEGORIES[resource.category as ResourceCategoryKey];
 
-  // BreadcrumbList JSON-LD
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "\u041D\u0430\u0447\u0430\u043B\u043E", item: "https://aizavseki.eu" },
-      { "@type": "ListItem", position: 2, name: "\u0420\u0435\u0441\u0443\u0440\u0441\u0438", item: "https://aizavseki.eu/resources" },
-      { "@type": "ListItem", position: 3, name: typeConfig?.label || resource.content_type, item: `https://aizavseki.eu/resources?type=${resource.content_type}` },
-      { "@type": "ListItem", position: 4, name: resource.title },
-    ],
+  const TYPE_ICONS: Record<string, React.ElementType> = {
+    definition: BookOpen,
+    howto: FileText,
+    comparison: ArrowRightLeft,
   };
-
-  // FAQPage JSON-LD
-  const faqJsonLd = faqItems.length > 0 ? {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqItems.map((item) => ({
-      "@type": "Question",
-      name: item.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: item.answer,
-      },
-    })),
-  } : null;
-
-  const TYPE_COLORS: Record<string, string> = {
-    definition: "#00d4ff",
-    howto: "#10b981",
-    comparison: "#f59e0b",
-  };
-  const typeColor = TYPE_COLORS[resource.content_type] || "#00d4ff";
+  const IconComponent = TYPE_ICONS[resource.content_type] || FileCode2;
 
   return (
-    <div className="pt-24 pb-16 sm:pt-32">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
-      {faqJsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
-      )}
+    <>
+      <ReadingProgress />
 
-      <article className="mx-auto max-w-3xl px-4 sm:px-6">
-        <Link
-          href="/resources"
-          className="mb-8 inline-flex items-center gap-1.5 text-sm text-brand-gray hover:text-brand-cyan transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          {"\u041E\u0431\u0440\u0430\u0442\u043D\u043E \u043A\u044A\u043C \u0440\u0435\u0441\u0443\u0440\u0441\u0438\u0442\u0435"}
-        </Link>
+      <div className="min-h-screen bg-brand-dark text-brand-gray font-body selection:bg-brand-cyan/20 selection:text-brand-white">
 
-        <header className="mb-10">
-          <div className="flex items-center gap-3 mb-4">
-            <span
-              className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold"
-              style={{
-                backgroundColor: `${typeColor}15`,
-                color: typeColor,
-                border: `1px solid ${typeColor}30`,
-              }}
-            >
-              {typeConfig?.label || resource.content_type}
-            </span>
-            {categoryConfig && (
-              <span className="text-sm text-brand-gray/60">
-                {categoryConfig.name}
+        {/* ── Hero ─────────────────────────────────────────────────── */}
+        <header className="relative pt-28 pb-14 border-b border-brand-white/5">
+          {/* Single, subtle ambient light — no more blob chaos */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_40%_at_50%_0%,rgba(0,212,255,0.05),transparent)] pointer-events-none" />
+
+          <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+
+            {/* Breadcrumb row */}
+            <nav className="flex items-center gap-2 mb-10 text-xs text-brand-gray/40 font-medium">
+              <BackButton />
+              <span className="mx-1 text-brand-gray/20">·</span>
+              <Link href="/resources" className="hover:text-brand-cyan transition-colors">
+                Ресурси
+              </Link>
+              {categoryConfig && (
+                <>
+                  <span className="text-brand-gray/20">/</span>
+                  <span className="text-brand-gray/60">{categoryConfig.name}</span>
+                </>
+              )}
+            </nav>
+
+            {/* Type badge */}
+            <div className="flex items-center gap-2.5 mb-5">
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.15em] text-brand-cyan border border-brand-cyan/25 rounded px-2.5 py-1 bg-brand-cyan/5">
+                <IconComponent className="w-3.5 h-3.5" />
+                {typeConfig?.label || resource.content_type}
               </span>
-            )}
-          </div>
+            </div>
 
-          <h1 className="font-display text-3xl font-bold text-brand-white sm:text-4xl lg:text-5xl leading-tight">
-            {resource.title}
-          </h1>
+            {/* Title — strong, clean, no gradient */}
+            <h1 className="text-4xl sm:text-5xl lg:text-[3.2rem] font-bold text-white font-display leading-[1.1] tracking-tight mb-7 max-w-3xl">
+              {resource.title}
+            </h1>
 
-          <div className="mt-6 flex items-center gap-4 text-sm text-brand-gray/60">
-            <span className="flex items-center gap-1">
-              <Clock className="h-3.5 w-3.5" />
-              {readingTime} {"\u043C\u0438\u043D \u0447\u0435\u0442\u0435\u043D\u0435"}
-            </span>
-            <span className="flex items-center gap-1">
-              <Eye className="h-3.5 w-3.5" />
-              {resource.views} {"\u043F\u0440\u0435\u0433\u043B\u0435\u0434\u0430"}
-            </span>
+            {/* Meta row */}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-brand-gray/45">
+              <span className="flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-brand-cyan/50" />
+                {readingTime} мин четене
+              </span>
+              <span className="w-px h-3.5 bg-brand-white/10 hidden sm:block" />
+              <span className="flex items-center gap-1.5">
+                <Eye className="w-3.5 h-3.5 text-brand-cyan/50" />
+                {resource.views || 0} прегледа
+              </span>
+              {resource.published_at && (
+                <>
+                  <span className="w-px h-3.5 bg-brand-white/10 hidden sm:block" />
+                  <span className="flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-brand-cyan/50" />
+                    {new Date(resource.published_at).toLocaleDateString("bg-BG", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </span>
+                </>
+              )}
+            </div>
           </div>
         </header>
 
-        {resource.key_takeaway && (
-          <div className="key-takeaway mb-10 rounded-xl border border-brand-cyan/20 bg-brand-cyan/5 p-6">
-            <p className="text-sm font-semibold uppercase tracking-wider text-brand-cyan mb-2">
-              {"\u041A\u043B\u044E\u0447\u043E\u0432 \u0438\u0437\u0432\u043E\u0434"}
-            </p>
-            <p className="text-lg text-brand-white leading-relaxed">
-              {resource.key_takeaway}
-            </p>
-          </div>
-        )}
+        {/* ── Body ─────────────────────────────────────────────────── */}
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 pt-14 pb-32 flex flex-col lg:flex-row gap-14 xl:gap-20 items-start">
 
-        <div className="text-brand-gray-light leading-relaxed text-lg [&_h2]:font-heading [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-brand-white [&_h2]:mt-10 [&_h2]:mb-4 [&_h3]:font-heading [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-brand-white [&_h3]:mt-8 [&_h3]:mb-3 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_a]:text-brand-cyan [&_a]:underline [&_strong]:font-bold [&_strong]:text-brand-white [&_p]:mb-4 [&_li]:mb-1 [&_blockquote]:border-l-4 [&_blockquote]:border-brand-cyan/30 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-brand-gray [&_table]:w-full [&_th]:text-left [&_th]:text-brand-white [&_th]:font-semibold [&_th]:pb-2 [&_th]:border-b [&_th]:border-brand-cyan/20 [&_td]:py-2 [&_td]:border-b [&_td]:border-brand-navy-light">
-          <Markdown remarkPlugins={[remarkGfm]}>
-            {resource.content}
-          </Markdown>
-        </div>
+          {/* ── Main article ─────────────────────────────────────── */}
+          <main className="flex-1 min-w-0 max-w-[680px]">
 
-        {faqItems.length > 0 && <FaqSection items={faqItems} />}
+            {/* Key Takeaway — editorial pull-quote */}
+            {resource.key_takeaway && (
+              <div className="mb-14 pl-5 border-l-2 border-brand-cyan/60">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-cyan/70 mb-3 flex items-center gap-1.5">
+                  <Sparkles className="w-3 h-3" />
+                  Ключов извод
+                </p>
+                <p className="text-lg sm:text-xl text-white/85 leading-[1.7] font-body font-normal">
+                  {resource.key_takeaway.replace(/\*\*/g, "")}
+                </p>
+              </div>
+            )}
 
-        {relatedResources.length > 0 && (
-          <section className="mt-12">
-            <h2 className="font-heading text-2xl font-bold text-brand-white mb-6">
-              {"\u0421\u0432\u044A\u0440\u0437\u0430\u043D\u0438 \u0440\u0435\u0441\u0443\u0440\u0441\u0438"}
-            </h2>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {relatedResources.map((r) => (
-                <Link
-                  key={r.id}
-                  href={`/resources/${r.slug}`}
-                  className="rounded-xl border border-brand-cyan/10 bg-brand-navy/30 p-4 hover:bg-brand-navy/50 transition-colors"
-                >
-                  <span
-                    className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold mb-2"
-                    style={{
-                      backgroundColor: `${TYPE_COLORS[r.content_type] || "#00d4ff"}15`,
-                      color: TYPE_COLORS[r.content_type] || "#00d4ff",
-                    }}
-                  >
-                    {CONTENT_TYPES[r.content_type as ContentTypeKey]?.label || r.content_type}
-                  </span>
-                  <h3 className="font-heading text-sm font-semibold text-brand-white line-clamp-2">
-                    {r.title}
-                  </h3>
-                </Link>
-              ))}
+            {/* Article content */}
+            <div
+              className="
+                text-brand-gray-light/85 leading-[1.9] text-[1.05rem] font-body
+
+                [&_h2]:text-2xl [&_h2]:sm:text-3xl [&_h2]:font-bold [&_h2]:text-white
+                [&_h2]:mt-16 [&_h2]:mb-6 [&_h2]:font-display [&_h2]:tracking-tight
+                [&_h2]:pb-4 [&_h2]:border-b [&_h2]:border-brand-white/5
+
+                [&_h3]:text-xl [&_h3]:sm:text-2xl [&_h3]:font-semibold [&_h3]:text-white/90
+                [&_h3]:mt-12 [&_h3]:mb-5 [&_h3]:font-display
+
+                [&_h4]:text-lg [&_h4]:font-semibold [&_h4]:text-white/80
+                [&_h4]:mt-8 [&_h4]:mb-4 [&_h4]:font-display
+
+                [&_p]:mb-7
+
+                [&_ul]:list-none [&_ul]:pl-0 [&_ul]:mb-8 [&_ul]:space-y-3
+                [&_ul_li]:relative [&_ul_li]:pl-6
+                [&_ul_li::before]:content-[''] [&_ul_li::before]:absolute [&_ul_li::before]:left-0
+                [&_ul_li::before]:top-[0.65em] [&_ul_li::before]:w-1.5 [&_ul_li::before]:h-1.5
+                [&_ul_li::before]:bg-brand-cyan/50 [&_ul_li::before]:rounded-full
+
+                [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-8 [&_ol]:space-y-3
+                [&_ol_li]:pl-2 [&_ol_li]:marker:text-brand-cyan/60 [&_ol_li]:marker:font-semibold
+
+                [&_a]:text-brand-cyan [&_a]:underline [&_a]:underline-offset-4 [&_a]:decoration-brand-cyan/30
+                [&_a:hover]:text-brand-cyan-bright [&_a:hover]:decoration-brand-cyan [&_a]:transition-colors
+
+                [&_strong]:font-semibold [&_strong]:text-white/95
+
+                [&_em]:text-brand-gray-light/70 [&_em]:italic
+
+                [&_blockquote]:border-l-2 [&_blockquote]:border-accent-purple/60
+                [&_blockquote]:pl-6 [&_blockquote]:ml-0 [&_blockquote]:my-10
+                [&_blockquote]:text-brand-gray-light/70 [&_blockquote]:italic
+                [&_blockquote_p]:mb-0
+
+                [&_table]:w-full [&_table]:mb-10 [&_table]:text-sm
+                [&_table]:border [&_table]:border-brand-white/8 [&_table]:rounded-xl [&_table]:overflow-hidden
+                [&_th]:text-left [&_th]:text-white/80 [&_th]:font-semibold
+                [&_th]:px-4 [&_th]:py-3 [&_th]:bg-brand-navy/60
+                [&_th]:border-b [&_th]:border-brand-white/8
+                [&_td]:px-4 [&_td]:py-3 [&_td]:border-b [&_td]:border-brand-white/5
+                [&_tr:last-child_td]:border-b-0
+                [&_tr:hover_td]:bg-brand-white/[0.02]
+
+                [&_code]:bg-brand-navy-light [&_code]:text-brand-cyan-bright
+                [&_code]:px-2 [&_code]:py-0.5 [&_code]:rounded-md
+                [&_code]:text-[0.88em] [&_code]:font-mono
+                [&_code]:border [&_code]:border-brand-white/8
+
+                [&_pre]:bg-[#0c1017] [&_pre]:p-6 [&_pre]:rounded-xl
+                [&_pre]:overflow-x-auto [&_pre]:border [&_pre]:border-brand-white/8
+                [&_pre]:mb-8 [&_pre]:text-sm
+                [&_pre_code]:bg-transparent [&_pre_code]:text-brand-gray-light/80
+                [&_pre_code]:p-0 [&_pre_code]:border-none
+
+                [&_hr]:border-brand-white/8 [&_hr]:my-12
+              "
+            >
+              <Markdown remarkPlugins={[remarkGfm]}>
+                {resource.content}
+              </Markdown>
             </div>
-          </section>
-        )}
 
-        <div className="mt-10 border-t border-brand-cyan/10 pt-6">
-          <Link
-            href="/resources"
-            className="inline-flex items-center gap-1.5 text-sm text-brand-gray hover:text-brand-cyan transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            {"\u0412\u0441\u0438\u0447\u043A\u0438 \u0440\u0435\u0441\u0443\u0440\u0441\u0438"}
-          </Link>
+            <FaqSection items={faqItems} />
+
+            {/* Article footer */}
+            <footer className="mt-16 pt-8 border-t border-brand-white/5">
+              <div className="flex flex-wrap items-center justify-between gap-5">
+                {/* Tags */}
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-brand-gray/30">Тагове</span>
+                  <span className="text-[11px] border border-brand-white/8 rounded px-2.5 py-1 text-brand-gray/50 bg-brand-white/[0.02]">
+                    {typeConfig?.name || resource.content_type}
+                  </span>
+                  {categoryConfig && (
+                    <span className="text-[11px] border border-brand-white/8 rounded px-2.5 py-1 text-brand-gray/50 bg-brand-white/[0.02]">
+                      {categoryConfig.name}
+                    </span>
+                  )}
+                </div>
+
+                {/* Back link */}
+                <Link
+                  href="/resources"
+                  className="inline-flex items-center gap-2 text-sm text-brand-gray/40 hover:text-brand-cyan transition-colors group"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
+                  Към всички ресурси
+                </Link>
+              </div>
+            </footer>
+          </main>
+
+          {/* ── Sidebar ──────────────────────────────────────────── */}
+          <aside className="w-full lg:w-60 xl:w-64 shrink-0 lg:sticky lg:top-28 space-y-10">
+
+            {/* Related resources */}
+            {relatedResources.length > 0 && (
+              <div>
+                <h3 className="text-[10px] font-bold uppercase tracking-[0.18em] text-brand-gray/35 mb-5">
+                  Свързани ресурси
+                </h3>
+                <div className="space-y-px">
+                  {relatedResources.map((rel) => (
+                    <Link
+                      key={rel.id}
+                      href={`/resources/${rel.slug}`}
+                      className="flex items-start gap-3 py-3 px-2 rounded-lg hover:bg-brand-white/[0.03] transition-colors group -mx-2"
+                    >
+                      <ArrowRight className="w-3.5 h-3.5 mt-0.5 text-brand-gray/20 group-hover:text-brand-cyan/60 shrink-0 transition-colors" />
+                      <div>
+                        <h4 className="text-sm text-brand-gray/60 group-hover:text-white transition-colors leading-snug mb-1 line-clamp-2">
+                          {rel.title}
+                        </h4>
+                        <span className="text-[10px] uppercase tracking-[0.12em] text-brand-gray/30 font-medium">
+                          {CONTENT_TYPES[rel.content_type as ContentTypeKey]?.label}
+                        </span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Divider */}
+            {relatedResources.length > 0 && (
+              <div className="border-t border-brand-white/5" />
+            )}
+
+            {/* Newsletter — minimal */}
+            <div>
+              <div className="w-7 h-7 rounded-md bg-brand-cyan/10 border border-brand-cyan/20 flex items-center justify-center mb-4">
+                <Sparkles className="w-3.5 h-3.5 text-brand-cyan/70" />
+              </div>
+              <h4 className="text-sm font-semibold text-white/80 mb-2 leading-snug">
+                Седмичен AI бюлетин
+              </h4>
+              <p className="text-xs text-brand-gray/40 mb-5 leading-relaxed">
+                Най-важните AI новини и ресурси, директно в пощата ти.
+              </p>
+              <Link
+                href="/newsletter"
+                className="inline-flex items-center gap-2 w-full justify-center py-2 px-4 rounded-lg border border-brand-cyan/20 bg-brand-cyan/5 text-brand-cyan text-xs font-semibold hover:bg-brand-cyan/10 hover:border-brand-cyan/40 transition-all"
+              >
+                Абонирай се
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
+
+          </aside>
         </div>
-      </article>
-    </div>
+      </div>
+    </>
   );
 }
