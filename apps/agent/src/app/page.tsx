@@ -187,6 +187,12 @@ export default function AgentPage() {
       return;
     }
 
+    const validationError = validateCredentials(email, password);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
     setError(null);
     setIsBusy(true);
     try {
@@ -208,6 +214,12 @@ export default function AgentPage() {
   async function signUp() {
     if (!supabase) {
       setError("Липсва Supabase конфигурация.");
+      return;
+    }
+
+    const validationError = validateCredentials(email, password);
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
@@ -565,4 +577,25 @@ export default function AgentPage() {
       </main>
     </div>
   );
+}
+
+function validateCredentials(rawEmail: string, rawPassword: string) {
+  const normalizedEmail = rawEmail.trim();
+  if (!normalizedEmail) {
+    return "Моля, въведи имейл.";
+  }
+
+  if (!normalizedEmail.includes("@")) {
+    return "Моля, въведи валиден имейл адрес.";
+  }
+
+  if (!rawPassword) {
+    return "Моля, въведи парола.";
+  }
+
+  if (rawPassword.length < 6) {
+    return "Паролата трябва да е поне 6 символа.";
+  }
+
+  return null;
 }
