@@ -1,4 +1,5 @@
 import type { AgentMemoryPolicy, AgentPersona, MessageRow } from "./types";
+import { getCapabilityPromptBlock } from "./capabilities";
 
 export type ExtractedRelation = {
   source: string;
@@ -223,8 +224,11 @@ export function buildSystemPrompt(context: PromptContext) {
           .join("\n")}`
       : "Relevant memory relations: none.",
     "",
+    getCapabilityPromptBlock(),
+    "",
     "Response policy:",
     "- Be explicit and useful for content execution.",
+    "- If the user requests image/video creation, execute generation flow instead of only advising.",
     "- Ask one clarifying question only when absolutely necessary.",
     "- If assumptions are needed, list them in short bullet points.",
     "- Keep outputs ready to use (captions, scripts, outlines, hooks, variants).",
@@ -248,4 +252,3 @@ function asPositiveInt(value: unknown, fallback: number) {
   const normalized = Math.floor(value);
   return normalized > 0 ? normalized : fallback;
 }
-

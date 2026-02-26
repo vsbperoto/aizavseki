@@ -9,6 +9,7 @@ import {
   getMemoryPolicy,
   getPersona,
 } from "@/lib/agent/memory";
+import { detectMediaIntent } from "@/lib/agent/router";
 import type {
   AgentProfileRow,
   ConversationRow,
@@ -19,6 +20,14 @@ import type {
   MessageRow,
 } from "@/lib/agent/types";
 import { getAuthenticatedContext } from "@/lib/api/auth";
+import {
+  buildImageAssistantMessage,
+  buildVideoQueuedAssistantMessage,
+  buildVideoReadyAssistantMessage,
+  createVideoJobAndDispatch,
+  runImageGenerationAndPersist,
+  isMissingMediaSchemaError,
+} from "@/lib/media/service";
 
 type ChatRequestBody = {
   conversationId?: string;
@@ -476,6 +485,107 @@ function extractStreamContent(chunk: OpenAiLikeStreamChunk) {
   return "";
 }
 
+async function persistAssistantTurn(
+  supabase: Awaited<ReturnType<typeof getAuthenticatedContext>>["supabase"],
+  args: {
+    userId: string;
+    conversation: ConversationRow;
+    title: string;
+    provisionalMessageCount: number;
+    userMessage: MessageRow;
+    assistantContent: string;
+    model: string;
+    eventType: "chat" | "image" | "video";
+    messageText: string;
+    memoryPolicy: ReturnType<typeof getMemoryPolicy>;
+    promptTokens?: number;
+    completionTokens?: number;
+  },
+) {
+  const { data: assistantData, error: assistantInsertError } = await supabase
+    .from("messages")
+    .insert({
+      conversation_id: args.conversation.id,
+      user_id: args.userId,
+      role: "assistant",
+      content: args.assistantContent,
+      meta_json: {
+        model: args.model,
+        promptTokens: args.promptTokens || null,
+        completionTokens: args.completionTokens || null,
+      },
+    })
+    .select("*")
+    .single();
+
+  if (assistantInsertError || !assistantData) {
+    throw new Error(assistantInsertError?.message || "Failed to store assistant response.");
+  }
+
+  const assistantMessage = assistantData as MessageRow;
+  const finalMessageCount = args.provisionalMessageCount + 1;
+
+  const { data: updatedConversationData, error: updateConversationError } = await supabase
+    .from("conversations")
+    .update({
+      title: args.title,
+      message_count: finalMessageCount,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", args.conversation.id)
+    .eq("user_id", args.userId)
+    .select("*")
+    .single();
+
+  if (updateConversationError || !updatedConversationData) {
+    throw new Error(updateConversationError?.message || "Failed to update conversation state.");
+  }
+
+  const updatedConversation = updatedConversationData as ConversationRow;
+
+  after(async () => {
+    try {
+      await persistMemory(supabase, {
+        userId: args.userId,
+        conversationId: args.conversation.id,
+        userText: args.messageText,
+        assistantText: args.assistantContent,
+        assistantMessageId: assistantMessage.id,
+      });
+
+      await refreshSummariesIfNeeded(supabase, {
+        userId: args.userId,
+        conversationId: args.conversation.id,
+        totalMessageCount: finalMessageCount,
+        summaryWindowMessages: args.memoryPolicy.summaryWindowMessages,
+        globalSummaryCadence: args.memoryPolicy.globalSummaryCadence,
+      });
+    } catch (memoryError) {
+      console.error("Memory update failed:", memoryError);
+    }
+
+    const { error: usageError } = await supabase.from("usage_events").insert({
+      user_id: args.userId,
+      conversation_id: args.conversation.id,
+      event_type: args.eventType,
+      model: args.model,
+      input_units: args.promptTokens || 0,
+      output_units: args.completionTokens || 0,
+      estimated_cost_usd: 0,
+    });
+
+    if (usageError) {
+      console.error("Usage event logging failed:", usageError);
+    }
+  });
+
+  return {
+    assistantMessage,
+    updatedConversation,
+    finalMessageCount,
+  };
+}
+
 export async function POST(request: NextRequest) {
   const { supabase, user, errorResponse } = await getAuthenticatedContext();
   if (errorResponse || !user) {
@@ -582,6 +692,139 @@ export async function POST(request: NextRequest) {
       })
       .eq("id", conversation.id)
       .eq("user_id", user.id);
+
+    const mediaIntent = detectMediaIntent(messageText);
+    if (mediaIntent) {
+      const encoder = new TextEncoder();
+
+      const stream = new ReadableStream<Uint8Array>({
+        start(controller) {
+          const sendEvent = (eventName: string, payload: unknown) => {
+            controller.enqueue(encoder.encode(encodeSseEvent(eventName, payload)));
+          };
+
+          const closeStream = () => {
+            try {
+              controller.close();
+            } catch {
+              // Ignore if the stream was already closed.
+            }
+          };
+
+          void (async () => {
+            try {
+              sendEvent("start", {
+                conversationId: conversation.id,
+                userMessage: mapMessage(userMessage),
+              });
+
+              let assistantContent = "";
+              const modelName = `media:${mediaIntent.modelAlias}`;
+
+              if (mediaIntent.kind === "image") {
+                const { result } = await runImageGenerationAndPersist(supabase, {
+                  userId: user.id,
+                  conversationId: conversation.id,
+                  sourceMessageId: userMessage.id,
+                  intent: mediaIntent,
+                });
+
+                assistantContent = buildImageAssistantMessage({
+                  modelAlias: mediaIntent.modelAlias,
+                  assetUrl: result.url,
+                });
+              } else {
+                const { createResult, job, asset } = await createVideoJobAndDispatch(supabase, {
+                  userId: user.id,
+                  conversationId: conversation.id,
+                  sourceMessageId: userMessage.id,
+                  intent: mediaIntent,
+                });
+
+                if (createResult.url || asset?.public_url) {
+                  assistantContent = buildVideoReadyAssistantMessage({
+                    modelAlias: mediaIntent.modelAlias,
+                    jobId: job?.id || createResult.providerJobId || "n/a",
+                    assetUrl: asset?.public_url || createResult.url || "",
+                  });
+                } else {
+                  assistantContent = buildVideoQueuedAssistantMessage({
+                    modelAlias: mediaIntent.modelAlias,
+                    jobId: job?.id || createResult.providerJobId || "n/a",
+                    status: job?.status || createResult.status,
+                  });
+                }
+              }
+
+              const { assistantMessage, updatedConversation } = await persistAssistantTurn(supabase, {
+                userId: user.id,
+                conversation,
+                title,
+                provisionalMessageCount,
+                userMessage,
+                assistantContent,
+                model: modelName,
+                eventType: mediaIntent.kind === "image" ? "image" : "video",
+                messageText,
+                memoryPolicy,
+                promptTokens: 0,
+                completionTokens: 0,
+              });
+
+              sendEvent("token", { delta: assistantContent });
+              sendEvent("done", {
+                conversation: mapConversation(updatedConversation),
+                userMessage: mapMessage(userMessage),
+                assistantMessage: mapMessage(assistantMessage),
+                usage: {
+                  promptTokens: 0,
+                  completionTokens: 0,
+                },
+              });
+            } catch (mediaError) {
+              const message =
+                mediaError instanceof Error
+                  ? mediaError.message
+                  : "Unexpected media generation error.";
+
+              if (isMissingMediaSchemaError(mediaError)) {
+                try {
+                  sendEvent("error", {
+                    message:
+                      "Media schema is missing. Apply create_agent_media_tables migration first.",
+                  });
+                } catch {
+                  // Ignore writes after close.
+                }
+              } else {
+                try {
+                  sendEvent("error", { message });
+                } catch {
+                  // Ignore writes after close.
+                }
+              }
+            } finally {
+              releaseSlot?.();
+              releaseSlot = null;
+              closeStream();
+            }
+          })();
+        },
+        cancel() {
+          releaseSlot?.();
+          releaseSlot = null;
+        },
+      });
+
+      return new Response(stream, {
+        headers: {
+          "Content-Type": "text/event-stream; charset=utf-8",
+          "Cache-Control": "no-cache, no-transform",
+          Connection: "keep-alive",
+          "X-Accel-Buffering": "no",
+        },
+      });
+    }
 
     const [historyResult, memoryContext] = await Promise.all([
       supabase

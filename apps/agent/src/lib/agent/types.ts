@@ -102,3 +102,43 @@ export type MemorySummaryRow = {
   created_at: string;
 };
 
+export type MediaJobRow = {
+  id: string;
+  user_id: string;
+  conversation_id: string;
+  source_message_id: string | null;
+  kind: "image" | "video";
+  model_alias: string;
+  provider_job_id: string | null;
+  status: "queued" | "running" | "succeeded" | "failed" | "cancelled";
+  progress: number;
+  prompt_text: string;
+  input_json: JsonValue;
+  error_text: string | null;
+  result_json: JsonValue;
+  created_at: string;
+  updated_at: string;
+  started_at: string | null;
+  finished_at: string | null;
+};
+
+export type MediaAssetRow = {
+  id: string;
+  user_id: string;
+  conversation_id: string;
+  job_id: string | null;
+  kind: "image" | "video";
+  model_alias: string;
+  provider_asset_id: string | null;
+  storage_provider: string;
+  storage_key: string | null;
+  public_url: string;
+  thumbnail_url: string | null;
+  mime_type: string | null;
+  width: number | null;
+  height: number | null;
+  duration_sec: number | null;
+  prompt_text: string;
+  meta_json: JsonValue;
+  created_at: string;
+};
