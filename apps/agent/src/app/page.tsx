@@ -53,6 +53,7 @@ export default function AgentPage() {
   const messagesRef = useRef<HTMLDivElement | null>(null);
 
   const [supabase, setSupabase] = useState<SupabaseClient | null>(null);
+  const [supabaseEndpoint, setSupabaseEndpoint] = useState<string>("");
   const [configError, setConfigError] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<AgentProfile | null>(null);
@@ -77,7 +78,9 @@ export default function AgentPage() {
 
   useEffect(() => {
     try {
-      setSupabase(createClient());
+      const client = createClient();
+      setSupabase(client);
+      setSupabaseEndpoint(process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() || "");
     } catch {
       setConfigError(
         "Липсват Supabase променливи за средата. Добави NEXT_PUBLIC_SUPABASE_URL и NEXT_PUBLIC_SUPABASE_ANON_KEY във Vercel и пусни нов deploy.",
@@ -186,12 +189,18 @@ export default function AgentPage() {
 
     setError(null);
     setIsBusy(true);
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
-      password,
-    });
-    if (signInError) {
-      setError(signInError.message);
+    try {
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      });
+      if (signInError) {
+        setError(signInError.message);
+      }
+    } catch {
+      setError(
+        `Мрежова грешка при вход към ${supabaseEndpoint || "Supabase"}. Провери дали е стар кеш.`,
+      );
     }
     setIsBusy(false);
   }
@@ -204,12 +213,18 @@ export default function AgentPage() {
 
     setError(null);
     setIsBusy(true);
-    const { error: signUpError } = await supabase.auth.signUp({
-      email: email.trim(),
-      password,
-    });
-    if (signUpError) {
-      setError(signUpError.message);
+    try {
+      const { error: signUpError } = await supabase.auth.signUp({
+        email: email.trim(),
+        password,
+      });
+      if (signUpError) {
+        setError(signUpError.message);
+      }
+    } catch {
+      setError(
+        `Мрежова грешка при регистрация към ${supabaseEndpoint || "Supabase"}. Провери дали е стар кеш.`,
+      );
     }
     setIsBusy(false);
   }
@@ -365,10 +380,20 @@ export default function AgentPage() {
   }
 
   if (!user) {
+    let endpointLabel = supabaseEndpoint;
+    try {
+      endpointLabel = supabaseEndpoint ? new URL(supabaseEndpoint).host : "";
+    } catch {
+      endpointLabel = supabaseEndpoint;
+    }
+
     return (
       <div className="h-screen flex items-center justify-center bg-brand-dark text-brand-white p-6">
         <div className="w-full max-w-sm rounded-xl border border-brand-white/10 bg-brand-navy/60 p-6 space-y-3">
           {error && <p className="text-sm text-red-300">{error}</p>}
+          {endpointLabel && (
+            <p className="text-[11px] text-brand-gray/70">Свързан към: {endpointLabel}</p>
+          )}
           <input
             className="w-full rounded-lg border border-brand-white/10 bg-brand-dark/60 px-3 py-2"
             placeholder="Имейл"
