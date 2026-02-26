@@ -1,16 +1,16 @@
 import { createBrowserClient } from "@supabase/ssr";
 
-function getEnv(name: string, fallback: string) {
+function getRequiredEnv(name: string) {
   const value = process.env[name];
-  if (value && value.trim()) {
-    return value.trim();
+  if (!value || !value.trim()) {
+    throw new Error(`Missing required environment variable: ${name}`);
   }
-  return fallback;
+  return value.trim();
 }
 
 export function createClient() {
   return createBrowserClient(
-    getEnv("NEXT_PUBLIC_SUPABASE_URL", "https://placeholder.supabase.co"),
-    getEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY", "placeholder-anon-key"),
+    getRequiredEnv("NEXT_PUBLIC_SUPABASE_URL"),
+    getRequiredEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY"),
   );
 }

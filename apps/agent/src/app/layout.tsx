@@ -22,8 +22,8 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://agent.aizavseki.eu"),
-  title: "AI Agent | AiZaVseki",
-  description: "Chat with the AiZaVseki AI agent.",
+  title: "AI Агент | AiZaVseki",
+  description: "Чат с AI агента на AiZaVseki.",
   robots: { index: true, follow: true },
 };
 
