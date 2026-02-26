@@ -1,16 +1,27 @@
 import { createBrowserClient } from "@supabase/ssr";
 
-function getRequiredEnv(name: string) {
-  const value = process.env[name];
-  if (!value || !value.trim()) {
-    throw new Error(`Missing required environment variable: ${name}`);
+function getRequiredPublicSupabaseEnv() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!url || !url.trim()) {
+    throw new Error("Missing required environment variable: NEXT_PUBLIC_SUPABASE_URL");
   }
-  return value.trim();
+
+  if (!anonKey || !anonKey.trim()) {
+    throw new Error("Missing required environment variable: NEXT_PUBLIC_SUPABASE_ANON_KEY");
+  }
+
+  return {
+    url: url.trim(),
+    anonKey: anonKey.trim(),
+  };
 }
 
 export function createClient() {
+  const env = getRequiredPublicSupabaseEnv();
   return createBrowserClient(
-    getRequiredEnv("NEXT_PUBLIC_SUPABASE_URL"),
-    getRequiredEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY"),
+    env.url,
+    env.anonKey,
   );
 }
