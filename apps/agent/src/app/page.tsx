@@ -68,6 +68,8 @@ export default function AgentPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isBusy, setIsBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const hasLoadedInitialDataRef = useRef(false);
+  const userId = user?.id ?? null;
 
   useEffect(() => {
     messagesRef.current?.scrollTo({
@@ -96,6 +98,17 @@ export default function AgentPage() {
     const client = supabase;
 
     let isMounted = true;
+    const setUserIfChanged = (nextUser: User | null) => {
+      setUser((currentUser) => {
+        const currentId = currentUser?.id ?? null;
+        const nextId = nextUser?.id ?? null;
+        if (currentId === nextId) {
+          return currentUser;
+        }
+        return nextUser;
+      });
+    };
+
     async function bootstrap() {
       const {
         data: { user: currentUser },
@@ -103,7 +116,7 @@ export default function AgentPage() {
       if (!isMounted) {
         return;
       }
-      setUser(currentUser || null);
+      setUserIfChanged(currentUser || null);
       setIsLoading(false);
     }
     void bootstrap();
@@ -114,7 +127,7 @@ export default function AgentPage() {
       if (!isMounted) {
         return;
       }
-      setUser(session?.user || null);
+      setUserIfChanged(session?.user || null);
       setError(null);
     });
 
@@ -128,7 +141,8 @@ export default function AgentPage() {
     let cancelled = false;
 
     async function loadData() {
-      if (!user) {
+      if (!userId) {
+        hasLoadedInitialDataRef.current = false;
         setProfile(null);
         setConversations([]);
         setActiveConversationId("");
@@ -136,7 +150,9 @@ export default function AgentPage() {
         return;
       }
 
-      setIsLoading(true);
+      if (!hasLoadedInitialDataRef.current) {
+        setIsLoading(true);
+      }
       try {
         const [setupData, conversationData] = await Promise.all([
           apiFetch<{ profile: AgentProfile | null }>("/api/agent/setup"),
@@ -170,6 +186,7 @@ export default function AgentPage() {
         }
       } finally {
         if (!cancelled) {
+          hasLoadedInitialDataRef.current = true;
           setIsLoading(false);
         }
       }
@@ -179,7 +196,7 @@ export default function AgentPage() {
     return () => {
       cancelled = true;
     };
-  }, [user]);
+  }, [userId]);
 
   async function signIn() {
     if (!supabase) {

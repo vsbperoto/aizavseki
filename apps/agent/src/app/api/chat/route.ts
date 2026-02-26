@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { after, NextRequest, NextResponse } from "next/server";
 import {
   buildConversationSummary,
   buildSystemPrompt,
@@ -237,26 +237,30 @@ async function upsertEntities(
 ) {
   const entityIdByName = new Map<string, string>();
 
-  for (const name of entityNames) {
-    const { data, error } = await supabase
-      .from("memory_entities")
-      .upsert(
-        {
-          user_id: userId,
-          canonical_name: name,
-          entity_type: "concept",
-          attributes_json: {},
-        },
-        { onConflict: "user_id,canonical_name" },
-      )
-      .select("*")
-      .single();
+  const uniqueNames = [...new Set(entityNames)];
+  if (uniqueNames.length === 0) {
+    return entityIdByName;
+  }
 
-    if (error || !data) {
-      throw new Error(error?.message || "Failed to upsert entity.");
-    }
+  const { data, error } = await supabase
+    .from("memory_entities")
+    .upsert(
+      uniqueNames.map((name) => ({
+        user_id: userId,
+        canonical_name: name,
+        entity_type: "concept",
+        attributes_json: {},
+      })),
+      { onConflict: "user_id,canonical_name" },
+    )
+    .select("*");
 
-    entityIdByName.set(name, (data as MemoryEntityRow).id);
+  if (error || !data) {
+    throw new Error(error?.message || "Failed to upsert entity.");
+  }
+
+  for (const entity of data as MemoryEntityRow[]) {
+    entityIdByName.set(entity.canonical_name, entity.id);
   }
 
   return entityIdByName;
@@ -289,13 +293,13 @@ async function persistMemory(
   let factCount = 0;
   let relationCount = 0;
 
-  for (const fact of facts) {
+  const factRows = facts.map((fact) => {
     const matchingEntityName = names.find((name) =>
       fact.toLowerCase().includes(name.toLowerCase()),
     );
     const entityId = matchingEntityName ? entityMap.get(matchingEntityName) || null : null;
 
-    const { error } = await supabase.from("memory_facts").insert({
+    return {
       user_id: args.userId,
       entity_id: entityId,
       fact_text: fact,
@@ -303,9 +307,13 @@ async function persistMemory(
       valid_from: nowIso,
       valid_until: null,
       source_message_id: args.assistantMessageId,
-    });
+    };
+  });
+
+  if (factRows.length > 0) {
+    const { error } = await supabase.from("memory_facts").insert(factRows);
     if (!error) {
-      factCount += 1;
+      factCount = factRows.length;
     }
   }
 
@@ -639,48 +647,51 @@ export async function POST(request: NextRequest) {
       }
 
       const updatedConversation = updatedConversationData as ConversationRow;
+      after(async () => {
+        try {
+          await persistMemory(supabase, {
+            userId: user.id,
+            conversationId: conversation.id,
+            userText: messageText,
+            assistantText: assistantContent,
+            assistantMessageId: assistantMessage.id,
+          });
 
-      let memoryStats = {
-        entityCount: 0,
-        factCount: 0,
-        relationCount: 0,
-      };
+          await refreshSummariesIfNeeded(supabase, {
+            userId: user.id,
+            conversationId: conversation.id,
+            totalMessageCount: finalMessageCount,
+            summaryWindowMessages: memoryPolicy.summaryWindowMessages,
+            globalSummaryCadence: memoryPolicy.globalSummaryCadence,
+          });
+        } catch (memoryError) {
+          console.error("Memory update failed:", memoryError);
+        }
 
-      try {
-        memoryStats = await persistMemory(supabase, {
-          userId: user.id,
-          conversationId: conversation.id,
-          userText: messageText,
-          assistantText: assistantContent,
-          assistantMessageId: assistantMessage.id,
+        const { error: usageError } = await supabase.from("usage_events").insert({
+          user_id: user.id,
+          conversation_id: conversation.id,
+          event_type: "chat",
+          model: `openclaw:${agentId}`,
+          input_units: responseData.usage?.prompt_tokens || 0,
+          output_units: responseData.usage?.completion_tokens || 0,
+          estimated_cost_usd: 0,
         });
 
-        await refreshSummariesIfNeeded(supabase, {
-          userId: user.id,
-          conversationId: conversation.id,
-          totalMessageCount: finalMessageCount,
-          summaryWindowMessages: memoryPolicy.summaryWindowMessages,
-          globalSummaryCadence: memoryPolicy.globalSummaryCadence,
-        });
-      } catch (memoryError) {
-        console.error("Memory update failed:", memoryError);
-      }
-
-      await supabase.from("usage_events").insert({
-        user_id: user.id,
-        conversation_id: conversation.id,
-        event_type: "chat",
-        model: `openclaw:${agentId}`,
-        input_units: responseData.usage?.prompt_tokens || 0,
-        output_units: responseData.usage?.completion_tokens || 0,
-        estimated_cost_usd: 0,
+        if (usageError) {
+          console.error("Usage event logging failed:", usageError);
+        }
       });
 
       return NextResponse.json({
         conversation: mapConversation(updatedConversation),
         userMessage: mapMessage(userMessage),
         assistantMessage: mapMessage(assistantMessage),
-        memory: memoryStats,
+        memory: {
+          entityCount: 0,
+          factCount: 0,
+          relationCount: 0,
+        },
       });
     });
   } catch (error) {
@@ -689,4 +700,3 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
-
