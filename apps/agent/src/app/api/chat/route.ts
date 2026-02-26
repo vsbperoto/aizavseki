@@ -42,6 +42,26 @@ type OpenAiLikeResponse = {
   };
 };
 
+type OpenAiLikeStreamChunk = {
+  choices?: Array<{
+    delta?: {
+      content?: string;
+    };
+    message?: {
+      content?: string;
+    };
+  }>;
+  usage?: {
+    prompt_tokens?: number;
+    completion_tokens?: number;
+  };
+  error?: {
+    message?: string;
+  };
+  output_text?: string;
+  response?: string;
+};
+
 type MemoryContext = {
   globalSummary: string | null;
   conversationSummary: string | null;
@@ -95,23 +115,27 @@ function isFactValid(validUntil: string | null) {
   return new Date(validUntil).getTime() > Date.now();
 }
 
-async function withConcurrencyLimit<T>(userId: string, task: () => Promise<T>) {
+function acquireUserSlot(userId: string) {
   const active = inflightByUser.get(userId) || 0;
   if (active >= MAX_CONCURRENT_REQUESTS_PER_USER) {
     throw new Error("Too many active requests. Please wait for the current response.");
   }
 
   inflightByUser.set(userId, active + 1);
-  try {
-    return await task();
-  } finally {
+  let released = false;
+
+  return () => {
+    if (released) {
+      return;
+    }
+    released = true;
     const next = (inflightByUser.get(userId) || 1) - 1;
     if (next <= 0) {
       inflightByUser.delete(userId);
     } else {
       inflightByUser.set(userId, next);
     }
-  }
+  };
 }
 
 async function loadMemoryContext(
@@ -426,6 +450,32 @@ async function refreshSummariesIfNeeded(
   });
 }
 
+function encodeSseEvent(eventName: string, payload: unknown) {
+  return `event: ${eventName}\ndata: ${JSON.stringify(payload)}\n\n`;
+}
+
+function extractStreamContent(chunk: OpenAiLikeStreamChunk) {
+  const fromDelta = chunk.choices?.[0]?.delta?.content;
+  if (typeof fromDelta === "string" && fromDelta.length > 0) {
+    return fromDelta;
+  }
+
+  const fromMessage = chunk.choices?.[0]?.message?.content;
+  if (typeof fromMessage === "string" && fromMessage.length > 0) {
+    return fromMessage;
+  }
+
+  if (typeof chunk.output_text === "string" && chunk.output_text.length > 0) {
+    return chunk.output_text;
+  }
+
+  if (typeof chunk.response === "string" && chunk.response.length > 0) {
+    return chunk.response;
+  }
+
+  return "";
+}
+
 export async function POST(request: NextRequest) {
   const { supabase, user, errorResponse } = await getAuthenticatedContext();
   if (errorResponse || !user) {
@@ -450,251 +500,444 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "message is required." }, { status: 400 });
   }
 
+  let releaseSlot: (() => void) | null = null;
+
   try {
-    return await withConcurrencyLimit(user.id, async () => {
-      const { data: conversationData, error: conversationError } = await supabase
-        .from("conversations")
-        .select("*")
-        .eq("id", conversationId)
-        .eq("user_id", user.id)
-        .maybeSingle();
+    releaseSlot = acquireUserSlot(user.id);
 
-      if (conversationError) {
-        return NextResponse.json({ error: conversationError.message }, { status: 500 });
-      }
+    const releaseAndRespond = (payload: { error: string }, status: number) => {
+      releaseSlot?.();
+      releaseSlot = null;
+      return NextResponse.json(payload, { status });
+    };
 
-      if (!conversationData) {
-        return NextResponse.json({ error: "Conversation not found." }, { status: 404 });
-      }
+    const { data: conversationData, error: conversationError } = await supabase
+      .from("conversations")
+      .select("*")
+      .eq("id", conversationId)
+      .eq("user_id", user.id)
+      .maybeSingle();
 
-      const conversation = conversationData as ConversationRow;
+    if (conversationError) {
+      return releaseAndRespond({ error: conversationError.message }, 500);
+    }
 
-      const { data: profileData, error: profileError } = await supabase
-        .from("agent_profiles")
-        .select("*")
-        .eq("id", conversation.agent_profile_id)
-        .eq("user_id", user.id)
-        .maybeSingle();
+    if (!conversationData) {
+      return releaseAndRespond({ error: "Conversation not found." }, 404);
+    }
 
-      if (profileError) {
-        return NextResponse.json({ error: profileError.message }, { status: 500 });
-      }
+    const conversation = conversationData as ConversationRow;
 
-      if (!profileData) {
-        return NextResponse.json(
-          { error: "Agent setup not found. Please complete setup first." },
-          { status: 400 },
-        );
-      }
+    const { data: profileData, error: profileError } = await supabase
+      .from("agent_profiles")
+      .select("*")
+      .eq("id", conversation.agent_profile_id)
+      .eq("user_id", user.id)
+      .maybeSingle();
 
-      const profile = profileData as AgentProfileRow;
-      const memoryPolicy = getMemoryPolicy(profile.memory_policy_json);
-      const persona = getPersona(profile.persona_json);
+    if (profileError) {
+      return releaseAndRespond({ error: profileError.message }, 500);
+    }
 
-      const { data: insertedUserMessage, error: insertUserError } = await supabase
+    if (!profileData) {
+      return releaseAndRespond(
+        { error: "Agent setup not found. Please complete setup first." },
+        400,
+      );
+    }
+
+    const profile = profileData as AgentProfileRow;
+    const memoryPolicy = getMemoryPolicy(profile.memory_policy_json);
+    const persona = getPersona(profile.persona_json);
+
+    const { data: insertedUserMessage, error: insertUserError } = await supabase
+      .from("messages")
+      .insert({
+        conversation_id: conversation.id,
+        user_id: user.id,
+        role: "user",
+        content: messageText,
+        meta_json: {},
+      })
+      .select("*")
+      .single();
+
+    if (insertUserError || !insertedUserMessage) {
+      return releaseAndRespond(
+        { error: insertUserError?.message || "Failed to store user message." },
+        500,
+      );
+    }
+
+    const userMessage = insertedUserMessage as MessageRow;
+    const provisionalMessageCount = (conversation.message_count || 0) + 1;
+    const title = provisionalMessageCount === 1 ? clampText(messageText, 48) : conversation.title;
+
+    await supabase
+      .from("conversations")
+      .update({
+        title,
+        message_count: provisionalMessageCount,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", conversation.id)
+      .eq("user_id", user.id);
+
+    const [historyResult, memoryContext] = await Promise.all([
+      supabase
         .from("messages")
-        .insert({
-          conversation_id: conversation.id,
-          user_id: user.id,
-          role: "user",
-          content: messageText,
-          meta_json: {},
-        })
         .select("*")
-        .single();
-
-      if (insertUserError || !insertedUserMessage) {
-        return NextResponse.json(
-          { error: insertUserError?.message || "Failed to store user message." },
-          { status: 500 },
-        );
-      }
-
-      const userMessage = insertedUserMessage as MessageRow;
-      const provisionalMessageCount = (conversation.message_count || 0) + 1;
-      const title =
-        provisionalMessageCount === 1 ? clampText(messageText, 48) : conversation.title;
-
-      await supabase
-        .from("conversations")
-        .update({
-          title,
-          message_count: provisionalMessageCount,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", conversation.id)
-        .eq("user_id", user.id);
-
-      const [historyResult, memoryContext] = await Promise.all([
-        supabase
-          .from("messages")
-          .select("*")
-          .eq("conversation_id", conversation.id)
-          .eq("user_id", user.id)
-          .order("created_at", { ascending: false })
-          .limit(26),
-        loadMemoryContext(
-          supabase,
-          user.id,
-          conversation.id,
-          messageText,
-          memoryPolicy.maxInjectedFacts,
-          memoryPolicy.maxInjectedRelations,
-        ),
-      ]);
-
-      if (historyResult.error) {
-        return NextResponse.json({ error: historyResult.error.message }, { status: 500 });
-      }
-
-      const history = ((historyResult.data || []) as MessageRow[])
-        .reverse()
-        .filter((message) => message.role === "user" || message.role === "assistant")
-        .map((message) => ({
-          role: message.role as "user" | "assistant",
-          content: message.content,
-        }));
-
-      const systemPrompt = buildSystemPrompt({
-        agentName: profile.agent_name,
-        persona,
-        globalSummary: memoryContext.globalSummary,
-        conversationSummary: memoryContext.conversationSummary,
-        memoryFacts: memoryContext.facts,
-        memoryRelations: memoryContext.relations,
-      });
-
-      const gatewayBaseUrl = getRequiredEnv("OPENCLAW_GATEWAY_BASE_URL").replace(/\/+$/, "");
-      const gatewayToken = getRequiredEnv("OPENCLAW_GATEWAY_TOKEN");
-      const agentId = process.env.OPENCLAW_AGENT_ID?.trim() || "main";
-
-      const gatewayResponse = await fetch(`${gatewayBaseUrl}/v1/chat/completions`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${gatewayToken}`,
-          "x-openclaw-agent-id": agentId,
-        },
-        body: JSON.stringify({
-          model: `openclaw:${agentId}`,
-          user: `user:${user.id}:conversation:${conversation.id}`,
-          stream: false,
-          messages: [{ role: "system", content: systemPrompt }, ...history],
-        }),
-      });
-
-      const responseData = (await gatewayResponse.json()) as OpenAiLikeResponse;
-      if (!gatewayResponse.ok) {
-        const message =
-          responseData?.error?.message || `OpenClaw request failed (${gatewayResponse.status}).`;
-        return NextResponse.json({ error: message }, { status: gatewayResponse.status });
-      }
-
-      const assistantContent = responseData?.choices?.[0]?.message?.content?.trim();
-      if (!assistantContent) {
-        return NextResponse.json(
-          { error: "OpenClaw returned an empty response." },
-          { status: 502 },
-        );
-      }
-
-      const { data: assistantData, error: assistantInsertError } = await supabase
-        .from("messages")
-        .insert({
-          conversation_id: conversation.id,
-          user_id: user.id,
-          role: "assistant",
-          content: assistantContent,
-          meta_json: {
-            model: `openclaw:${agentId}`,
-            promptTokens: responseData.usage?.prompt_tokens || null,
-            completionTokens: responseData.usage?.completion_tokens || null,
-          },
-        })
-        .select("*")
-        .single();
-
-      if (assistantInsertError || !assistantData) {
-        return NextResponse.json(
-          { error: assistantInsertError?.message || "Failed to store assistant response." },
-          { status: 500 },
-        );
-      }
-
-      const assistantMessage = assistantData as MessageRow;
-      const finalMessageCount = provisionalMessageCount + 1;
-
-      const { data: updatedConversationData, error: updateConversationError } = await supabase
-        .from("conversations")
-        .update({
-          title,
-          message_count: finalMessageCount,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", conversation.id)
+        .eq("conversation_id", conversation.id)
         .eq("user_id", user.id)
-        .select("*")
-        .single();
+        .order("created_at", { ascending: false })
+        .limit(26),
+      loadMemoryContext(
+        supabase,
+        user.id,
+        conversation.id,
+        messageText,
+        memoryPolicy.maxInjectedFacts,
+        memoryPolicy.maxInjectedRelations,
+      ),
+    ]);
 
-      if (updateConversationError || !updatedConversationData) {
-        return NextResponse.json(
-          {
-            error:
-              updateConversationError?.message || "Failed to update conversation state.",
-          },
-          { status: 500 },
-        );
+    if (historyResult.error) {
+      return releaseAndRespond({ error: historyResult.error.message }, 500);
+    }
+
+    const history = ((historyResult.data || []) as MessageRow[])
+      .reverse()
+      .filter((message) => message.role === "user" || message.role === "assistant")
+      .map((message) => ({
+        role: message.role as "user" | "assistant",
+        content: message.content,
+      }));
+
+    const systemPrompt = buildSystemPrompt({
+      agentName: profile.agent_name,
+      persona,
+      globalSummary: memoryContext.globalSummary,
+      conversationSummary: memoryContext.conversationSummary,
+      memoryFacts: memoryContext.facts,
+      memoryRelations: memoryContext.relations,
+    });
+
+    const gatewayBaseUrl = getRequiredEnv("OPENCLAW_GATEWAY_BASE_URL").replace(/\/+$/, "");
+    const gatewayToken = getRequiredEnv("OPENCLAW_GATEWAY_TOKEN");
+    const agentId = process.env.OPENCLAW_AGENT_ID?.trim() || "main";
+
+    const gatewayResponse = await fetch(`${gatewayBaseUrl}/v1/chat/completions`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${gatewayToken}`,
+        "x-openclaw-agent-id": agentId,
+      },
+      body: JSON.stringify({
+        model: `openclaw:${agentId}`,
+        user: `user:${user.id}:conversation:${conversation.id}`,
+        stream: true,
+        messages: [{ role: "system", content: systemPrompt }, ...history],
+      }),
+      signal: request.signal,
+    });
+
+    if (!gatewayResponse.ok) {
+      let message = `OpenClaw request failed (${gatewayResponse.status}).`;
+      const contentType = gatewayResponse.headers.get("content-type") || "";
+
+      try {
+        if (contentType.includes("application/json")) {
+          const errorPayload = (await gatewayResponse.json()) as OpenAiLikeResponse;
+          message = errorPayload?.error?.message || message;
+        } else {
+          const rawError = await gatewayResponse.text();
+          if (rawError.trim()) {
+            message = rawError.trim();
+          }
+        }
+      } catch {
+        // Keep fallback message.
       }
 
-      const updatedConversation = updatedConversationData as ConversationRow;
-      after(async () => {
-        try {
-          await persistMemory(supabase, {
-            userId: user.id,
-            conversationId: conversation.id,
-            userText: messageText,
-            assistantText: assistantContent,
-            assistantMessageId: assistantMessage.id,
-          });
+      return releaseAndRespond({ error: message }, gatewayResponse.status);
+    }
 
-          await refreshSummariesIfNeeded(supabase, {
-            userId: user.id,
-            conversationId: conversation.id,
-            totalMessageCount: finalMessageCount,
-            summaryWindowMessages: memoryPolicy.summaryWindowMessages,
-            globalSummaryCadence: memoryPolicy.globalSummaryCadence,
-          });
-        } catch (memoryError) {
-          console.error("Memory update failed:", memoryError);
-        }
+    const encoder = new TextEncoder();
+    const gatewayContentType = gatewayResponse.headers.get("content-type") || "";
 
-        const { error: usageError } = await supabase.from("usage_events").insert({
-          user_id: user.id,
-          conversation_id: conversation.id,
-          event_type: "chat",
-          model: `openclaw:${agentId}`,
-          input_units: responseData.usage?.prompt_tokens || 0,
-          output_units: responseData.usage?.completion_tokens || 0,
-          estimated_cost_usd: 0,
-        });
+    const stream = new ReadableStream<Uint8Array>({
+      start(controller) {
+        const sendEvent = (eventName: string, payload: unknown) => {
+          controller.enqueue(encoder.encode(encodeSseEvent(eventName, payload)));
+        };
 
-        if (usageError) {
-          console.error("Usage event logging failed:", usageError);
-        }
-      });
+        const closeStream = () => {
+          try {
+            controller.close();
+          } catch {
+            // Ignore if the stream was already closed.
+          }
+        };
 
-      return NextResponse.json({
-        conversation: mapConversation(updatedConversation),
-        userMessage: mapMessage(userMessage),
-        assistantMessage: mapMessage(assistantMessage),
-        memory: {
-          entityCount: 0,
-          factCount: 0,
-          relationCount: 0,
-        },
-      });
+        void (async () => {
+          let assistantContent = "";
+          let promptTokens = 0;
+          let completionTokens = 0;
+
+          try {
+            sendEvent("start", {
+              conversationId: conversation.id,
+              userMessage: mapMessage(userMessage),
+            });
+
+            if (gatewayContentType.includes("application/json")) {
+              const responseData = (await gatewayResponse.json()) as OpenAiLikeResponse;
+
+              if (responseData?.error?.message) {
+                throw new Error(responseData.error.message);
+              }
+
+              assistantContent = responseData?.choices?.[0]?.message?.content || "";
+              promptTokens = responseData?.usage?.prompt_tokens || 0;
+              completionTokens = responseData?.usage?.completion_tokens || 0;
+
+              if (assistantContent) {
+                sendEvent("token", { delta: assistantContent });
+              }
+            } else {
+              const reader = gatewayResponse.body?.getReader();
+              if (!reader) {
+                throw new Error("OpenClaw stream is unavailable.");
+              }
+
+              const decoder = new TextDecoder();
+              let buffer = "";
+              let eventDataLines: string[] = [];
+
+              const flushEventData = () => {
+                if (eventDataLines.length === 0) {
+                  return;
+                }
+
+                const payloadText = eventDataLines.join("\n").trim();
+                eventDataLines = [];
+                if (!payloadText || payloadText === "[DONE]") {
+                  return;
+                }
+
+                let parsed: OpenAiLikeStreamChunk;
+                try {
+                  parsed = JSON.parse(payloadText) as OpenAiLikeStreamChunk;
+                } catch {
+                  return;
+                }
+
+                if (parsed.error?.message) {
+                  throw new Error(parsed.error.message);
+                }
+
+                const delta = extractStreamContent(parsed);
+                if (delta) {
+                  assistantContent += delta;
+                  sendEvent("token", { delta });
+                }
+
+                if (typeof parsed.usage?.prompt_tokens === "number") {
+                  promptTokens = parsed.usage.prompt_tokens;
+                }
+                if (typeof parsed.usage?.completion_tokens === "number") {
+                  completionTokens = parsed.usage.completion_tokens;
+                }
+              };
+
+              while (true) {
+                if (request.signal.aborted) {
+                  throw new Error("The request was cancelled.");
+                }
+
+                const { done, value } = await reader.read();
+                if (done) {
+                  break;
+                }
+
+                buffer += decoder.decode(value, { stream: true });
+                let lineBreakIndex = buffer.indexOf("\n");
+
+                while (lineBreakIndex !== -1) {
+                  let line = buffer.slice(0, lineBreakIndex);
+                  buffer = buffer.slice(lineBreakIndex + 1);
+
+                  if (line.endsWith("\r")) {
+                    line = line.slice(0, -1);
+                  }
+
+                  if (!line) {
+                    flushEventData();
+                    lineBreakIndex = buffer.indexOf("\n");
+                    continue;
+                  }
+
+                  if (line.startsWith("data:")) {
+                    eventDataLines.push(line.slice(5).trimStart());
+                  }
+
+                  lineBreakIndex = buffer.indexOf("\n");
+                }
+              }
+
+              const tail = decoder.decode();
+              if (tail) {
+                buffer += tail;
+              }
+
+              if (buffer.trim()) {
+                for (const rawLine of buffer.replace(/\r/g, "").split("\n")) {
+                  if (!rawLine) {
+                    flushEventData();
+                    continue;
+                  }
+
+                  if (rawLine.startsWith("data:")) {
+                    eventDataLines.push(rawLine.slice(5).trimStart());
+                  }
+                }
+              }
+
+              flushEventData();
+            }
+
+            assistantContent = assistantContent.trim();
+            if (!assistantContent) {
+              throw new Error("OpenClaw returned an empty response.");
+            }
+
+            const { data: assistantData, error: assistantInsertError } = await supabase
+              .from("messages")
+              .insert({
+                conversation_id: conversation.id,
+                user_id: user.id,
+                role: "assistant",
+                content: assistantContent,
+                meta_json: {
+                  model: `openclaw:${agentId}`,
+                  promptTokens: promptTokens || null,
+                  completionTokens: completionTokens || null,
+                },
+              })
+              .select("*")
+              .single();
+
+            if (assistantInsertError || !assistantData) {
+              throw new Error(
+                assistantInsertError?.message || "Failed to store assistant response.",
+              );
+            }
+
+            const assistantMessage = assistantData as MessageRow;
+            const finalMessageCount = provisionalMessageCount + 1;
+
+            const { data: updatedConversationData, error: updateConversationError } = await supabase
+              .from("conversations")
+              .update({
+                title,
+                message_count: finalMessageCount,
+                updated_at: new Date().toISOString(),
+              })
+              .eq("id", conversation.id)
+              .eq("user_id", user.id)
+              .select("*")
+              .single();
+
+            if (updateConversationError || !updatedConversationData) {
+              throw new Error(
+                updateConversationError?.message || "Failed to update conversation state.",
+              );
+            }
+
+            const updatedConversation = updatedConversationData as ConversationRow;
+
+            after(async () => {
+              try {
+                await persistMemory(supabase, {
+                  userId: user.id,
+                  conversationId: conversation.id,
+                  userText: messageText,
+                  assistantText: assistantContent,
+                  assistantMessageId: assistantMessage.id,
+                });
+
+                await refreshSummariesIfNeeded(supabase, {
+                  userId: user.id,
+                  conversationId: conversation.id,
+                  totalMessageCount: finalMessageCount,
+                  summaryWindowMessages: memoryPolicy.summaryWindowMessages,
+                  globalSummaryCadence: memoryPolicy.globalSummaryCadence,
+                });
+              } catch (memoryError) {
+                console.error("Memory update failed:", memoryError);
+              }
+
+              const { error: usageError } = await supabase.from("usage_events").insert({
+                user_id: user.id,
+                conversation_id: conversation.id,
+                event_type: "chat",
+                model: `openclaw:${agentId}`,
+                input_units: promptTokens,
+                output_units: completionTokens,
+                estimated_cost_usd: 0,
+              });
+
+              if (usageError) {
+                console.error("Usage event logging failed:", usageError);
+              }
+            });
+
+            sendEvent("done", {
+              conversation: mapConversation(updatedConversation),
+              userMessage: mapMessage(userMessage),
+              assistantMessage: mapMessage(assistantMessage),
+              usage: {
+                promptTokens,
+                completionTokens,
+              },
+            });
+          } catch (streamError) {
+            const message =
+              streamError instanceof Error
+                ? streamError.message
+                : "Unexpected server error while streaming response.";
+
+            try {
+              sendEvent("error", { message });
+            } catch {
+              // Ignore writes after close.
+            }
+          } finally {
+            releaseSlot?.();
+            releaseSlot = null;
+            closeStream();
+          }
+        })();
+      },
+      cancel() {
+        releaseSlot?.();
+        releaseSlot = null;
+      },
+    });
+
+    return new Response(stream, {
+      headers: {
+        "Content-Type": "text/event-stream; charset=utf-8",
+        "Cache-Control": "no-cache, no-transform",
+        Connection: "keep-alive",
+        "X-Accel-Buffering": "no",
+      },
     });
   } catch (error) {
+    releaseSlot?.();
+    releaseSlot = null;
+
     const message =
       error instanceof Error ? error.message : "Unexpected server error while sending message.";
     return NextResponse.json({ error: message }, { status: 500 });

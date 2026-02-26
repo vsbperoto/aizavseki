@@ -33,6 +33,29 @@ type Message = {
   createdAt: string;
 };
 
+type ChatStreamStartPayload = {
+  conversationId: string;
+  userMessage?: Message;
+};
+
+type ChatStreamTokenPayload = {
+  delta?: string;
+};
+
+type ChatStreamDonePayload = {
+  conversation: Conversation;
+  userMessage: Message;
+  assistantMessage: Message;
+  usage?: {
+    promptTokens?: number;
+    completionTokens?: number;
+  };
+};
+
+type ChatStreamErrorPayload = {
+  message?: string;
+};
+
 function createId() {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
     return crypto.randomUUID();
@@ -47,6 +70,104 @@ async function apiFetch<T>(url: string, init?: RequestInit) {
     throw new Error(payload.error || "Заявката се провали.");
   }
   return payload as T;
+}
+
+async function readErrorFromResponse(response: Response) {
+  const contentType = response.headers.get("content-type") || "";
+
+  try {
+    if (contentType.includes("application/json")) {
+      const payload = (await response.json()) as { error?: string };
+      return payload.error || `Request failed (${response.status}).`;
+    }
+
+    const text = await response.text();
+    if (text.trim()) {
+      return text.trim();
+    }
+  } catch {
+    // Fallback to generic message.
+  }
+
+  return `Request failed (${response.status}).`;
+}
+
+async function consumeSseStream(
+  response: Response,
+  onEvent: (eventName: string, payload: unknown) => void,
+) {
+  if (!response.body) {
+    throw new Error("Streaming response is unavailable.");
+  }
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+
+  const processBlock = (rawBlock: string) => {
+    const block = rawBlock.replace(/\r/g, "");
+    if (!block.trim()) {
+      return;
+    }
+
+    const lines = block.split("\n");
+    let eventName = "message";
+    const dataLines: string[] = [];
+
+    for (const line of lines) {
+      if (line.startsWith("event:")) {
+        eventName = line.slice(6).trim() || "message";
+        continue;
+      }
+      if (line.startsWith("data:")) {
+        dataLines.push(line.slice(5).trimStart());
+      }
+    }
+
+    if (dataLines.length === 0) {
+      return;
+    }
+
+    const rawData = dataLines.join("\n");
+    if (!rawData.trim()) {
+      return;
+    }
+
+    let payload: unknown = rawData;
+    try {
+      payload = JSON.parse(rawData);
+    } catch {
+      // Keep payload as text.
+    }
+
+    onEvent(eventName, payload);
+  };
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) {
+      break;
+    }
+
+    buffer += decoder.decode(value, { stream: true }).replace(/\r\n/g, "\n");
+    let separatorIndex = buffer.indexOf("\n\n");
+
+    while (separatorIndex !== -1) {
+      const block = buffer.slice(0, separatorIndex);
+      buffer = buffer.slice(separatorIndex + 2);
+      processBlock(block);
+      separatorIndex = buffer.indexOf("\n\n");
+    }
+  }
+
+  const tail = decoder.decode();
+  if (tail) {
+    buffer += tail.replace(/\r\n/g, "\n");
+  }
+
+  if (buffer.trim()) {
+    processBlock(buffer);
+  }
 }
 
 export default function AgentPage() {
@@ -70,13 +191,14 @@ export default function AgentPage() {
   const [error, setError] = useState<string | null>(null);
   const hasLoadedInitialDataRef = useRef(false);
   const userId = user?.id ?? null;
+  const lastMessageContent = messages[messages.length - 1]?.content || "";
 
   useEffect(() => {
     messagesRef.current?.scrollTo({
       top: messagesRef.current.scrollHeight,
       behavior: "smooth",
     });
-  }, [messages.length, isBusy]);
+  }, [messages.length, lastMessageContent, isBusy]);
 
   useEffect(() => {
     try {
@@ -352,40 +474,116 @@ export default function AgentPage() {
       content: trimmed,
       createdAt: new Date().toISOString(),
     };
+    const streamingAssistantId = `tmp-assistant-${createId()}`;
 
     setDraft("");
     setIsBusy(true);
-    setMessages((current) => [...current, optimisticUserMessage]);
+    setMessages((current) => [
+      ...current,
+      optimisticUserMessage,
+      {
+        id: streamingAssistantId,
+        role: "assistant",
+        content: "",
+        createdAt: new Date().toISOString(),
+      },
+    ]);
 
     try {
-      const payload = await apiFetch<{
-        conversation: Conversation;
-        userMessage: Message;
-        assistantMessage: Message;
-      }>("/api/chat", {
+      const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ conversationId, message: trimmed }),
       });
 
+      if (!response.ok) {
+        throw new Error(await readErrorFromResponse(response));
+      }
+
+      const streamState: {
+        donePayload?: ChatStreamDonePayload;
+      } = {};
+
+      await consumeSseStream(response, (eventName, payload) => {
+        if (eventName === "start") {
+          const startPayload = payload as ChatStreamStartPayload;
+          if (startPayload?.userMessage) {
+            setMessages((current) =>
+              current.map((message) =>
+                message.id === optimisticUserMessage.id ? startPayload.userMessage! : message,
+              ),
+            );
+          }
+          return;
+        }
+
+        if (eventName === "token") {
+          const tokenPayload = payload as ChatStreamTokenPayload;
+          const delta = typeof tokenPayload?.delta === "string" ? tokenPayload.delta : "";
+          if (!delta) {
+            return;
+          }
+
+          setMessages((current) =>
+            current.map((message) =>
+              message.id === streamingAssistantId
+                ? {
+                    ...message,
+                    content: message.content + delta,
+                  }
+                : message,
+            ),
+          );
+          return;
+        }
+
+        if (eventName === "done") {
+          streamState.donePayload = payload as ChatStreamDonePayload;
+          return;
+        }
+
+        if (eventName === "error") {
+          const errorPayload = payload as ChatStreamErrorPayload;
+          throw new Error(errorPayload?.message || "Грешка при streaming отговора.");
+        }
+      });
+
+      const resolvedPayload = streamState.donePayload;
+      if (!resolvedPayload) {
+        throw new Error("Получен е непълен отговор от сървъра.");
+      }
+      const finalIds = new Set([
+        optimisticUserMessage.id,
+        streamingAssistantId,
+        resolvedPayload.userMessage.id,
+        resolvedPayload.assistantMessage.id,
+      ]);
+
       setMessages((current) => [
-        ...current.filter((message) => message.id !== optimisticUserMessage.id),
-        payload.userMessage,
-        payload.assistantMessage,
+        ...current.filter((message) => !finalIds.has(message.id)),
+        resolvedPayload.userMessage,
+        resolvedPayload.assistantMessage,
       ]);
       setConversations((current) => [
-        payload.conversation,
-        ...current.filter((conversation) => conversation.id !== payload.conversation.id),
+        resolvedPayload.conversation,
+        ...current.filter((conversation) => conversation.id !== resolvedPayload.conversation.id),
       ]);
     } catch (chatError) {
       setMessages((current) =>
-        current.filter((message) => message.id !== optimisticUserMessage.id),
+        current.filter(
+          (message) =>
+            message.id !== optimisticUserMessage.id && message.id !== streamingAssistantId,
+        ),
       );
       setError(chatError instanceof Error ? chatError.message : "Грешка при изпращане.");
     } finally {
       setIsBusy(false);
     }
   }
+
+  const hasStreamingAssistant = messages.some((message) =>
+    message.id.startsWith("tmp-assistant-"),
+  );
 
   if (configError) {
     return (
@@ -556,7 +754,7 @@ export default function AgentPage() {
                 <p className="text-sm whitespace-pre-wrap">{message.content}</p>
               </div>
             ))}
-            {isBusy && (
+            {isBusy && !hasStreamingAssistant && (
               <div className="mr-auto max-w-[90%] rounded-xl border border-brand-white/10 px-4 py-3 bg-brand-navy/50">
                 <p className="text-sm text-brand-gray/70">Агентът мисли...</p>
               </div>
